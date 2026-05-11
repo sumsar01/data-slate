@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { Note, Tag, DateGroup } from "@data-slate/shared"
 import { soundClick } from "../audio/sounds"
 import "./NoteList.css"
@@ -78,4 +79,3 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Pro
   )
 }
 
-import { useState } from "react"
