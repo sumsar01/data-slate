@@ -1,0 +1,153 @@
+.note-reader {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.note-reader--empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.note-reader-empty-text {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: #3a2800;
+  letter-spacing: 0.08em;
+  line-height: 2;
+  text-align: center;
+}
+
+.note-reader-header {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+.note-reader-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1rem;
+  color: #ffb000;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.note-reader-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.note-reader-datetime {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  color: #7a5500;
+  letter-spacing: 0.06em;
+}
+
+.note-reader-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.note-reader-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  color: #00ff41;
+  letter-spacing: 0.05em;
+}
+
+.note-reader-divider {
+  font-family: "JetBrains Mono", monospace;
+  color: #3a2800;
+  font-size: 0.7rem;
+  letter-spacing: -0.05em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.note-reader-body {
+  flex: 1;
+  overflow-y: auto;
+  margin: 1rem 0;
+}
+
+.note-reader-body::-webkit-scrollbar {
+  width: 4px;
+}
+.note-reader-body::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+.note-reader-body::-webkit-scrollbar-thumb {
+  background: #3a2800;
+}
+
+.note-reader-transcript {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  color: #c88800;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+.note-reader-footer {
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+.note-reader-audio {
+  margin-top: 0.75rem;
+}
+
+.note-reader-audio audio {
+  width: 100%;
+  filter: sepia(1) saturate(3) hue-rotate(5deg);
+}
+
+.note-reader-audio-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  flex-wrap: wrap;
+}
+
+.note-reader-audio-icon {
+  color: #7a5500;
+  font-size: 0.75rem;
+}
+
+.note-reader-audio-bar {
+  color: #3a2800;
+  font-size: 0.7rem;
+  letter-spacing: -0.05em;
+}
+
+.note-reader-audio-time {
+  font-size: 0.6rem;
+  color: #7a5500;
+}
+
+.note-reader-audio-label {
+  font-size: 0.55rem;
+  color: #3a2800;
+  letter-spacing: 0.06em;
+  width: 100%;
+}
+
+.blink {
+  animation: blink 0.8s step-end infinite;
+  color: #ffb000;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

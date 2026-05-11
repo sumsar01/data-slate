@@ -1,0 +1,41 @@
+.tag-filter {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #3a2800;
+}
+
+.tag-filter-label {
+  font-size: 0.6rem;
+  color: #7a5500;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+.tag-filter-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-chip {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #3a2800;
+  background: transparent;
+  color: #7a5500;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.1s ease;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+.tag-chip:hover {
+  border-color: #ffb000;
+  color: #ffb000;
+}
+
+.tag-chip--active {
+  border-color: #00ff41;
+  color: #00ff41;
+  background: rgba(0, 255, 65, 0.06);
+}
