@@ -1,5 +1,6 @@
 import { useState } from "react"
 import type { Note, Tag, DateGroup } from "@data-slate/shared"
+import { soundClick } from "../audio/sounds"
 import "./NoteList.css"
 
 interface Props {
@@ -57,6 +58,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Pro
                     key={note.id}
                     className={`note-item ${selectedId === note.id ? "note-item--active" : ""}`}
                     onClick={() => {
+                      soundClick()
                       onSelect(note)
                     }}
                   >

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react"
+import { soundTypewriterKey } from "../audio/sounds"
 
 export function useTypewriter(text: string, active: boolean, speed = 18) {
   const [displayed, setDisplayed] = useState("")
@@ -19,6 +20,8 @@ export function useTypewriter(text: string, active: boolean, speed = 18) {
       if (now - lastRef.current >= speed) {
         indexRef.current += 1
         setDisplayed(text.slice(0, indexRef.current))
+        // Play a key sound every ~3 characters to avoid being overwhelming
+        if (indexRef.current % 3 === 0) soundTypewriterKey()
         lastRef.current = now
         if (indexRef.current >= text.length) {
           setDone(true)
