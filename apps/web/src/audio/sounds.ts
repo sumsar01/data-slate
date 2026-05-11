@@ -35,8 +35,11 @@ export function preloadSounds() {
 function play(fn: (ctx: AudioContext) => void) {
   try {
     const c = getCtx()
-    if (c.state === "suspended") c.resume()
-    fn(c)
+    if (c.state === "suspended") {
+      c.resume().then(() => fn(c))
+    } else {
+      fn(c)
+    }
   } catch (_) {}
 }
 
