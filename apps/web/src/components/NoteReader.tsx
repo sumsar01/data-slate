@@ -7,7 +7,7 @@ interface Props {
 }
 
 export function NoteReader({ note }: Props) {
-  const { displayed, done } = useTypewriter(note?.transcript ?? "", !!note, 12)
+  const { displayed, done, skip } = useTypewriter(note?.transcript ?? "", !!note, 12)
 
   if (!note) {
     return (
@@ -56,11 +56,12 @@ export function NoteReader({ note }: Props) {
         </div>
       </div>
 
-      <div className="note-reader-body">
+      <div className="note-reader-body" onClick={() => { if (!done) skip() }} style={{ cursor: done ? "default" : "pointer" }}>
         <div className="note-reader-transcript">
           {displayed}
           {!done && <span className="blink">█</span>}
         </div>
+        {!done && <div className="note-reader-skip-hint">[ TAP TO SKIP ]</div>}
       </div>
 
       <div className="note-reader-footer">

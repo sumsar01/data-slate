@@ -1,3 +1,11 @@
+.boot-skip-hint {
+  font-size: 0.6rem;
+  color: #3a2800;
+  letter-spacing: 0.1em;
+  margin-top: 1rem;
+  animation: blink 1.2s step-end infinite;
+}
+
 .boot-prompt {
   color: #7a5500;
   animation: blink 1s step-end infinite;

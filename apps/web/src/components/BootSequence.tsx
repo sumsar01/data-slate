@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { preloadSounds, soundTypewriterKey } from "../audio/sounds"
+import { preloadSounds, soundLineTick, soundLineOK, soundWarning, soundBootHum } from "../audio/sounds"
 import "./BootSequence.css"
 
 const BOOT_LINES = [
@@ -28,44 +28,79 @@ interface Props {
   onComplete: () => void
 }
 
+function playLineSound(line: string) {
+  if (!line) return
+  if (line.startsWith("WARNING")) {
+    soundWarning()
+  } else if (line.includes("[ OK ]")) {
+    soundLineOK()
+  } else {
+    soundLineTick()
+  }
+}
+
 export function BootSequence({ onComplete }: Props) {
   const [lines, setLines] = useState<string[]>([])
   const [done, setDone] = useState(false)
   const [started, setStarted] = useState(false)
   const onCompleteRef = useRef(onComplete)
+  const skipRef = useRef(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Wait for a tap/click to unlock audio, then start
+  function finish() {
+    setDone(true)
+    setTimeout(() => onCompleteRef.current(), 600)
+  }
+
   function handleStart() {
     if (started) return
     setStarted(true)
     preloadSounds()
+    soundBootHum()
+  }
+
+  function handleSkip() {
+    if (!started) {
+      handleStart()
+      return
+    }
+    if (done) return
+    // Skip: show all lines immediately
+    skipRef.current = true
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    setLines([...BOOT_LINES])
+    finish()
   }
 
   useEffect(() => {
     if (!started) return
 
     let i = 0
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
+      if (skipRef.current) return
       if (i < BOOT_LINES.length) {
-        setLines((prev) => [...prev, BOOT_LINES[i]])
-        if (BOOT_LINES[i]) soundTypewriterKey()
+        const line = BOOT_LINES[i]
+        setLines((prev) => [...prev, line])
+        playLineSound(line)
         i++
       } else {
-        clearInterval(interval)
+        if (intervalRef.current) clearInterval(intervalRef.current)
         setTimeout(() => {
-          setDone(true)
-          setTimeout(() => onCompleteRef.current(), 600)
+          if (!skipRef.current) finish()
         }, 400)
       }
     }, 90)
-    return () => clearInterval(interval)
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [started])
 
   return (
     <div
       className={`boot-sequence ${done ? "boot-fade-out" : ""}`}
-      onClick={handleStart}
-      onTouchStart={handleStart}
+      onClick={handleSkip}
+      onTouchStart={handleSkip}
     >
       <div className="boot-content">
         {!started && (
@@ -77,6 +112,9 @@ export function BootSequence({ onComplete }: Props) {
           </div>
         ))}
         {started && !done && <span className="boot-cursor">█</span>}
+        {started && !done && (
+          <div className="boot-skip-hint">[ TAP TO SKIP ]</div>
+        )}
       </div>
     </div>
   )

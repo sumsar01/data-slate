@@ -142,6 +142,15 @@
   width: 100%;
 }
 
+.note-reader-skip-hint {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  color: #3a2800;
+  letter-spacing: 0.1em;
+  margin-top: 0.75rem;
+  animation: blink 1.2s step-end infinite;
+}
+
 .blink {
   animation: blink 0.8s step-end infinite;
   color: #ffb000;
