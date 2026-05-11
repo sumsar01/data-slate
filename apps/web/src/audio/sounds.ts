@@ -36,10 +36,18 @@ function play(fn: (ctx: AudioContext) => void) {
   try {
     const c = getCtx()
     if (c.state === "suspended") {
-      c.resume().then(() => fn(c))
+      c.resume().then(() => fn(c)).catch(() => {})
     } else {
       fn(c)
     }
+  } catch (_) {}
+}
+
+async function playAsync(fn: (ctx: AudioContext) => void) {
+  try {
+    const c = getCtx()
+    if (c.state === "suspended") await c.resume()
+    fn(c)
   } catch (_) {}
 }
 
@@ -60,7 +68,7 @@ function playKeyclick(playbackRate = 1.0, gain = 0.5) {
 
 // Mechanical noise burst — filtered white noise, sounds like a relay or solenoid
 function noiseClick(frequency: number, durationMs: number, gainLevel = 0.08) {
-  play((ctx) => {
+  playAsync((ctx) => {
     const bufSize = ctx.sampleRate * (durationMs / 1000)
     const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate)
     const data = buf.getChannelData(0)
