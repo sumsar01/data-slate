@@ -56,7 +56,7 @@ export function NoteReader({ note }: Props) {
         </div>
       </div>
 
-      <div className="note-reader-body" onClick={() => { if (!done) skip() }} style={{ cursor: done ? "default" : "pointer" }}>
+      <div className="note-reader-body" onClick={() => { if (!done) skip() }}>
         <div className="note-reader-transcript">
           {displayed}
           {!done && <span className="blink">█</span>}

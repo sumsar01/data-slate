@@ -17,6 +17,14 @@ body {
   color: #ffb000;
   font-family: "JetBrains Mono", monospace;
   -webkit-font-smoothing: antialiased;
+  /* Amber targeting reticle — crosshair with centre gap */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='%23FFB000' stroke-width='1.5' fill='none' opacity='0.9'%3E%3C!-- horizontal left --%3E%3Cline x1='2' y1='16' x2='10' y2='16'/%3E%3C!-- horizontal right --%3E%3Cline x1='22' y1='16' x2='30' y2='16'/%3E%3C!-- vertical top --%3E%3Cline x1='16' y1='2' x2='16' y2='10'/%3E%3C!-- vertical bottom --%3E%3Cline x1='16' y1='22' x2='16' y2='30'/%3E%3C!-- corner ticks top-left --%3E%3Cpolyline points='6,11 6,6 11,6'/%3E%3C!-- corner ticks top-right --%3E%3Cpolyline points='21,6 26,6 26,11'/%3E%3C!-- corner ticks bottom-right --%3E%3Cpolyline points='26,21 26,26 21,26'/%3E%3C!-- corner ticks bottom-left --%3E%3Cpolyline points='11,26 6,26 6,21'/%3E%3C!-- centre dot --%3E%3Ccircle cx='16' cy='16' r='1.2' fill='%23FFB000' stroke='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
+}
+
+/* Pointer variant — slightly brighter, filled corner ticks */
+a, button, [role="button"],
+[style*="cursor: pointer"], [style*="cursor:pointer"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='%23FFD050' stroke-width='1.5' fill='none' opacity='1'%3E%3Cline x1='2' y1='16' x2='10' y2='16'/%3E%3Cline x1='22' y1='16' x2='30' y2='16'/%3E%3Cline x1='16' y1='2' x2='16' y2='10'/%3E%3Cline x1='16' y1='22' x2='16' y2='30'/%3E%3Cpolyline points='6,11 6,6 11,6' stroke-width='2'/%3E%3Cpolyline points='21,6 26,6 26,11' stroke-width='2'/%3E%3Cpolyline points='26,21 26,26 21,26' stroke-width='2'/%3E%3Cpolyline points='11,26 6,26 6,21' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='1.8' fill='%23FFD050' stroke='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
 }
 
 /* ── App shell ──────────────────────────────────────────── */
