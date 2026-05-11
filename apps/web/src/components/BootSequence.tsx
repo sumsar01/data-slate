@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { soundTypewriterKey } from "../audio/sounds"
+import { preloadSounds, soundTypewriterKey } from "../audio/sounds"
 import "./BootSequence.css"
 
 const BOOT_LINES = [
@@ -31,9 +31,19 @@ interface Props {
 export function BootSequence({ onComplete }: Props) {
   const [lines, setLines] = useState<string[]>([])
   const [done, setDone] = useState(false)
+  const [started, setStarted] = useState(false)
   const onCompleteRef = useRef(onComplete)
 
+  // Wait for a tap/click to unlock audio, then start
+  function handleStart() {
+    if (started) return
+    setStarted(true)
+    preloadSounds()
+  }
+
   useEffect(() => {
+    if (!started) return
+
     let i = 0
     const interval = setInterval(() => {
       if (i < BOOT_LINES.length) {
@@ -48,20 +58,25 @@ export function BootSequence({ onComplete }: Props) {
         }, 400)
       }
     }, 90)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+    return () => clearInterval(interval)
+  }, [started])
 
   return (
-    <div className={`boot-sequence ${done ? "boot-fade-out" : ""}`}>
+    <div
+      className={`boot-sequence ${done ? "boot-fade-out" : ""}`}
+      onClick={handleStart}
+      onTouchStart={handleStart}
+    >
       <div className="boot-content">
+        {!started && (
+          <div className="boot-prompt">[ TAP TO INITIALIZE ]</div>
+        )}
         {lines.map((line, idx) => (
           <div key={idx} className={`boot-line ${line && line.startsWith("WARNING") ? "boot-warning" : ""}`}>
             {line || "\u00A0"}
           </div>
         ))}
-        {!done && <span className="boot-cursor">█</span>}
+        {started && !done && <span className="boot-cursor">█</span>}
       </div>
     </div>
   )

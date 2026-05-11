@@ -1,3 +1,10 @@
+.boot-prompt {
+  color: #7a5500;
+  animation: blink 1s step-end infinite;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+
 .boot-sequence {
   position: fixed;
   inset: 0;

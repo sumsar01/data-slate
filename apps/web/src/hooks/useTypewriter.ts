@@ -1,39 +1,35 @@
 import { useState, useEffect, useRef } from "react"
 import { soundTypewriterKey } from "../audio/sounds"
 
-export function useTypewriter(text: string, active: boolean, speed = 16) {
+export function useTypewriter(text: string, active: boolean, speed = 40) {
   const [displayed, setDisplayed] = useState("")
   const [done, setDone] = useState(false)
-  const rafRef = useRef<number | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const indexRef = useRef(0)
-  const lastRef = useRef(0)
 
   useEffect(() => {
     setDisplayed("")
     setDone(false)
     indexRef.current = 0
-    lastRef.current = 0
+    if (timerRef.current) clearTimeout(timerRef.current)
 
     if (!active || !text) return
 
-    function tick(now: number) {
-      if (now - lastRef.current >= speed) {
-        indexRef.current += 1
-        setDisplayed(text.slice(0, indexRef.current))
-        // Play a key sound every ~3 characters to avoid being overwhelming
-        if (indexRef.current % 20 === 0) soundTypewriterKey()
-        lastRef.current = now
-        if (indexRef.current >= text.length) {
-          setDone(true)
-          return
-        }
+    function next() {
+      indexRef.current += 1
+      const idx = indexRef.current
+      setDisplayed(text.slice(0, idx))
+      if (idx % 4 === 0) soundTypewriterKey()
+      if (idx < text.length) {
+        timerRef.current = setTimeout(next, speed)
+      } else {
+        setDone(true)
       }
-      rafRef.current = requestAnimationFrame(tick)
     }
 
-    rafRef.current = requestAnimationFrame(tick)
+    timerRef.current = setTimeout(next, speed)
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [text, active, speed])
 

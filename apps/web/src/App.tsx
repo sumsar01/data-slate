@@ -5,7 +5,6 @@ import { BootSequence } from "./components/BootSequence"
 import { TagFilter } from "./components/TagFilter"
 import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
-import { preloadSounds } from "./audio/sounds"
 import "./App.css"
 
 // Mechanicus cog SVG
@@ -48,7 +47,7 @@ export default function App() {
   return (
     <>
       {!booted && <BootSequence onComplete={() => setBooted(true)} />}
-      <div className={`app ${booted ? "app--visible" : ""}`} onClick={preloadSounds} onTouchStart={preloadSounds}>
+      <div className={`app ${booted ? "app--visible" : ""}`}>
         {/* Scanline overlay */}
         <div className="scanlines" aria-hidden />
 
