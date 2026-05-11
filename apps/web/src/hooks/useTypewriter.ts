@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { soundTypewriterKey } from "../audio/sounds"
 
-export function useTypewriter(text: string, active: boolean, speed = 40) {
+export function useTypewriter(text: string, active: boolean, speed = 20) {
   const [displayed, setDisplayed] = useState("")
   const [done, setDone] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -19,7 +19,7 @@ export function useTypewriter(text: string, active: boolean, speed = 40) {
       indexRef.current += 1
       const idx = indexRef.current
       setDisplayed(text.slice(0, idx))
-      if (idx % 4 === 0) soundTypewriterKey()
+      if (idx % 12 === 0) soundTypewriterKey()
       if (idx < text.length) {
         timerRef.current = setTimeout(next, speed)
       } else {
