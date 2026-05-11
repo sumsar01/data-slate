@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { soundBoot } from "../audio/sounds"
 import "./BootSequence.css"
 
@@ -31,6 +31,7 @@ interface Props {
 export function BootSequence({ onComplete }: Props) {
   const [lines, setLines] = useState<string[]>([])
   const [done, setDone] = useState(false)
+  const onCompleteRef = useRef(onComplete)
 
   useEffect(() => {
     soundBoot()
@@ -43,18 +44,18 @@ export function BootSequence({ onComplete }: Props) {
         clearInterval(interval)
         setTimeout(() => {
           setDone(true)
-          setTimeout(onComplete, 600)
+          setTimeout(() => onCompleteRef.current(), 600)
         }, 400)
       }
     }, 90)
     return () => clearInterval(interval)
-  }, [onComplete])
+  }, [])
 
   return (
     <div className={`boot-sequence ${done ? "boot-fade-out" : ""}`}>
       <div className="boot-content">
         {lines.map((line, idx) => (
-          <div key={idx} className={`boot-line ${line.startsWith("WARNING") ? "boot-warning" : ""}`}>
+          <div key={idx} className={`boot-line ${line && line.startsWith("WARNING") ? "boot-warning" : ""}`}>
             {line || "\u00A0"}
           </div>
         ))}
