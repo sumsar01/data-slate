@@ -5,6 +5,7 @@ import { BootSequence } from "./components/BootSequence"
 import { TagFilter } from "./components/TagFilter"
 import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
+import { soundClick } from "./audio/sounds"
 import "./App.css"
 
 // Mechanicus cog SVG
@@ -43,6 +44,20 @@ export default function App() {
   const [booted, setBooted] = useState(false)
   const [selectedNote, setSelectedNote] = useState<Note | null>(null)
   const [activeFilters, setActiveFilters] = useState<Tag[]>([])
+  // Mobile: "list" | "reader"
+  const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
+
+  function handleSelectNote(note: Note) {
+    setSelectedNote(note)
+    setMobilePanel("reader")
+  }
+
+  function handleBack() {
+    soundClick()
+    setMobilePanel("list")
+  }
+
+  const totalNotes = MOCK_DATA.reduce((a, g) => a + g.notes.length, 0)
 
   return (
     <>
@@ -54,19 +69,27 @@ export default function App() {
         {/* Header */}
         <header className="app-header">
           <div className="app-header-left">
+            {/* Mobile back button — only visible when in reader on small screens */}
+            {mobilePanel === "reader" && (
+              <button className="app-back-btn" onClick={handleBack} aria-label="Back to list">
+                ◄ LOG
+              </button>
+            )}
             <CogIcon />
             <SkullIcon />
             <span className="app-header-title">
-              ADEPTUS MECHANICUS <span className="app-header-divider">//</span> DATA-SLATE MK.IV
+              <span className="app-header-title-long">ADEPTUS MECHANICUS <span className="app-header-divider">//</span> </span>
+              DATA-SLATE MK.IV
             </span>
           </div>
           <div className="app-header-right">
             <span className="app-header-status">
               <span className="status-dot" />
-              COGITATOR ONLINE
+              <span className="app-header-status-text">COGITATOR ONLINE</span>
             </span>
             <span className="app-header-rec">
-              <span className="status-dot status-dot--red" /> AUSPEX ACTIVE
+              <span className="status-dot status-dot--red" />
+              <span className="app-header-status-text">AUSPEX ACTIVE</span>
             </span>
           </div>
         </header>
@@ -74,31 +97,31 @@ export default function App() {
         {/* Main layout */}
         <main className="app-main">
           {/* Left panel */}
-          <aside className="panel panel-left">
+          <aside className={`panel panel-left ${mobilePanel === "reader" ? "panel--mobile-hidden" : ""}`}>
             <div className="panel-label">[ AUSPEX LOG v2.3.1 ]</div>
             <TagFilter active={activeFilters} onChange={setActiveFilters} />
             <NoteList
               groups={MOCK_DATA}
               selectedId={selectedNote?.id ?? null}
               activeTagFilters={activeFilters}
-              onSelect={setSelectedNote}
+              onSelect={handleSelectNote}
             />
           </aside>
 
-          {/* Divider */}
-          <div className="panel-divider" />
+          {/* Divider — hidden on mobile */}
+          <div className="panel-divider" aria-hidden />
 
           {/* Right panel */}
-          <section className="panel panel-right">
+          <section className={`panel panel-right ${mobilePanel === "list" ? "panel--mobile-hidden" : ""}`}>
             <div className="panel-label">[ COGITATOR RECORD ]</div>
             <NoteReader note={selectedNote} />
           </section>
         </main>
 
-        {/* Footer */}
+        {/* Footer — hidden on mobile */}
         <footer className="app-footer">
           <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
-          <span>RECORDS: {MOCK_DATA.reduce((a, g) => a + g.notes.length, 0)} // SESSIONS: {MOCK_DATA.length}</span>
+          <span>RECORDS: {totalNotes} // SESSIONS: {MOCK_DATA.length}</span>
         </footer>
       </div>
     </>

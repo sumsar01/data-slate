@@ -10,6 +10,11 @@ html, body, #root {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  /* Safe area insets for notched phones */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 body {
@@ -216,7 +221,97 @@ a, button, [role="button"],
   50% { opacity: 0; }
 }
 
-/* CRT flicker — very subtle */
+/* ── Mobile back button ─────────────────────────────────── */
+
+.app-back-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.6rem;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='%23FFD050' stroke-width='1.5' fill='none' opacity='1'%3E%3Cline x1='2' y1='16' x2='10' y2='16'/%3E%3Cline x1='22' y1='16' x2='30' y2='16'/%3E%3Cline x1='16' y1='2' x2='16' y2='10'/%3E%3Cline x1='16' y1='22' x2='16' y2='30'/%3E%3Cpolyline points='6,11 6,6 11,6' stroke-width='2'/%3E%3Cpolyline points='21,6 26,6 26,11' stroke-width='2'/%3E%3Cpolyline points='26,21 26,26 21,26' stroke-width='2'/%3E%3Cpolyline points='11,26 6,26 6,21' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='1.8' fill='%23FFD050' stroke='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  /* Show back button on mobile */
+  .app-back-btn {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Hide long title prefix on mobile */
+  .app-header-title-long {
+    display: none;
+  }
+
+  /* Trim header status text on mobile */
+  .app-header-status-text {
+    display: none;
+  }
+
+  /* Single-panel layout: both panels take full width, toggle visibility */
+  .app-main {
+    position: relative;
+  }
+
+  .panel-left,
+  .panel-right {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .panel--mobile-hidden {
+    transform: translateX(-8px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .panel-right.panel--mobile-hidden {
+    transform: translateX(8px);
+  }
+
+  /* Hide the vertical divider */
+  .panel-divider {
+    display: none;
+  }
+
+  /* Hide footer */
+  .app-footer {
+    display: none;
+  }
+
+  /* Slightly larger tap targets in the note list */
+  .note-item {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .note-group-header {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  /* Larger tag chips */
+  .tag-chip {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.65rem;
+  }
+
+  /* Boot sequence padding */
+  .boot-sequence {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ── CRT flicker ────────────────────────────────────────── */
 @keyframes crt-flicker {
   0%   { opacity: 1; }
   92%  { opacity: 1; }
