@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import { soundBoot } from "../audio/sounds"
 import "./BootSequence.css"
 
 const BOOT_LINES = [
@@ -34,15 +33,6 @@ export function BootSequence({ onComplete }: Props) {
   const onCompleteRef = useRef(onComplete)
 
   useEffect(() => {
-    // Sound must be triggered by user interaction — listen for first click/touch
-    const unlock = () => {
-      soundBoot()
-      document.removeEventListener("click", unlock)
-      document.removeEventListener("touchstart", unlock)
-    }
-    document.addEventListener("click", unlock)
-    document.addEventListener("touchstart", unlock)
-
     let i = 0
     const interval = setInterval(() => {
       if (i < BOOT_LINES.length) {
@@ -58,8 +48,6 @@ export function BootSequence({ onComplete }: Props) {
     }, 90)
     return () => {
       clearInterval(interval)
-      document.removeEventListener("click", unlock)
-      document.removeEventListener("touchstart", unlock)
     }
   }, [])
 

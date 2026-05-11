@@ -1,6 +1,5 @@
 import type { Tag } from "@data-slate/shared"
 import { ALL_TAGS } from "@data-slate/shared"
-import { soundBeep } from "../audio/sounds"
 import "./TagFilter.css"
 
 interface Props {
@@ -10,7 +9,6 @@ interface Props {
 
 export function TagFilter({ active, onChange }: Props) {
   function toggle(tag: Tag) {
-    soundBeep()
     if (active.includes(tag)) {
       onChange(active.filter((t) => t !== tag))
     } else {
