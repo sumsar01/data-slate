@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { soundTypewriterKey } from "../audio/sounds"
 
-export function useTypewriter(text: string, active: boolean, speed = 4) {
+export function useTypewriter(text: string, active: boolean, speed = 16) {
   const [displayed, setDisplayed] = useState("")
   const [done, setDone] = useState(false)
   const rafRef = useRef<number | null>(null)

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { soundTypewriterKey } from "../audio/sounds"
 import "./BootSequence.css"
 
 const BOOT_LINES = [
@@ -37,6 +38,7 @@ export function BootSequence({ onComplete }: Props) {
     const interval = setInterval(() => {
       if (i < BOOT_LINES.length) {
         setLines((prev) => [...prev, BOOT_LINES[i]])
+        if (BOOT_LINES[i]) soundTypewriterKey()
         i++
       } else {
         clearInterval(interval)
