@@ -104,6 +104,11 @@ body {
   animation: pulse 2s ease-in-out infinite;
 }
 
+.status-dot--red {
+  background: #ff2200;
+  box-shadow: 0 0 6px #ff2200;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -112,11 +117,9 @@ body {
 .app-header-rec {
   color: #ff2200;
   letter-spacing: 0.08em;
-}
-
-.blink-red {
-  animation: blink 1s step-end infinite;
-  color: #ff2200;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 /* ── Main layout ────────────────────────────────────────── */

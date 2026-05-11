@@ -66,7 +66,7 @@ export default function App() {
               COGITATOR ONLINE
             </span>
             <span className="app-header-rec">
-              <span className="blink-red">●</span> AUSPEX ACTIVE
+              <span className="status-dot status-dot--red" /> AUSPEX ACTIVE
             </span>
           </div>
         </header>
@@ -75,7 +75,7 @@ export default function App() {
         <main className="app-main">
           {/* Left panel */}
           <aside className="panel panel-left">
-            <div className="panel-label">[ AUSPEX LOG v2.3.1 ]<span className="blink-cursor"> █</span></div>
+            <div className="panel-label">[ AUSPEX LOG v2.3.1 ]</div>
             <TagFilter active={activeFilters} onChange={setActiveFilters} />
             <NoteList
               groups={MOCK_DATA}

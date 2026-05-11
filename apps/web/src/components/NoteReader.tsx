@@ -13,7 +13,7 @@ export function NoteReader({ note }: Props) {
     return (
       <div className="note-reader note-reader--empty">
         <div className="note-reader-empty-text">
-          <span className="blink">█</span> AWAITING DATA INPUT
+          AWAITING DATA INPUT
           <br />
           <br />
           SELECT A COGITATOR RECORD FROM THE AUSPEX LOG
