@@ -90,7 +90,7 @@ function noiseClick(frequency: number, durationMs: number, gainLevel = 0.08) {
 export function soundTypewriterKey() {
   if (keyclickBuffer) {
     const pitch = 0.85 + Math.random() * 0.35 // slight variation each key
-    playKeyclick(pitch, 0.4)
+    playKeyclick(pitch, 0.2)
   } else {
     // Fallback: mechanical noise burst
     noiseClick(2400 + Math.random() * 800, 35, 0.06)

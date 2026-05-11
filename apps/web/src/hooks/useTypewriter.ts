@@ -21,7 +21,7 @@ export function useTypewriter(text: string, active: boolean, speed = 4) {
         indexRef.current += 1
         setDisplayed(text.slice(0, indexRef.current))
         // Play a key sound every ~3 characters to avoid being overwhelming
-        if (indexRef.current % 6 === 0) soundTypewriterKey()
+        if (indexRef.current % 20 === 0) soundTypewriterKey()
         lastRef.current = now
         if (indexRef.current >= text.length) {
           setDone(true)
