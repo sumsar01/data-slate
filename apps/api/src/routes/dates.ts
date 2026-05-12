@@ -4,30 +4,37 @@ import type { DateGroup } from "../lib/types"
 
 export const datesRouter = new Hono()
 
-// GET /dates — returns DateGroup[] with session names merged in
+// GET /dates — returns DateGroup[] with session names and summaries merged in
 datesRouter.get("/", async (c) => {
   const [notesResult, sessionsResult] = await Promise.all([
     db.execute("SELECT * FROM notes ORDER BY date ASC, created_at ASC"),
     db.execute("SELECT * FROM session_overrides"),
   ])
 
-  // Build a map of date -> session_name
-  const sessionMap = new Map<string, string>()
+  // Build a map of date -> { session_id, session_name, session_summary }
+  const sessionMap = new Map<string, { id: string; name: string; summary: string | null }>()
   for (const row of sessionsResult.rows) {
     const dates: string[] = JSON.parse(row.dates as string)
     for (const d of dates) {
-      sessionMap.set(d, row.name as string)
+      sessionMap.set(d, {
+        id: row.id as string,
+        name: row.name as string,
+        summary: (row.summary as string | null) ?? null,
+      })
     }
   }
 
   // Group notes by date
-  const groups = new Map<string, DateGroup>()
+  const groups = new Map<string, DateGroup & { session_id: string | null; session_summary: string | null }>()
   for (const row of notesResult.rows) {
     const date = row.date as string
     if (!groups.has(date)) {
+      const session = sessionMap.get(date) ?? null
       groups.set(date, {
         date,
-        session_name: sessionMap.get(date) ?? null,
+        session_id: session?.id ?? null,
+        session_name: session?.name ?? null,
+        session_summary: session?.summary ?? null,
         notes: [],
       })
     }

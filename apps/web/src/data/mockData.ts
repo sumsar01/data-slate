@@ -3,7 +3,7 @@ import type { DateGroup } from "../shared"
 export const MOCK_DATA: DateGroup[] = [
   {
     date: "2026-05-10",
-    session_name: "Session 14 — Hive Sibellus Underhive",
+    session_id: null, session_summary: null, session_name: "Session 14 — Hive Sibellus Underhive",
     notes: [
       {
         id: "n001",
@@ -42,7 +42,7 @@ export const MOCK_DATA: DateGroup[] = [
   },
   {
     date: "2026-04-26",
-    session_name: "Session 13 — The Warp Transit",
+    session_id: null, session_summary: null, session_name: "Session 13 — The Warp Transit",
     notes: [
       {
         id: "n004",
@@ -70,7 +70,7 @@ export const MOCK_DATA: DateGroup[] = [
   },
   {
     date: "2026-04-12",
-    session_name: "Session 12 — Port Wrath",
+    session_id: null, session_summary: null, session_name: "Session 12 — Port Wrath",
     notes: [
       {
         id: "n006",

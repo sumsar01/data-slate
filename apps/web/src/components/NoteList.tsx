@@ -2,7 +2,7 @@ import { useState } from "react"
 import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
-import { upsertSession, deleteNote } from "../data/api"
+import { upsertSession, deleteNote, generateSummary } from "../data/api"
 import "./NoteList.css"
 
 interface Props {
@@ -20,6 +20,8 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
   const [sessionIds] = useState<Map<string, string>>(new Map())
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
+  const [summaries, setSummaries] = useState<Map<string, string>>(new Map())
+  const [summaryLoading, setSummaryLoading] = useState<Set<string>>(new Set())
 
   function toggleGroup(date: string) {
     setCollapsed((prev) => {
@@ -61,8 +63,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
     onReload()
   }
 
-  async function handleDelete(note: Note) {
-    if (confirmId !== note.id) {
+  async function handleDelete(note: Note) {    if (confirmId !== note.id) {
       setConfirmId(note.id)
       return
     }
@@ -75,6 +76,19 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
       console.error("Delete failed", e)
     } finally {
       setDeletingId(null)
+    }
+  }
+
+  async function handleGenerateSummary(group: DateGroup) {
+    if (!group.session_id) return
+    setSummaryLoading((prev) => new Set(prev).add(group.date))
+    try {
+      const summary = await generateSummary(group.session_id)
+      setSummaries((prev) => new Map(prev).set(group.date, summary))
+    } catch (e) {
+      console.error("Summary failed", e)
+    } finally {
+      setSummaryLoading((prev) => { const s = new Set(prev); s.delete(group.date); return s })
     }
   }
 
@@ -97,6 +111,38 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
                 currentName={group.session_name}
                 onSave={(name) => handleSessionSave(group.date, name)}
               />
+            )}
+
+            {!isCollapsed && group.session_id && (
+              <div className="note-group-summary">
+                {(() => {
+                  const summary = summaries.get(group.date) ?? group.session_summary
+                  const isLoading = summaryLoading.has(group.date)
+                  if (summary) {
+                    return (
+                      <>
+                        <div className="note-group-summary-text">{summary}</div>
+                        <button
+                          className="note-group-summary-btn"
+                          onClick={() => handleGenerateSummary(group)}
+                          disabled={isLoading}
+                        >
+                          {isLoading ? "PROCESSING..." : "↺ REGENERATE"}
+                        </button>
+                      </>
+                    )
+                  }
+                  return (
+                    <button
+                      className="note-group-summary-btn"
+                      onClick={() => handleGenerateSummary(group)}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "COGITATOR PROCESSING..." : "▶ GENERATE BATTLE REPORT"}
+                    </button>
+                  )
+                })()}
+              </div>
             )}
 
             {!isCollapsed && (

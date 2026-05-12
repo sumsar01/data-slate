@@ -12,6 +12,51 @@ bd close <id>         # Complete work
 bd dolt push          # Push beads data to remote
 ```
 
+## Monorepo Layout
+
+Bun workspaces. Package manager is **Bun** — do not use npm or pnpm.
+
+```
+apps/web        # React 19 + Vite frontend (also absorbs recorder functionality)
+apps/api        # Hono web framework on Bun (backend)
+packages/shared # Shared types/utils (@data-slate/shared)
+```
+
+## Commands
+
+```bash
+bun install                          # Install all workspace deps
+
+# Web (apps/web)
+bun run dev:web                      # Vite dev server with HMR
+bun run build:web                    # tsc -b && vite build (typecheck + build)
+bun run --cwd apps/web lint          # ESLint
+
+# API (apps/api)
+bun run dev:api                      # bun --watch src/index.ts
+bun run --cwd apps/api start         # Production start
+```
+
+- No standalone typecheck script — `tsc -b` runs as part of `build`.
+- No Prettier configured.
+- No global test command — no tests exist yet.
+- ESLint uses v10 flat config (`eslint.config.js`) — no `.eslintrc`.
+
+## Infrastructure (API)
+
+- **Database:** Turso (libsql) — `libsql://dataslate-sumsar01.aws-eu-west-1.turso.io`
+- **Storage:** Cloudflare R2 (S3-compatible) — bucket `data-slate`
+- **LLM:** Groq SDK
+
+Environment variables are in `apps/api/.env` (see `apps/api/.env.example`).
+
+## Deployment
+
+- `apps/web` → Vercel
+- `apps/api` → Railway (also has `Dockerfile` and `nixpacks.toml`)
+
+No CI/CD workflows configured (no `.github/workflows/`).
+
 ## Non-Interactive Shell Commands
 
 **ALWAYS use non-interactive flags** with file operations to avoid hanging on confirmation prompts.
@@ -20,12 +65,9 @@ Shell commands like `cp`, `mv`, and `rm` may be aliased to include `-i` (interac
 
 **Use these forms instead:**
 ```bash
-# Force overwrite without prompting
 cp -f source dest           # NOT: cp source dest
 mv -f source dest           # NOT: mv source dest
 rm -f file                  # NOT: rm file
-
-# For recursive operations
 rm -rf directory            # NOT: rm -r directory
 cp -rf source dest          # NOT: cp -r source dest
 ```

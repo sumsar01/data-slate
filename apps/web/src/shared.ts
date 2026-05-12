@@ -32,7 +32,9 @@ export type Note = {
 
 export type DateGroup = {
   date: string // YYYY-MM-DD
+  session_id: string | null
   session_name: string | null
+  session_summary: string | null
   notes: Note[]
 }
 

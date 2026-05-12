@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
+import { summariseSession } from "../lib/groq"
 import { randomUUID } from "crypto"
 
 export const sessionsRouter = new Hono()
@@ -38,4 +39,38 @@ sessionsRouter.patch("/:id", async (c) => {
   })
 
   return c.json({ id, name, dates: JSON.parse(dates) })
+})
+
+// POST /sessions/:id/summary — generate and store session summary via Groq
+sessionsRouter.post("/:id/summary", async (c) => {
+  const id = c.req.param("id")
+
+  const sessionResult = await db.execute({ sql: "SELECT * FROM session_overrides WHERE id = ?", args: [id] })
+  if (sessionResult.rows.length === 0) return c.json({ error: "Session not found" }, 404)
+  const session = sessionResult.rows[0]!
+  const dates: string[] = JSON.parse(session.dates as string)
+
+  // Fetch all notes for the dates in this session
+  const placeholders = dates.map(() => "?").join(",")
+  const notesResult = await db.execute({
+    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) ORDER BY created_at ASC`,
+    args: dates,
+  })
+
+  const transcripts = notesResult.rows
+    .map((r) => (r.transcript as string) ?? "")
+    .filter(Boolean)
+
+  if (transcripts.length === 0) {
+    return c.json({ error: "No transcripts found for this session" }, 422)
+  }
+
+  const summary = await summariseSession(transcripts)
+
+  await db.execute({
+    sql: "UPDATE session_overrides SET summary = ? WHERE id = ?",
+    args: [summary, id],
+  })
+
+  return c.json({ id, summary })
 })

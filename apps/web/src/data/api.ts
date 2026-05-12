@@ -24,3 +24,10 @@ export async function deleteNote(id: string): Promise<void> {
   if (!res.ok) throw new Error(`Delete failed: HTTP ${res.status}`)
 }
 
+export async function generateSummary(sessionId: string): Promise<string> {
+  if (!API_URL) throw new Error("No API configured")
+  const res = await fetch(`${API_URL}/sessions/${sessionId}/summary`, { method: "POST" })
+  if (!res.ok) throw new Error(`Summary failed: HTTP ${res.status}`)
+  const data = await res.json()
+  return data.summary as string
+}
