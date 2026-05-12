@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react"
-import { ALL_TAGS, type Tag } from "@data-slate/shared"
+import { ALL_TAGS, type Tag } from "./shared"
 import "./index.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001"
