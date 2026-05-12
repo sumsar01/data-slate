@@ -140,9 +140,73 @@ a, button, [role="button"],
   gap: 0.4rem;
 }
 
+.app-export-btn {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;
+}
+
+.app-export-btn:hover {
+  color: #ffb000;
+  background: #1a0e00;
+}
+
+.app-search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 1rem 0.2rem;
+  position: relative;
+}
+
+.app-search-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.5rem;
+  outline: none;
+  transition: border-color 0.1s;
+}
+
+.app-search-input::placeholder {
+  color: #3a2800;
+}
+
+.app-search-input:focus {
+  border-color: #7a5500;
+}
+
+.app-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.app-search-clear {
+  background: transparent;
+  border: none;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  cursor: pointer;
+  padding: 0.2rem 0.3rem;
+  transition: color 0.1s;
+}
+
+.app-search-clear:hover {
+  color: #ffb000;
+}
+
 .app-rec-link {
-  color: #ff2200;
-  text-decoration: none;
+  color: #ff2200;  text-decoration: none;
   letter-spacing: 0.08em;
   display: flex;
   align-items: center;

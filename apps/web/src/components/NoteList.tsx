@@ -2,21 +2,24 @@ import { useState } from "react"
 import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
-import { upsertSession } from "../data/api"
+import { upsertSession, deleteNote } from "../data/api"
 import "./NoteList.css"
 
 interface Props {
   groups: DateGroup[]
   selectedId: string | null
   activeTagFilters: Tag[]
+  searchQuery: string
   onSelect: (note: Note) => void
   onReload: () => void
+  onDeleted: (noteId: string) => void
 }
 
-export function NoteList({ groups, selectedId, activeTagFilters, onSelect, onReload }: Props) {
+export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, onSelect, onReload, onDeleted }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
-  // Track session IDs returned from the API by date
   const [sessionIds] = useState<Map<string, string>>(new Map())
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [confirmId, setConfirmId] = useState<string | null>(null)
 
   function toggleGroup(date: string) {
     setCollapsed((prev) => {
@@ -28,8 +31,19 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect, onRel
   }
 
   function filteredNotes(notes: Note[]) {
-    if (activeTagFilters.length === 0) return notes
-    return notes.filter((n) => activeTagFilters.some((t) => n.tags.includes(t)))
+    let result = notes
+    if (activeTagFilters.length > 0) {
+      result = result.filter((n) => activeTagFilters.some((t) => n.tags.includes(t)))
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase()
+      result = result.filter(
+        (n) =>
+          n.title.toLowerCase().includes(q) ||
+          (n.transcript ?? "").toLowerCase().includes(q)
+      )
+    }
+    return result
   }
 
   function formatDate(dateStr: string) {
@@ -45,6 +59,23 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect, onRel
     const existingId = sessionIds.get(date)
     await upsertSession(date, name, existingId)
     onReload()
+  }
+
+  async function handleDelete(note: Note) {
+    if (confirmId !== note.id) {
+      setConfirmId(note.id)
+      return
+    }
+    setConfirmId(null)
+    setDeletingId(note.id)
+    try {
+      await deleteNote(note.id)
+      onDeleted(note.id)
+    } catch (e) {
+      console.error("Delete failed", e)
+    } finally {
+      setDeletingId(null)
+    }
   }
 
   return (
@@ -71,18 +102,32 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect, onRel
             {!isCollapsed && (
               <div className="note-group-items">
                 {notes.map((note) => (
-                  <button
+                  <div
                     key={note.id}
-                    className={`note-item ${selectedId === note.id ? "note-item--active" : ""}`}
-                    onClick={() => {
-                      soundClick()
-                      onSelect(note)
-                    }}
+                    className={`note-item-row ${selectedId === note.id ? "note-item-row--active" : ""}`}
                   >
-                    <span className="note-item-prefix">›</span>
-                    <span className="note-item-title">{note.title}</span>
-                    <span className="note-item-time">{formatTime(note.created_at)}</span>
-                  </button>
+                    <button
+                      className={`note-item ${selectedId === note.id ? "note-item--active" : ""}`}
+                      onClick={() => {
+                        soundClick()
+                        onSelect(note)
+                        setConfirmId(null)
+                      }}
+                    >
+                      <span className="note-item-prefix">›</span>
+                      <span className="note-item-title">{note.title}</span>
+                      <span className="note-item-time">{formatTime(note.created_at)}</span>
+                    </button>
+                    <button
+                      className={`note-delete-btn ${confirmId === note.id ? "note-delete-btn--confirm" : ""}`}
+                      onClick={() => handleDelete(note)}
+                      disabled={deletingId === note.id}
+                      aria-label={confirmId === note.id ? "Confirm delete" : "Delete note"}
+                      title={confirmId === note.id ? "Tap again to confirm deletion" : "Delete note"}
+                    >
+                      {deletingId === note.id ? "…" : confirmId === note.id ? "!" : "✕"}
+                    </button>
+                  </div>
                 ))}
                 {notes.length === 0 && (
                   <div className="note-item-empty">NO RECORDS MATCH FILTER</div>

@@ -1,6 +1,6 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
-import { uploadToR2 } from "../lib/r2"
+import { uploadToR2, deleteFromR2 } from "../lib/r2"
 import { transcribeAudio } from "../lib/groq"
 import { randomUUID } from "crypto"
 import type { Tag } from "../lib/types"
@@ -55,6 +55,29 @@ notesRouter.get("/:id", async (c) => {
   const result = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
   if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
   return c.json(rowToNote(result.rows[0]))
+})
+
+// DELETE /notes/:id
+notesRouter.delete("/:id", async (c) => {
+  const id = c.req.param("id")
+  const result = await db.execute({ sql: "SELECT audio_url FROM notes WHERE id = ?", args: [id] })
+  if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
+  const row = result.rows[0]!
+
+  const audio_url = (row.audio_url ?? "") as string
+  // Derive the R2 key from the URL (everything after the public base URL)
+  const publicBase = process.env.R2_PUBLIC_URL ?? ""
+  const key = audio_url.startsWith(publicBase) ? audio_url.slice(publicBase.length + 1) : null
+
+  await db.execute({ sql: "DELETE FROM notes WHERE id = ?", args: [id] })
+
+  if (key) {
+    try { await deleteFromR2(key) } catch (e) {
+      console.warn(`[WARN] Failed to delete R2 object ${key}:`, e)
+    }
+  }
+
+  return c.json({ deleted: id })
 })
 
 function rowToNote(row: any) {

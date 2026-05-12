@@ -7,6 +7,7 @@ import { TagFilter } from "./components/TagFilter"
 import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
 import { soundClick } from "./audio/sounds"
+import { exportGroupsToMarkdown, downloadMarkdown } from "./data/export"
 import "./App.css"
 
 function CogIcon() {
@@ -44,6 +45,7 @@ export default function App() {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null)
   const [activeFilters, setActiveFilters] = useState<Tag[]>([])
   const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
+  const [searchQuery, setSearchQuery] = useState("")
 
   const { groups, loading, reload } = useDateGroups(!!selectedNote)
 
@@ -57,6 +59,16 @@ export default function App() {
   function handleBack() {
     soundClick()
     setMobilePanel("list")
+  }
+
+  function handleDeleted(noteId: string) {
+    if (selectedNote?.id === noteId) setSelectedNote(null)
+    reload()
+  }
+
+  function handleExportAll() {
+    const md = exportGroupsToMarkdown(groups)
+    downloadMarkdown(md, `data-slate-export-${new Date().toISOString().slice(0, 10)}.md`)
   }
 
   return (
@@ -80,6 +92,9 @@ export default function App() {
             </span>
           </div>
           <div className="app-header-right">
+            <button className="app-export-btn" onClick={handleExportAll} title="Export all sessions as markdown">
+              ↓ EXPORT
+            </button>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />
               <span className="app-header-status-text">REC</span>
@@ -94,13 +109,28 @@ export default function App() {
         <main className="app-main">
           <aside className={`panel panel-left ${mobilePanel === "reader" ? "panel--mobile-hidden" : ""}`}>
             <div className="panel-label">[ AUSPEX LOG v2.3.1 ]</div>
+            <div className="app-search-row">
+              <input
+                className="app-search-input"
+                type="search"
+                placeholder="SEARCH RECORDS..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search notes"
+              />
+              {searchQuery && (
+                <button className="app-search-clear" onClick={() => setSearchQuery("")} aria-label="Clear search">✕</button>
+              )}
+            </div>
             <TagFilter active={activeFilters} onChange={setActiveFilters} />
             <NoteList
               groups={groups}
               selectedId={selectedNote?.id ?? null}
               activeTagFilters={activeFilters}
+              searchQuery={searchQuery}
               onSelect={handleSelectNote}
               onReload={reload}
+              onDeleted={handleDeleted}
             />
           </aside>
 

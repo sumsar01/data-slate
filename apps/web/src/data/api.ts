@@ -17,3 +17,10 @@ export async function upsertSession(date: string, name: string, existingId?: str
     })
   }
 }
+
+export async function deleteNote(id: string): Promise<void> {
+  if (!API_URL) return
+  const res = await fetch(`${API_URL}/notes/${id}`, { method: "DELETE" })
+  if (!res.ok) throw new Error(`Delete failed: HTTP ${res.status}`)
+}
+

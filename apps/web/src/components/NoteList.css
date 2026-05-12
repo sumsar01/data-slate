@@ -129,3 +129,40 @@
   color: #3a2800;
   letter-spacing: 0.05em;
 }
+
+.note-item-row {
+  display: flex;
+  align-items: center;
+}
+
+.note-item-row .note-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-delete-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: color 0.1s;
+  line-height: 1;
+}
+
+.note-delete-btn:hover {
+  color: #ff2200;
+}
+
+.note-delete-btn--confirm {
+  color: #ff8800;
+  animation: note-delete-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes note-delete-pulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
