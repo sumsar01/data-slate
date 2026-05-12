@@ -8,6 +8,7 @@ import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
 import { soundClick } from "./audio/sounds"
 import { exportGroupsToMarkdown, downloadMarkdown } from "./data/export"
+import { EntityIndex } from "./components/EntityIndex"
 import "./App.css"
 
 function CogIcon() {
@@ -132,6 +133,7 @@ export default function App() {
               onReload={reload}
               onDeleted={handleDeleted}
             />
+            <EntityIndex groups={groups} onFilter={(name) => setSearchQuery(name)} />
           </aside>
 
           <div className="panel-divider" aria-hidden />

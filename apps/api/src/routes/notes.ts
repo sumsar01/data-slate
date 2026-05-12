@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
 import { uploadToR2, deleteFromR2 } from "../lib/r2"
-import { transcribeAudio } from "../lib/groq"
+import { transcribeAudio, extractEntities } from "../lib/groq"
 import { randomUUID } from "crypto"
 import type { Tag } from "../lib/types"
 
@@ -38,6 +38,19 @@ notesRouter.post("/", async (c) => {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [id, date, title, transcript, audio_url, duration_s, tags, created_at],
   })
+
+  // Fire-and-forget entity extraction
+  ;(async () => {
+    try {
+      const entities = await extractEntities(transcript)
+      await db.execute({
+        sql: "UPDATE notes SET entities = ? WHERE id = ?",
+        args: [JSON.stringify(entities), id],
+      })
+    } catch (e) {
+      console.warn(`[WARN] Entity extraction failed for note ${id}:`, e)
+    }
+  })()
 
   return c.json({ id, date, title, transcript, audio_url, duration_s, tags: tagsRaw, created_at }, 201)
 })
@@ -89,6 +102,7 @@ function rowToNote(row: any) {
     audio_url: row.audio_url,
     duration_s: row.duration_s,
     tags: JSON.parse(row.tags as string),
+    entities: row.entities ? JSON.parse(row.entities as string) : [],
     created_at: row.created_at,
   }
 }

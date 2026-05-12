@@ -46,6 +46,7 @@ datesRouter.get("/", async (c) => {
       audio_url: row.audio_url as string | null,
       duration_s: row.duration_s as number,
       tags: JSON.parse(row.tags as string),
+      entities: row.entities ? JSON.parse(row.entities as string) : [],
       created_at: row.created_at as string,
     })
   }

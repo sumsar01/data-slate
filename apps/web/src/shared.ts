@@ -19,6 +19,13 @@ export const ALL_TAGS: Tag[] = [
   "Misc",
 ]
 
+export type EntityType = "NPC" | "Location" | "Faction" | "Item" | "Other"
+
+export type Entity = {
+  name: string
+  type: EntityType
+}
+
 export type Note = {
   id: string
   date: string // YYYY-MM-DD
@@ -27,6 +34,7 @@ export type Note = {
   audio_url: string | null
   duration_s: number
   tags: Tag[]
+  entities: Entity[]
   created_at: string
 }
 

@@ -18,6 +18,38 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
   return { transcript, title }
 }
 
+export type Entity = { name: string; type: "NPC" | "Location" | "Faction" | "Item" | "Other" }
+
+export async function extractEntities(transcript: string): Promise<Entity[]> {
+  const chat = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are an entity extractor for a Warhammer 40K tabletop RPG campaign. " +
+          "Extract named entities from the transcript. " +
+          "Return a JSON object with an 'entities' array. Each element has 'name' (string) and 'type' (one of: NPC, Location, Faction, Item, Other). " +
+          "Example: {\"entities\":[{\"name\":\"Inquisitor Krell\",\"type\":\"NPC\"},{\"name\":\"Hive Sibellus\",\"type\":\"Location\"}]}",
+      },
+      {
+        role: "user",
+        content: transcript,
+      },
+    ],
+    max_tokens: 400,
+    response_format: { type: "json_object" },
+  })
+  const text = chat.choices[0]?.message?.content ?? "{}"
+  try {
+    const parsed = JSON.parse(text)
+    const arr = Array.isArray(parsed) ? parsed : (parsed.entities ?? [])
+    return arr.filter((e: any) => e.name && e.type)
+  } catch {
+    return []
+  }
+}
+
 export async function summariseSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
   const chat = await groq.chat.completions.create({
@@ -40,4 +72,3 @@ export async function summariseSession(transcripts: string[]): Promise<string> {
   })
   return chat.choices[0]?.message?.content ?? ""
 }
-

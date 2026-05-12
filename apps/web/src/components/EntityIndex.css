@@ -1,0 +1,57 @@
+.entity-index {
+  border-top: 1px solid #1a0e00;
+  padding: 0.5rem 1rem;
+  flex-shrink: 0;
+}
+
+.entity-index-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 0.4rem;
+}
+
+.entity-group {
+  margin-bottom: 0.4rem;
+}
+
+.entity-group-type {
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 0.2rem;
+}
+
+.entity-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.entity-pill {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #c88800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.4rem;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.entity-pill:hover {
+  background: rgba(255, 176, 0, 0.08);
+  border-color: #7a5500;
+  color: #ffb000;
+}
+
+.entity-pill-count {
+  color: #7a5500;
+  font-size: 0.5rem;
+}
