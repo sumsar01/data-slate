@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.38 AS base
+FROM oven/bun:latest AS base
 WORKDIR /app
 
 COPY package.json ./
