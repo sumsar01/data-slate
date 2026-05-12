@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import type { DateGroup } from "@data-slate/shared"
+import type { DateGroup } from "../shared"
 import { MOCK_DATA } from "../data/mockData"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""

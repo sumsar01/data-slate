@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Note, Tag } from "@data-slate/shared"
+import type { Note, Tag } from "./shared"
 import { useDateGroups } from "./hooks/useDateGroups"
 import { BootSequence } from "./components/BootSequence"
 import { TagFilter } from "./components/TagFilter"

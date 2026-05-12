@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Note, Tag, DateGroup } from "@data-slate/shared"
+import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
 import { upsertSession } from "../data/api"

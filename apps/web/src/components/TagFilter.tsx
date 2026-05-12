@@ -1,5 +1,5 @@
-import type { Tag } from "@data-slate/shared"
-import { ALL_TAGS } from "@data-slate/shared"
+import type { Tag } from "../shared"
+import { ALL_TAGS } from "../shared"
 import "./TagFilter.css"
 
 interface Props {

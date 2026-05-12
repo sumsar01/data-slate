@@ -1,4 +1,4 @@
-import type { DateGroup } from "@data-slate/shared"
+import type { DateGroup } from "../shared"
 
 export const MOCK_DATA: DateGroup[] = [
   {
