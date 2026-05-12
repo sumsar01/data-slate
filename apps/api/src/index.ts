@@ -6,8 +6,12 @@ import { sessionsRouter } from "./routes/sessions"
 
 const app = new Hono()
 
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
+  : ["*"]
+
 app.use("*", cors({
-  origin: process.env.CORS_ORIGIN ?? "*",
+  origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
   allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
 }))
