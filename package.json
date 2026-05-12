@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "dev:web": "bun run --cwd apps/web dev",
-    "build:web": "bun run --cwd apps/web build"
+    "build:web": "bun run --cwd apps/web build",
+    "dev:api": "bun run --cwd apps/api dev",
+    "dev:recorder": "bun run --cwd apps/recorder dev"
   }
 }

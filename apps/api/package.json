@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^25.7.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1045.0",
+    "@aws-sdk/lib-storage": "^3.1045.0",
+    "@data-slate/shared": "workspace:*",
+    "@libsql/client": "^0.17.3",
+    "groq-sdk": "^1.2.0",
+    "hono": "^4.12.18"
+  }
+}
