@@ -24,6 +24,7 @@ export default function Record() {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
   const [level, setLevel] = useState(0)
   const [status, setStatus] = useState<Status>({ type: "idle", msg: "" })
+  const [warnNoTags, setWarnNoTags] = useState(false)
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -34,6 +35,7 @@ export default function Record() {
 
   function toggleTag(tag: Tag) {
     setTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag])
+    setWarnNoTags(false)
   }
 
   const pollLevel = useCallback(() => {
@@ -47,6 +49,12 @@ export default function Record() {
   }, [])
 
   async function startRecording() {
+    // Tag reminder — first tap warns, second tap proceeds
+    if (tags.length === 0 && !warnNoTags) {
+      setWarnNoTags(true)
+      return
+    }
+    setWarnNoTags(false)
     setAudioBlob(null)
     setStatus({ type: "idle", msg: "" })
     setElapsed(0)
@@ -64,11 +72,13 @@ export default function Record() {
       analyserRef.current = analyser
       animFrameRef.current = requestAnimationFrame(pollLevel)
 
-      const mr = new MediaRecorder(stream, { mimeType: "audio/webm" })
+      // Prefer webm, fall back to mp4 for Safari/iOS
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4"
+      const mr = new MediaRecorder(stream, { mimeType })
       mediaRecorderRef.current = mr
       mr.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data) }
       mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" })
+        const blob = new Blob(chunksRef.current, { type: mimeType })
         setAudioBlob(blob)
         stream.getTracks().forEach((t) => t.stop())
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
@@ -89,12 +99,20 @@ export default function Record() {
     setRecording(false)
   }
 
+  function discard() {
+    setAudioBlob(null)
+    setElapsed(0)
+    setStatus({ type: "idle", msg: "" })
+    setWarnNoTags(false)
+  }
+
   async function submit() {
     if (!audioBlob) return
     setStatus({ type: "sending", msg: "TRANSMITTING..." })
 
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : "webm"
     const form = new FormData()
-    form.append("audio", audioBlob, "recording.webm")
+    form.append("audio", audioBlob, `recording.${ext}`)
     form.append("date", todayISO())
     form.append("duration_s", String(elapsed))
     for (const t of tags) form.append("tags", t)
@@ -137,6 +155,11 @@ export default function Record() {
       <main className="rec-main">
         <div>
           <div className="rec-section-label">[ SELECT CLASSIFICATIONS ]</div>
+          {warnNoTags && (
+            <div className="rec-warn-banner">
+              ⚠ NO CLASSIFICATION SELECTED — TAP REC AGAIN TO PROCEED UNCLASSIFIED
+            </div>
+          )}
           <div className="rec-tag-grid">
             {ALL_TAGS.map((tag) => (
               <button
@@ -176,9 +199,16 @@ export default function Record() {
 
         <div>
           <div className="rec-section-label">[ TRANSMIT ]</div>
-          <button className="rec-submit-btn" onClick={submit} disabled={!canSubmit}>
-            ▶ COMMIT TO COGITATOR
-          </button>
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button className="rec-submit-btn" onClick={submit} disabled={!canSubmit} style={{ flex: 1 }}>
+              ▶ COMMIT TO COGITATOR
+            </button>
+            {audioBlob && status.type !== "sending" && (
+              <button className="rec-discard-btn" onClick={discard} aria-label="Discard recording">
+                ✕ DISCARD
+              </button>
+            )}
+          </div>
           <div style={{ marginTop: "0.5rem" }}>
             <div className={`rec-status-msg rec-status-msg--${status.type}`}>
               {status.msg || (audioBlob ? "RECORDING READY FOR TRANSMISSION" : recording ? "VOXCASTER ACTIVE..." : "AWAITING RECORDING")}

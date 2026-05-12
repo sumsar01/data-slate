@@ -45,7 +45,7 @@ export default function App() {
   const [activeFilters, setActiveFilters] = useState<Tag[]>([])
   const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
 
-  const { groups, loading, reload } = useDateGroups()
+  const { groups, loading, reload } = useDateGroups(!!selectedNote)
 
   const totalNotes = groups.reduce((a, g) => a + g.notes.length, 0)
 
