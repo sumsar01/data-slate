@@ -1,6 +1,8 @@
 import { useState } from "react"
 import type { Note, Tag, DateGroup } from "@data-slate/shared"
 import { soundClick } from "../audio/sounds"
+import { SessionOverride } from "./SessionOverride"
+import { upsertSession } from "../data/api"
 import "./NoteList.css"
 
 interface Props {
@@ -8,10 +10,13 @@ interface Props {
   selectedId: string | null
   activeTagFilters: Tag[]
   onSelect: (note: Note) => void
+  onReload: () => void
 }
 
-export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Props) {
+export function NoteList({ groups, selectedId, activeTagFilters, onSelect, onReload }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  // Track session IDs returned from the API by date
+  const [sessionIds] = useState<Map<string, string>>(new Map())
 
   function toggleGroup(date: string) {
     setCollapsed((prev) => {
@@ -36,6 +41,12 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Pro
     return new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
   }
 
+  async function handleSessionSave(date: string, name: string) {
+    const existingId = sessionIds.get(date)
+    await upsertSession(date, name, existingId)
+    onReload()
+  }
+
   return (
     <div className="note-list">
       {groups.map((group) => {
@@ -48,9 +59,15 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Pro
               <span className="note-group-date">{formatDate(group.date)}</span>
               <span className="note-group-count">[{notes.length}]</span>
             </button>
-            {group.session_name && !isCollapsed && (
-              <div className="note-group-session">{group.session_name}</div>
+
+            {!isCollapsed && (
+              <SessionOverride
+                date={group.date}
+                currentName={group.session_name}
+                onSave={(name) => handleSessionSave(group.date, name)}
+              />
             )}
+
             {!isCollapsed && (
               <div className="note-group-items">
                 {notes.map((note) => (
@@ -78,4 +95,3 @@ export function NoteList({ groups, selectedId, activeTagFilters, onSelect }: Pro
     </div>
   )
 }
-

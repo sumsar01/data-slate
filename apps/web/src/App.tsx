@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Note, Tag } from "@data-slate/shared"
-import { MOCK_DATA } from "./data/mockData"
+import { useDateGroups } from "./hooks/useDateGroups"
 import { BootSequence } from "./components/BootSequence"
 import { TagFilter } from "./components/TagFilter"
 import { NoteList } from "./components/NoteList"
@@ -44,8 +44,11 @@ export default function App() {
   const [booted, setBooted] = useState(false)
   const [selectedNote, setSelectedNote] = useState<Note | null>(null)
   const [activeFilters, setActiveFilters] = useState<Tag[]>([])
-  // Mobile: "list" | "reader"
   const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
+
+  const { groups, loading, reload } = useDateGroups()
+
+  const totalNotes = groups.reduce((a, g) => a + g.notes.length, 0)
 
   function handleSelectNote(note: Note) {
     setSelectedNote(note)
@@ -57,19 +60,14 @@ export default function App() {
     setMobilePanel("list")
   }
 
-  const totalNotes = MOCK_DATA.reduce((a, g) => a + g.notes.length, 0)
-
   return (
     <>
       {!booted && <BootSequence onComplete={() => setBooted(true)} />}
       <div className={`app ${booted ? "app--visible" : ""}`}>
-        {/* Scanline overlay */}
         <div className="scanlines" aria-hidden />
 
-        {/* Header */}
         <header className="app-header">
           <div className="app-header-left">
-            {/* Mobile back button — only visible when in reader on small screens */}
             {mobilePanel === "reader" && (
               <button className="app-back-btn" onClick={handleBack} aria-label="Back to list">
                 ◄ LOG
@@ -84,8 +82,8 @@ export default function App() {
           </div>
           <div className="app-header-right">
             <span className="app-header-status">
-              <span className="status-dot" />
-              <span className="app-header-status-text">COGITATOR ONLINE</span>
+              <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
+              <span className="app-header-status-text">{loading ? "RETRIEVING..." : "COGITATOR ONLINE"}</span>
             </span>
             <span className="app-header-rec">
               <span className="status-dot status-dot--red" />
@@ -94,34 +92,30 @@ export default function App() {
           </div>
         </header>
 
-        {/* Main layout */}
         <main className="app-main">
-          {/* Left panel */}
           <aside className={`panel panel-left ${mobilePanel === "reader" ? "panel--mobile-hidden" : ""}`}>
             <div className="panel-label">[ AUSPEX LOG v2.3.1 ]</div>
             <TagFilter active={activeFilters} onChange={setActiveFilters} />
             <NoteList
-              groups={MOCK_DATA}
+              groups={groups}
               selectedId={selectedNote?.id ?? null}
               activeTagFilters={activeFilters}
               onSelect={handleSelectNote}
+              onReload={reload}
             />
           </aside>
 
-          {/* Divider — hidden on mobile */}
           <div className="panel-divider" aria-hidden />
 
-          {/* Right panel */}
           <section className={`panel panel-right ${mobilePanel === "list" ? "panel--mobile-hidden" : ""}`}>
             <div className="panel-label">[ COGITATOR RECORD ]</div>
             <NoteReader note={selectedNote} />
           </section>
         </main>
 
-        {/* Footer — hidden on mobile */}
         <footer className="app-footer">
           <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
-          <span>RECORDS: {totalNotes} // SESSIONS: {MOCK_DATA.length}</span>
+          <span>RECORDS: {totalNotes} // SESSIONS: {groups.length}</span>
         </footer>
       </div>
     </>

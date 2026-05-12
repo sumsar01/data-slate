@@ -1,0 +1,90 @@
+.session-override-trigger {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 1rem 0.25rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.session-override-name {
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-style: italic;
+}
+
+.session-override-empty {
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.session-override-edit-icon {
+  font-size: 0.55rem;
+  color: #3a2800;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.session-override-trigger:hover .session-override-edit-icon {
+  opacity: 1;
+}
+
+.session-override-trigger:hover .session-override-empty {
+  color: #7a5500;
+}
+
+.session-override-form {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.75rem 0.25rem;
+}
+
+.session-override-input {
+  flex: 1;
+  background: #0d0d0d;
+  border: 1px solid #ffb000;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.4rem;
+  outline: none;
+}
+
+.session-override-input::placeholder {
+  color: #3a2800;
+}
+
+.session-override-btn {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+
+.session-override-btn--save {
+  border-color: #ffb000;
+  color: #ffb000;
+}
+
+.session-override-btn--save:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.session-override-btn:hover:not(:disabled) {
+  background: #1a0e00;
+}

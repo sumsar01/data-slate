@@ -1,5 +1,6 @@
 import type { Note } from "@data-slate/shared"
 import { useTypewriter } from "../hooks/useTypewriter"
+import { AudioPlayer } from "./AudioPlayer"
 import "./NoteReader.css"
 
 interface Props {
@@ -68,7 +69,7 @@ export function NoteReader({ note }: Props) {
         <div className="note-reader-divider">{"─".repeat(60)}</div>
         {note.audio_url ? (
           <div className="note-reader-audio">
-            <audio controls src={note.audio_url} />
+            <AudioPlayer src={note.audio_url} duration_s={note.duration_s} />
           </div>
         ) : (
           <div className="note-reader-audio-placeholder">

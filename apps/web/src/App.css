@@ -122,6 +122,11 @@ a, button, [role="button"],
   box-shadow: 0 0 6px #ff2200;
 }
 
+.status-dot--amber {
+  background: #ffb000;
+  box-shadow: 0 0 6px #ffb000;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
