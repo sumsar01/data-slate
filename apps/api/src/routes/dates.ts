@@ -1,6 +1,6 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
-import type { DateGroup } from "@data-slate/shared"
+import type { DateGroup } from "../lib/types"
 
 export const datesRouter = new Hono()
 

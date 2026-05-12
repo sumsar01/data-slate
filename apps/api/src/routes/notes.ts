@@ -3,7 +3,7 @@ import { db } from "../lib/db"
 import { uploadToR2 } from "../lib/r2"
 import { transcribeAudio } from "../lib/groq"
 import { randomUUID } from "crypto"
-import type { Tag } from "@data-slate/shared"
+import type { Tag } from "../lib/types"
 
 export const notesRouter = new Hono()
 
