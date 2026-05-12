@@ -1,6 +1,9 @@
 # Dolt database (managed by Dolt, not git)
 dolt/
 
+# Dolt noms binary store — may contain secrets from bd remember
+embeddeddolt/
+
 # Runtime files
 bd.sock
 bd.sock.startlock
