@@ -3,6 +3,7 @@ import { cors } from "hono/cors"
 import { notesRouter } from "./routes/notes"
 import { datesRouter } from "./routes/dates"
 import { sessionsRouter } from "./routes/sessions"
+import { sharesRouter } from "./routes/shares"
 
 const app = new Hono()
 
@@ -26,6 +27,7 @@ app.get("/health", (c) => c.json({ status: "ok", ts: new Date().toISOString() })
 app.route("/notes", notesRouter)
 app.route("/dates", datesRouter)
 app.route("/sessions", sessionsRouter)
+app.route("/shares", sharesRouter)
 
 export default {
   port: parseInt(process.env.PORT ?? "3001"),

@@ -1,0 +1,190 @@
+.share-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: "JetBrains Mono", monospace;
+  background: #0a0a0a;
+  color: #ffb000;
+}
+
+.share-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+}
+
+.share-status--err {
+  color: #ff2200;
+}
+
+.share-header {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #3a2800;
+  background: #0d0d0d;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.share-header-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffb000;
+}
+
+.share-header-sub {
+  font-size: 0.6rem;
+  color: #c88800;
+  letter-spacing: 0.08em;
+}
+
+.share-header-badge {
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+}
+
+.share-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.share-list {
+  width: 300px;
+  min-width: 200px;
+  overflow-y: auto;
+  border-right: 1px solid #1a0e00;
+  padding: 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.share-list::-webkit-scrollbar { width: 4px; }
+.share-list::-webkit-scrollbar-track { background: #0a0a0a; }
+.share-list::-webkit-scrollbar-thumb { background: #3a2800; }
+
+.share-group {
+  margin-bottom: 0.5rem;
+}
+
+.share-group-date {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: #ffb000;
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid #1a0e00;
+}
+
+.share-group-summary {
+  font-size: 0.55rem;
+  color: #7a5500;
+  line-height: 1.5;
+  padding: 0.4rem 1rem;
+  letter-spacing: 0.03em;
+  white-space: pre-wrap;
+}
+
+.share-group-notes {
+  padding: 0.25rem 0;
+}
+
+.share-note-item {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.3rem 1rem 0.3rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  text-align: left;
+  transition: all 0.1s;
+}
+
+.share-note-item:hover {
+  background: rgba(255, 176, 0, 0.04);
+  border-left-color: #3a2800;
+}
+
+.share-note-item--active {
+  background: rgba(255, 176, 0, 0.07);
+  border-left-color: #ffb000;
+}
+
+.share-note-prefix {
+  color: #7a5500;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.share-note-item--active .share-note-prefix { color: #ffb000; }
+
+.share-note-title {
+  flex: 1;
+  font-size: 0.65rem;
+  color: #c88800;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.share-note-item--active .share-note-title { color: #ffb000; }
+
+.share-note-time {
+  font-size: 0.55rem;
+  color: #3a2800;
+  flex-shrink: 0;
+}
+
+.share-reader {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.share-footer {
+  padding: 0.35rem 1rem;
+  border-top: 1px solid #3a2800;
+  background: #0d0d0d;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.share-footer-link {
+  color: #7a5500;
+  text-decoration: none;
+}
+
+.share-footer-link:hover {
+  color: #ffb000;
+}
+
+@media (max-width: 700px) {
+  .share-list {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #1a0e00;
+    max-height: 40vh;
+  }
+
+  .share-main {
+    flex-direction: column;
+  }
+}

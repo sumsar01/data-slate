@@ -70,6 +70,19 @@ notesRouter.get("/:id", async (c) => {
   return c.json(rowToNote(result.rows[0]))
 })
 
+// POST /notes/:id/entities — retry entity extraction for a note
+notesRouter.post("/:id/entities", async (c) => {
+  const id = c.req.param("id")
+  const result = await db.execute({ sql: "SELECT transcript FROM notes WHERE id = ?", args: [id] })
+  if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
+  const transcript = (result.rows[0]!.transcript ?? "") as string
+  if (!transcript) return c.json({ error: "No transcript" }, 422)
+
+  const entities = await extractEntities(transcript)
+  await db.execute({ sql: "UPDATE notes SET entities = ? WHERE id = ?", args: [JSON.stringify(entities), id] })
+  return c.json({ id, entities })
+})
+
 // DELETE /notes/:id
 notesRouter.delete("/:id", async (c) => {
   const id = c.req.param("id")

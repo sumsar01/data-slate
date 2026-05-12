@@ -96,6 +96,9 @@ export default function App() {
             <button className="app-export-btn" onClick={handleExportAll} title="Export all sessions as markdown">
               ↓ EXPORT
             </button>
+            <Link to="/admin-mechanicus" className="app-export-btn" title="Admin panel">
+              ⚙
+            </Link>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />
               <span className="app-header-status-text">REC</span>
