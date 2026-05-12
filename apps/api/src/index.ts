@@ -12,6 +12,11 @@ app.use("*", cors({
   allowHeaders: ["Content-Type", "Authorization"],
 }))
 
+app.onError((err, c) => {
+  console.error(`[ERROR] ${c.req.method} ${c.req.url}:`, err)
+  return c.json({ error: err.message }, 500)
+})
+
 app.get("/health", (c) => c.json({ status: "ok", ts: new Date().toISOString() }))
 
 app.route("/notes", notesRouter)
