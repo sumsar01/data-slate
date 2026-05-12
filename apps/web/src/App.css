@@ -140,6 +140,23 @@ a, button, [role="button"],
   gap: 0.4rem;
 }
 
+.app-rec-link {
+  color: #ff2200;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6rem;
+  border: 1px solid #3a0000;
+  padding: 0.2rem 0.5rem;
+  transition: background 0.1s;
+}
+
+.app-rec-link:hover {
+  background: #1a0000;
+}
+
 /* ── Main layout ────────────────────────────────────────── */
 
 .app-main {

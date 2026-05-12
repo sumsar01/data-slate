@@ -1,0 +1,223 @@
+/* Recorder page — scoped with rec- prefix to avoid conflicts with web app styles */
+
+.rec-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #3a2800;
+  background: #0d0d0d;
+  flex-shrink: 0;
+}
+
+.rec-header-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffb000;
+}
+
+.rec-header-sub {
+  font-size: 0.55rem;
+  color: #7a5500;
+  letter-spacing: 0.08em;
+}
+
+.rec-back-link {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: #ffb000;
+  text-decoration: none;
+  border: 1px solid #3a2800;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.1s;
+}
+
+.rec-back-link:hover {
+  background: #1a0e00;
+}
+
+.rec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.rec-dot--green { background: #00ff41; box-shadow: 0 0 6px #00ff41; animation: rec-pulse 2s ease-in-out infinite; }
+.rec-dot--red   { background: #ff2200; box-shadow: 0 0 6px #ff2200; animation: rec-pulse 1s ease-in-out infinite; }
+.rec-dot--amber { background: #ffb000; box-shadow: 0 0 6px #ffb000; animation: rec-pulse 0.5s ease-in-out infinite; }
+
+@keyframes rec-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.rec-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rec-section-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+  margin-bottom: 0.5rem;
+}
+
+.rec-tag-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.rec-tag-btn {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  padding: 0.45rem 0.3rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.rec-tag-btn:active { transform: scale(0.95); }
+
+.rec-tag-btn--active {
+  border-color: #ffb000;
+  color: #ffb000;
+  background: #1a0e00;
+  box-shadow: 0 0 8px #ffb00033;
+}
+
+.rec-record-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.rec-record-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid #ffb000;
+  background: #0d0d0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 0 16px #ffb00022;
+  flex-shrink: 0;
+}
+
+.rec-record-btn:active { transform: scale(0.93); }
+
+.rec-record-btn--recording {
+  border-color: #ff2200;
+  box-shadow: 0 0 24px #ff220044;
+}
+
+.rec-record-btn-inner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffb000;
+  transition: all 0.15s;
+}
+
+.rec-record-btn-inner--recording {
+  border-radius: 6px;
+  background: #ff2200;
+  width: 28px;
+  height: 28px;
+}
+
+.rec-timer {
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  color: #ffb000;
+  font-variant-numeric: tabular-nums;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.rec-timer--recording { color: #ff2200; }
+
+.rec-level-meter {
+  width: 100%;
+  height: 4px;
+  background: #1a0e00;
+  border: 1px solid #3a2800;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.rec-level-bar {
+  height: 100%;
+  background: #ffb000;
+  transition: width 0.05s;
+}
+
+.rec-level-bar--recording { background: #ff2200; }
+
+.rec-submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #1a0e00;
+  border: 1px solid #ffb000;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.rec-submit-btn:hover { background: #2a1800; }
+.rec-submit-btn:active { transform: scale(0.98); }
+.rec-submit-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rec-status-msg {
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+  min-height: 1rem;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.rec-status-msg--ok { color: #00ff41; }
+.rec-status-msg--err { color: #ff2200; }
+.rec-status-msg--sending { color: #ffb000; }
+
+.rec-footer {
+  padding: 0.35rem 1rem;
+  border-top: 1px solid #3a2800;
+  background: #0d0d0d;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  flex-shrink: 0;
+}

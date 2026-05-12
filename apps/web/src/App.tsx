@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import type { Note, Tag } from "./shared"
 import { useDateGroups } from "./hooks/useDateGroups"
 import { BootSequence } from "./components/BootSequence"
@@ -8,7 +9,6 @@ import { NoteReader } from "./components/NoteReader"
 import { soundClick } from "./audio/sounds"
 import "./App.css"
 
-// Mechanicus cog SVG
 function CogIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,6 @@ function CogIcon() {
   )
 }
 
-// Skull SVG
 function SkullIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,13 +80,13 @@ export default function App() {
             </span>
           </div>
           <div className="app-header-right">
+            <Link to="/record" className="app-rec-link">
+              <span className="status-dot status-dot--red" />
+              <span className="app-header-status-text">REC</span>
+            </Link>
             <span className="app-header-status">
               <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
               <span className="app-header-status-text">{loading ? "RETRIEVING..." : "COGITATOR ONLINE"}</span>
-            </span>
-            <span className="app-header-rec">
-              <span className="status-dot status-dot--red" />
-              <span className="app-header-status-text">AUSPEX ACTIVE</span>
             </span>
           </div>
         </header>
