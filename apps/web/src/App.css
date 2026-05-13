@@ -546,10 +546,9 @@ a, button, [role="button"],
   border: 1px solid #3a2800;
   border-top: none;
   background: #0d0d0d;
-  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  overflow: hidden;
 }
 
 .tl-card-dates {
@@ -560,12 +559,44 @@ a, button, [role="button"],
 
 .tl-card-summary {
   font-size: 0.6rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: #c88800;
   letter-spacing: 0.03em;
-  border-left: 2px solid #3a2800;
-  padding-left: 0.6rem;
   font-style: italic;
+}
+
+/* Sections inside expanded card */
+.tl-card-section {
+  padding: 0.6rem 0.75rem;
+}
+
+.tl-card-section + .tl-card-section {
+  border-top: 1px solid #3a2800;
+}
+
+.tl-card-section--summary {
+  background: #0f0900;
+}
+
+.tl-card-section--recordings {
+  background: #0d0d0d;
+}
+
+.tl-card-section--actions {
+  background: #0d0d0d;
+  padding-top: 0.4rem;
+  padding-bottom: 0.5rem;
+}
+
+.tl-card-section-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: #7a5500;
+  margin-bottom: 0.4rem;
+}
+
+.tl-card-section-meta {
+  color: #3a2800;
 }
 
 .tl-card-recordings {

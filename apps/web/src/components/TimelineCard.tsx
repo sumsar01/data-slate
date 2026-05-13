@@ -74,21 +74,30 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
 
         {expanded && (
           <div className="tl-card-body">
-            <div className="tl-card-dates">DATES: {session.dates.sort().join(", ")}</div>
             {session.session_summary && (
-              <div className="tl-card-summary">{session.session_summary}</div>
+              <div className="tl-card-section tl-card-section--summary">
+                <div className="tl-card-section-label">BATTLE REPORT</div>
+                <div className="tl-card-summary">{session.session_summary}</div>
+              </div>
             )}
-            <div className="tl-card-recordings">
-              {session.notes.map(n => (
-                <div key={n.id} className="tl-card-rec-row">
-                  <span className="tl-card-rec-title">{n.title || "Untitled"}</span>
-                  <span className="tl-card-rec-dur">{formatDuration(n.duration_s)}</span>
-                </div>
-              ))}
+            <div className="tl-card-section tl-card-section--recordings">
+              <div className="tl-card-section-label">
+                RECORDINGS <span className="tl-card-section-meta">[{recordingCount}] · {formatDuration(totalDuration)}</span>
+              </div>
+              <div className="tl-card-recordings">
+                {session.notes.map(n => (
+                  <div key={n.id} className="tl-card-rec-row">
+                    <span className="tl-card-rec-title">{n.title || "Untitled"}</span>
+                    <span className="tl-card-rec-dur">{formatDuration(n.duration_s)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <button className="tl-card-goto" onClick={handleGoToLog}>
-              GO TO LOG →
-            </button>
+            <div className="tl-card-section tl-card-section--actions">
+              <button className="tl-card-goto" onClick={handleGoToLog}>
+                GO TO LOG →
+              </button>
+            </div>
           </div>
         )}
       </div>
