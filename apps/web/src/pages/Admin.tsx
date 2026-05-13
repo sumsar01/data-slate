@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import type { DateGroup } from "../shared"
+import type { DateGroup, Tag } from "../shared"
+import { ALL_TAGS } from "../shared"
 import { exportGroupsToMarkdown, exportSessionToMarkdown, downloadMarkdown } from "../data/export"
+import { createTextNote } from "../data/api"
 import "./Admin.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -47,6 +49,15 @@ export default function Admin() {
   const [mergeTargetId, setMergeTargetId] = useState<string>("")
   const [uploadingImageFor, setUploadingImageFor] = useState<string | null>(null)
   const [removingImageFor, setRemovingImageFor] = useState<string | null>(null)
+
+  // Reference log state
+  const [refDate, setRefDate] = useState(() => new Date().toISOString().slice(0, 10))
+  const [refTitle, setRefTitle] = useState("")
+  const [refContent, setRefContent] = useState("")
+  const [refTags, setRefTags] = useState<Tag[]>([])
+  const [refReference, setRefReference] = useState(true)
+  const [refSubmitting, setRefSubmitting] = useState(false)
+  const [refResult, setRefResult] = useState<"ok" | "err" | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -209,6 +220,24 @@ export default function Admin() {
     }
   }
 
+  async function submitRefNote() {
+    if (!refDate || !refTitle.trim() || !refContent.trim()) return
+    setRefSubmitting(true)
+    setRefResult(null)
+    try {
+      await createTextNote(refDate, refTitle.trim(), refContent.trim(), refTags, refReference)
+      setRefTitle("")
+      setRefContent("")
+      setRefTags([])
+      setRefResult("ok")
+    } catch (e) {
+      console.error(e)
+      setRefResult("err")
+    } finally {
+      setRefSubmitting(false)
+    }
+  }
+
   const webOrigin = window.location.origin
 
   if (loading) {
@@ -232,7 +261,10 @@ export default function Admin() {
           <div className="admin-header-title">DATA-SLATE MK.IV // ADMIN COGITATOR</div>
           <div className="admin-header-sub">ADEPTUS MECHANICUS RESTRICTED ACCESS</div>
         </div>
-        <Link to="/" className="admin-back-link">◄ LOG</Link>
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+          <Link to="/admin-mechanicus/notes" className="admin-back-link">✎ LOG ENTRIES</Link>
+          <Link to="/" className="admin-back-link">◄ LOG</Link>
+        </div>
       </header>
 
       <main className="admin-main">
@@ -500,6 +532,83 @@ export default function Admin() {
               ))}
             </>
           )}
+        </section>
+
+        {/* ── Reference Log ───────────────────────────────────── */}
+        <section className="admin-section">
+          <div className="admin-section-title">[ REFERENCE LOG ]</div>
+          <div className="admin-row">
+            <span className="admin-label admin-label--dim">
+              Log wiki entries, NPCs, or lore that are excluded from session summaries by default.
+            </span>
+          </div>
+          <div className="admin-row">
+            <label className="admin-label">DATE</label>
+            <input
+              className="admin-input"
+              type="date"
+              value={refDate}
+              onChange={(e) => setRefDate(e.target.value)}
+            />
+          </div>
+          <div className="admin-row">
+            <label className="admin-label">TITLE</label>
+            <input
+              className="admin-input"
+              style={{ flex: 1 }}
+              placeholder="e.g. Inquisitor Krell"
+              value={refTitle}
+              onChange={(e) => setRefTitle(e.target.value)}
+            />
+          </div>
+          <div className="admin-row" style={{ alignItems: "flex-start" }}>
+            <label className="admin-label" style={{ paddingTop: "0.2rem" }}>CONTENT</label>
+            <textarea
+              className="admin-input"
+              style={{ flex: 1, minHeight: "6rem", resize: "vertical" }}
+              placeholder="Notes about this entity or lore entry..."
+              value={refContent}
+              onChange={(e) => setRefContent(e.target.value)}
+            />
+          </div>
+          <div className="admin-row" style={{ flexWrap: "wrap", gap: "0.4rem" }}>
+            <span className="admin-label">TAGS</span>
+            {ALL_TAGS.map((tag) => (
+              <button
+                key={tag}
+                className={`admin-btn admin-btn--sm ${refTags.includes(tag) ? "admin-btn--active" : ""}`}
+                onClick={() => setRefTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag])}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+          <div className="admin-row">
+            <label className="admin-label" style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <input
+                type="checkbox"
+                checked={refReference}
+                onChange={(e) => setRefReference(e.target.checked)}
+              />
+              REFERENCE (exclude from summaries)
+            </label>
+          </div>
+          {refResult && (
+            <div className="admin-row">
+              <span className={`admin-value ${refResult === "err" ? "admin-value--warn" : ""}`}>
+                {refResult === "ok" ? "ENTRY LOGGED // SUCCESS" : "ERROR — ENTRY FAILED"}
+              </span>
+            </div>
+          )}
+          <div className="admin-row">
+            <button
+              className="admin-btn"
+              onClick={submitRefNote}
+              disabled={refSubmitting || !refDate || !refTitle.trim() || !refContent.trim()}
+            >
+              {refSubmitting ? "LOGGING..." : "+ LOG ENTRY"}
+            </button>
+          </div>
         </section>
 
       </main>

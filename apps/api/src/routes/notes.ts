@@ -19,6 +19,9 @@ notesRouter.post("/", async (c) => {
     return c.json({ error: "Missing required fields: audio, date, duration_s" }, 400)
   }
 
+  const referenceRaw = formData.get("reference") as string | null
+  const reference = referenceRaw === "true" ? 1 : 0
+
   const id = randomUUID()
   const ext = audio.name?.endsWith(".mp4") ? "mp4" : "webm"
   const key = `audio/${id}.${ext}`
@@ -41,9 +44,9 @@ notesRouter.post("/", async (c) => {
   const tags = JSON.stringify(tagsRaw)
 
   await db.execute({
-    sql: `INSERT INTO notes (id, date, title, transcript, audio_url, duration_s, tags, created_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    args: [id, date, title, transcript, audio_url, duration_s, tags, created_at],
+    sql: `INSERT INTO notes (id, date, title, transcript, audio_url, duration_s, tags, created_at, reference)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [id, date, title, transcript, audio_url, duration_s, tags, created_at, reference],
   })
 
   // Fire-and-forget entity extraction on flavoured transcript
@@ -59,7 +62,43 @@ notesRouter.post("/", async (c) => {
     }
   })()
 
-  return c.json({ id, date, title, transcript, audio_url, duration_s, tags: tagsRaw, created_at }, 201)
+  return c.json({ id, date, title, transcript, audio_url, duration_s, tags: tagsRaw, reference: reference === 1, created_at }, 201)
+})
+
+// POST /notes/text — create a plain-text reference note (no audio)
+notesRouter.post("/text", async (c) => {
+  const body = await c.req.json<{ date: string; title: string; content: string; tags?: string[]; reference?: boolean }>()
+  const { date, title, content, tags: tagsRaw = [], reference: referenceFlag = true } = body
+
+  if (!date || !title || !content) {
+    return c.json({ error: "Missing required fields: date, title, content" }, 400)
+  }
+
+  const id = randomUUID()
+  const created_at = new Date().toISOString()
+  const tags = JSON.stringify(tagsRaw)
+  const reference = referenceFlag ? 1 : 0
+
+  await db.execute({
+    sql: `INSERT INTO notes (id, date, title, transcript, audio_url, duration_s, tags, created_at, reference)
+          VALUES (?, ?, ?, ?, NULL, 0, ?, ?, ?)`,
+    args: [id, date, title, content, tags, created_at, reference],
+  })
+
+  // Fire-and-forget entity extraction
+  ;(async () => {
+    try {
+      const entities = await extractEntities(content)
+      await db.execute({
+        sql: "UPDATE notes SET entities = ? WHERE id = ?",
+        args: [JSON.stringify(entities), id],
+      })
+    } catch (e) {
+      console.warn(`[WARN] Entity extraction failed for note ${id}:`, e)
+    }
+  })()
+
+  return c.json({ id, date, title, transcript: content, audio_url: null, duration_s: 0, tags: tagsRaw, reference: referenceFlag, created_at }, 201)
 })
 
 // GET /notes
@@ -125,6 +164,33 @@ notesRouter.post("/flavour-all", async (c) => {
   return c.json({ total: notes.length, processed, failed })
 })
 
+// PATCH /notes/:id — update editable fields
+notesRouter.patch("/:id", async (c) => {
+  const id = c.req.param("id")
+  const body = await c.req.json()
+
+  const allowed = ["title", "date", "transcript", "tags", "entities"] as const
+  const updates: string[] = []
+  const args: unknown[] = []
+
+  for (const field of allowed) {
+    if (field in body) {
+      updates.push(`${field} = ?`)
+      const val = body[field]
+      args.push(field === "tags" || field === "entities" ? JSON.stringify(val) : val)
+    }
+  }
+
+  if (updates.length === 0) return c.json({ error: "No valid fields to update" }, 400)
+
+  args.push(id)
+  await db.execute({ sql: `UPDATE notes SET ${updates.join(", ")} WHERE id = ?`, args })
+
+  const result = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
+  if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
+  return c.json(rowToNote(result.rows[0]))
+})
+
 // DELETE /notes/:id
 notesRouter.delete("/:id", async (c) => {
   const id = c.req.param("id")
@@ -157,6 +223,7 @@ function rowToNote(row: any) {
     duration_s: row.duration_s,
     tags: JSON.parse(row.tags as string),
     entities: row.entities ? JSON.parse(row.entities as string) : [],
+    reference: row.reference === 1,
     created_at: row.created_at,
   }
 }

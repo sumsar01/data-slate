@@ -8,6 +8,7 @@ import Admin from "./pages/Admin.tsx"
 import Wiki from "./pages/Wiki.tsx"
 import WikiPage from "./pages/WikiPage.tsx"
 import Timeline from "./pages/Timeline.tsx"
+import AdminNotes from "./pages/AdminNotes.tsx"
 import "./index.css"
 
 createRoot(document.getElementById("root")!).render(
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/wiki/name/:name" element={<WikiPage byName />} />
         <Route path="/wiki/:id" element={<WikiPage />} />
         <Route path="/timeline" element={<Timeline />} />
+        <Route path="/admin-mechanicus/notes" element={<AdminNotes />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
