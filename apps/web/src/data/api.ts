@@ -31,3 +31,14 @@ export async function generateSummary(sessionId: string): Promise<string> {
   const data = await res.json()
   return data.summary as string
 }
+
+export async function autoAnalyseSession(dates: string[]): Promise<{ id: string; name: string; summary: string }> {
+  if (!API_URL) throw new Error("No API configured")
+  const res = await fetch(`${API_URL}/sessions/auto`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ dates }),
+  })
+  if (!res.ok) throw new Error(`Auto-analyse failed: HTTP ${res.status}`)
+  return res.json()
+}

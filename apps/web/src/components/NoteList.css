@@ -160,6 +160,16 @@
   cursor: default;
 }
 
+.note-group-summary-btn--auto {
+  color: #ffb000;
+  border-color: #7a5500;
+}
+
+.note-group-summary-btn--auto:hover:not(:disabled) {
+  background: #1a0e00;
+  border-color: #ffb000;
+}
+
 .note-item-empty {
   padding: 0.3rem 1rem 0.3rem 2rem;
   font-family: "JetBrains Mono", monospace;

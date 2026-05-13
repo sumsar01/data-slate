@@ -2,7 +2,7 @@ import { useState } from "react"
 import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
-import { upsertSession, deleteNote, generateSummary } from "../data/api"
+import { upsertSession, deleteNote, generateSummary, autoAnalyseSession } from "../data/api"
 import "./NoteList.css"
 
 interface Props {
@@ -22,6 +22,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [summaries, setSummaries] = useState<Map<string, string>>(new Map())
   const [summaryLoading, setSummaryLoading] = useState<Set<string>>(new Set())
+  const [autoLoading, setAutoLoading] = useState<Set<string>>(new Set())
 
   function toggleGroup(date: string) {
     setCollapsed((prev) => {
@@ -92,6 +93,18 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
     }
   }
 
+  async function handleAutoAnalyse(group: DateGroup) {
+    setAutoLoading((prev) => new Set(prev).add(group.date))
+    try {
+      await autoAnalyseSession([group.date])
+      onReload()
+    } catch (e) {
+      console.error("Auto-analyse failed", e)
+    } finally {
+      setAutoLoading((prev) => { const s = new Set(prev); s.delete(group.date); return s })
+    }
+  }
+
   return (
     <div className="note-list">
       {groups.map((group) => {
@@ -111,6 +124,18 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
                 currentName={group.session_name}
                 onSave={(name) => handleSessionSave(group.date, name)}
               />
+            )}
+
+            {!isCollapsed && !group.session_id && (
+              <div className="note-group-summary">
+                <button
+                  className="note-group-summary-btn note-group-summary-btn--auto"
+                  onClick={() => handleAutoAnalyse(group)}
+                  disabled={autoLoading.has(group.date)}
+                >
+                  {autoLoading.has(group.date) ? "COGITATOR PROCESSING..." : "▶ AUTO-ANALYSE SESSION"}
+                </button>
+              </div>
             )}
 
             {!isCollapsed && group.session_id && (

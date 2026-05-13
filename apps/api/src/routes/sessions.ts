@@ -1,13 +1,49 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
-import { summariseSession } from "../lib/groq"
+import { nameSession, summariseSession } from "../lib/groq"
 import { randomUUID } from "crypto"
 
 export const sessionsRouter = new Hono()
 
+// POST /sessions/auto — create session with Groq-generated name + summary
+sessionsRouter.post("/auto", async (c) => {
+  const body = await c.req.json<{ dates: string[] }>()
+  if (!Array.isArray(body.dates) || body.dates.length === 0) {
+    return c.json({ error: "Missing required field: dates" }, 400)
+  }
+  const dates: string[] = body.dates
+
+  // Fetch transcripts for these dates
+  const placeholders = dates.map(() => "?").join(",")
+  const notesResult = await db.execute({
+    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) ORDER BY created_at ASC`,
+    args: dates,
+  })
+  const transcripts = notesResult.rows
+    .map((r) => (r.transcript as string) ?? "")
+    .filter(Boolean)
+
+  if (transcripts.length === 0) {
+    return c.json({ error: "No transcripts found for these dates" }, 422)
+  }
+
+  // Generate name + summary in parallel
+  const [name, summary] = await Promise.all([
+    nameSession(transcripts),
+    summariseSession(transcripts),
+  ])
+
+  const id = randomUUID()
+  await db.execute({
+    sql: "INSERT INTO session_overrides (id, name, dates, summary) VALUES (?, ?, ?, ?)",
+    args: [id, name, JSON.stringify(dates), summary],
+  })
+
+  return c.json({ id, name, summary, dates }, 201)
+})
+
 // POST /sessions — create session override
 sessionsRouter.post("/", async (c) => {
-  const body = await c.req.json<{ name: string; dates: string[] }>()
   if (!body.name || !Array.isArray(body.dates)) {
     return c.json({ error: "Missing required fields: name, dates" }, 400)
   }
