@@ -5,6 +5,7 @@ import type { DateGroup } from "../shared"
 interface TimelineSession {
   session_id: string | null
   session_name: string | null
+  session_summary: string | null
   dates: string[]
   notes: DateGroup["notes"]
 }
@@ -74,6 +75,9 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
         {expanded && (
           <div className="tl-card-body">
             <div className="tl-card-dates">DATES: {session.dates.sort().join(", ")}</div>
+            {session.session_summary && (
+              <div className="tl-card-summary">{session.session_summary}</div>
+            )}
             <div className="tl-card-recordings">
               {session.notes.map(n => (
                 <div key={n.id} className="tl-card-rec-row">

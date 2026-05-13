@@ -558,6 +558,16 @@ a, button, [role="button"],
   color: #7a5500;
 }
 
+.tl-card-summary {
+  font-size: 0.6rem;
+  line-height: 1.6;
+  color: #c88800;
+  letter-spacing: 0.03em;
+  border-left: 2px solid #3a2800;
+  padding-left: 0.6rem;
+  font-style: italic;
+}
+
 .tl-card-recordings {
   display: flex;
   flex-direction: column;

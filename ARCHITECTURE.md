@@ -1,0 +1,495 @@
+# Data-Slate Architecture Diagram & Flow
+
+## High-Level System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    USER INTERACTIONS                         │
+├─────────────────────────────────────────────────────────────┤
+│  Record Audio (/record)  →  Browse Notes (/)  →  Admin Panel │
+│                                                              │
+└────────────┬────────────────────────────────────────────────┘
+             │
+┌────────────▼─────────────────────────────────────────────────┐
+│         FRONTEND (React 19 + Vite)                           │
+├──────────────────────────────────────────────────────────────┤
+│  App.tsx (2-panel layout)                                    │
+│  ├─ NoteList (SessionOverride UI, tag filtering)            │
+│  ├─ NoteReader (audio player, entities)                     │
+│  ├─ EntityIndex (sidebar mentions)                          │
+│  ├─ Admin.tsx (export, shares, entity sync, flavouring)     │
+│  ├─ Wiki.tsx / WikiPage.tsx (entity browser)                │
+│  ├─ Record.tsx (audio capture)                              │
+│  └─ ShareView.tsx (public read-only)                        │
+│                                                              │
+│  State: useDateGroups() hook (polls /dates every 30s)       │
+│  API calls: data/api.ts (upsertSession, deleteNote, etc.)   │
+│                                                              │
+└────────────┬───────────────────────────────────────────────┘
+             │
+        HTTPS/REST
+             │
+┌────────────▼───────────────────────────────────────────────┐
+│         BACKEND API (Hono on Bun)                           │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  /notes            → Upload audio → Groq transcribe/flavour │
+│  /dates            → Aggregate notes by date + sessions     │
+│  /sessions         → Create/update session overrides        │
+│  /shares           → Create/revoke share tokens             │
+│  /wiki             → Entity CRUD, sync, merge               │
+│                                                              │
+│  Pipeline:                                                   │
+│  POST /notes with audio                                     │
+│    1. Upload to R2 (Cloudflare)                             │
+│    2. Transcribe via Groq (speech-to-text)                  │
+│    3. Flavour via Groq (rewrite with 40K terminology)       │
+│    4. Generate title via Groq (from flavoured transcript)   │
+│    5. Extract entities via Groq (NER)                       │
+│    6. Store in notes table                                  │
+│    → Response: Full note object                             │
+│                                                              │
+│  POST /sessions/:id/summary                                 │
+│    1. Fetch all notes for session dates                     │
+│    2. Summarise transcripts via Groq                        │
+│    3. Store in session_overrides.summary                    │
+│    → Response: { id, summary }                              │
+│                                                              │
+└────────────┬───────────────────────────────────────────────┘
+             │
+    ┌────────┼────────┬─────────────┐
+    │        │        │             │
+    ▼        ▼        ▼             ▼
+┌────────┐┌────────┐┌────────┐┌──────────┐
+│ Turso  ││Groq   ││R2      ││  (Future)│
+│SQLite  ││LLM    ││Object  ││Streaming │
+│        ││       ││Store   ││etc.      │
+└────────┘└────────┘└────────┘└──────────┘
+
+  PROD:
+  libsql:// turso.io
+  groq-sdk
+  @aws-sdk/client-s3 (R2 compatible)
+```
+
+---
+
+## Data Model & Type Hierarchy
+
+```
+DateGroup (returned from /dates)
+├── date: string (YYYY-MM-DD)
+├── session_id: string | null ──────┐
+├── session_name: string | null     │ All from session_overrides table
+├── session_summary: string | null  │
+└── notes: Note[] ──────────────────┼─ All from notes table
+                                    │  filtered by date
+    Note
+    ├── id: string (UUID)
+    ├── date: string (YYYY-MM-DD)
+    ├── title: string (generated by Groq)
+    ├── transcript: string (flavoured with 40K terms)
+    ├── audio_url: string (Cloudflare R2 public URL)
+    ├── duration_s: number
+    ├── tags: Tag[] (NPC, Location, Faction, Combat, Clue, Tech-Lore, Rumour, Item, Misc)
+    ├── entities: Entity[]
+    └── created_at: string (ISO timestamp)
+    
+    Entity
+    ├── name: string
+    └── type: EntityType (NPC | Location | Faction | Item | Other)
+
+Wiki Entity (from entities table)
+├── id: string (UUID)
+├── name: string
+├── type: EntityType
+├── canonical_id: string | null (FK for deduplication)
+├── description: string | null (user-editable)
+├── summary: string | null (Groq dossier)
+├── image_url: string | null (Cloudflare R2)
+└── created_at: string
+
+SessionOverride (session_overrides table)
+├── id: string (UUID)
+├── name: string (user-provided)
+├── dates: string[] (array of YYYY-MM-DD)
+└── summary: string | null (Groq-generated)
+```
+
+---
+
+## Database Schema Relationships
+
+```
+session_overrides (campaigns/sessions)
+├─ id (PK)
+├─ name
+├─ dates (JSON array of dates)
+└─ summary
+   │
+   ├──────────┐
+   │          │
+   │      shares (share links)
+   │      ├─ id (PK)
+   │      ├─ token (unique token)
+   │      ├─ session_id (FK)
+   │      ├─ created_at
+   │      └─ expires_at
+   │
+   └───────── dates (FK, each note.date matched to sessions)
+
+notes (recordings)
+├─ id (PK)
+├─ date (FK implicit to session_overrides.dates)
+├─ title
+├─ transcript
+├─ audio_url
+├─ duration_s
+├─ tags (JSON)
+├─ entities (JSON)
+└─ created_at
+   │
+   └──────────── Entity names mentioned
+                 │
+                 └──────────────────┐
+                                    │
+entities (wiki/dossier)
+├─ id (PK)
+├─ name
+├─ type
+├─ canonical_id (FK, for merging duplicates)
+├─ description
+├─ summary
+├─ image_url
+└─ created_at
+```
+
+---
+
+## Key Data Flows
+
+### Flow 1: Record Audio → Store Note
+
+```
+User records audio on /record
+         │
+         ▼
+FormData { audio: File, date, duration_s, tags }
+         │
+         ▼
+POST /notes
+         │
+         ▼
+Backend:
+  1. Upload audio to R2 ─────────────────────→ Cloudflare R2
+                                               /audio/{uuid}.webm
+  
+  2. Transcribe via Groq ──────────────────→ Groq API
+     (speech-to-text, detect language)       returns: transcript
+  
+  3. Flavour transcript via Groq ─────────→ Groq API
+     (rewrite with 40K terminology)          returns: flavoured_transcript
+  
+  4. Generate title via Groq ──────────────→ Groq API
+     (from flavoured transcript)             returns: title
+  
+  5. Extract entities via Groq ────────────→ Groq API
+     (NER - Named Entity Recognition)        returns: Entity[]
+  
+  6. Store in notes table
+     INSERT into notes (id, date, title, transcript, audio_url, duration_s, tags, entities, created_at)
+     
+  7. Fire-and-forget: async entity extraction retry if failed
+         │
+         ▼
+Response: { id, date, title, transcript, audio_url, duration_s, tags, created_at }
+         │
+         ▼
+Frontend: useDateGroups hook polls /dates every 30s
+         │
+         ▼
+New note appears in NoteList
+```
+
+### Flow 2: Create Session
+
+```
+User clicks [ SET SESSION NAME ] on date group
+         │
+         ▼
+SessionOverride modal (SessionOverride.tsx)
+  Input: name, date
+         │
+         ▼
+POST /sessions { name, dates: [date] }
+    or PATCH /sessions/:id { name, dates }
+         │
+         ▼
+Backend:
+  INSERT/UPDATE session_overrides
+         │
+         ▼
+Response: { id, name, dates }
+         │
+         ▼
+Frontend: onReload() → useDateGroups resets
+         │
+         ▼
+/dates endpoint re-queried:
+  - Fetches all notes
+  - Fetches all session_overrides
+  - Maps dates to sessions
+  - Returns DateGroup[] with session_id/name injected
+         │
+         ▼
+NoteList re-renders with session name visible
+```
+
+### Flow 3: Generate Session Summary
+
+```
+User clicks "▶ GENERATE BATTLE REPORT" in NoteList
+         │
+         ▼
+Call generateSummary(session_id)
+         │
+         ▼
+POST /sessions/:id/summary
+         │
+         ▼
+Backend:
+  1. SELECT session_overrides WHERE id = :id
+     Extract dates array
+  
+  2. SELECT transcript FROM notes WHERE date IN (dates)
+     Collect all transcripts for this session
+  
+  3. summariseSession(transcripts) via Groq
+     ─────────────────────────────→ Groq API
+                                    (few-shot summarisation)
+                                    returns: summary string
+  
+  4. UPDATE session_overrides SET summary = ? WHERE id = ?
+     Store summary
+         │
+         ▼
+Response: { id, summary }
+         │
+         ▼
+Frontend: 
+  Update local state
+  NoteList re-renders showing summary
+  User can click "↺ REGENERATE" to re-run
+```
+
+### Flow 4: Sync Entities (Admin)
+
+```
+Admin clicks "⚙ SYNC ENTITIES" on /admin-mechanicus
+         │
+         ▼
+POST /wiki/sync
+         │
+         ▼
+Backend:
+  1. SELECT id, transcript FROM notes ORDER BY created_at ASC
+  
+  2. For each note:
+       extractEntities(transcript) via Groq
+       ────────────────────────────→ Groq API (NER)
+       returns: { name, type }[]
+       
+  3. For each entity:
+       - Check if already in entities table (case-insensitive)
+       - If not: INSERT (with canonical_id = NULL)
+       - If yes: Create alias (set canonical_id to canonical)
+  
+  4. Fire-and-forget: async re-extraction on notes
+         │
+         ▼
+Response: { inserted: count }
+         │
+         ▼
+Frontend:
+  Show result count
+  Fetch /wiki to refresh entity list
+  Admin can now:
+    - Edit type (NPC/Location/Faction/Item/Other)
+    - Edit description
+    - Upload image → R2
+    - Generate Groq dossier (POST /wiki/:id/summary)
+    - Merge duplicates (POST /wiki/merge)
+```
+
+### Flow 5: Create Share Link
+
+```
+Admin clicks "+ SHARE" on session in /admin-mechanicus
+         │
+         ▼
+POST /shares { session_id, expires_in_days?: 7 }
+         │
+         ▼
+Backend:
+  1. Verify session_overrides.id exists
+  
+  2. Generate:
+     - id = UUID
+     - token = UUID without dashes (32 chars)
+     - created_at = now
+     - expires_at = now + expires_in_days (if provided)
+  
+  3. INSERT into shares table
+         │
+         ▼
+Response: { id, token, session_id, created_at, expires_at }
+         │
+         ▼
+Frontend:
+  Construct URL: window.location.origin + /share/ + token
+  Show copyable link
+  Store share record locally for revocation
+```
+
+### Flow 6: Public Share Access (Read-Only)
+
+```
+Recipient clicks /share/:token
+         │
+         ▼
+GET /shares/shared/:token
+         │
+         ▼
+Backend:
+  1. SELECT * FROM shares WHERE token = :token
+  
+  2. Check if expired:
+     if expires_at < now → return 410 Gone
+  
+  3. SELECT * FROM session_overrides WHERE id = session_id
+  
+  4. SELECT * FROM notes WHERE date IN (session.dates)
+     Group by date
+         │
+         ▼
+Response: { session_name, groups: DateGroup[] }
+         │
+         ▼
+Frontend (ShareView.tsx):
+  Display session name
+  Display grouped notes (read-only)
+  No edit buttons, no tag filtering
+  Just a clean archive view
+```
+
+---
+
+## Component Dependency Graph (Frontend)
+
+```
+App.tsx (main)
+├── BootSequence (startup anim)
+├── NoteList
+│   ├── SessionOverride (session name editor)
+│   └── NoteItem (individual note)
+│       └── delete/audio controls
+├── NoteReader (selected note detail)
+│   └── AudioPlayer
+├── TagFilter
+├── EntityIndex (sidebar)
+│   └── Entity pills
+└── Export button → exportGroupsToMarkdown()
+
+/admin-mechanicus
+└── Admin.tsx
+    ├── Export section
+    ├── Share links section
+    ├── Entity extraction status
+    ├── Transcript flavouring section
+    └── Entity wiki section
+        ├── Entity row
+        │   ├── Type selector
+        │   ├── Description input
+        │   ├── Image upload/remove
+        │   ├── Generate dossier
+        │   ├── Merge button
+        │   └── Entity list select
+
+/wiki
+└── Wiki.tsx (entity browser)
+    └── Entity pills
+        onClick → /wiki/:id
+
+/wiki/:id
+└── WikiPage.tsx (entity detail)
+    ├── Entity bio (name, type, description)
+    ├── Groq dossier (if available)
+    └── Note excerpts mentioning entity
+
+/record
+└── Record.tsx (audio recorder)
+    ├── WebRTC capture
+    ├── Duration display
+    ├── Tag selector
+    └── Upload button
+
+/share/:token
+└── ShareView.tsx (read-only session)
+    └── NoteList (filtered by token access)
+```
+
+---
+
+## State Management
+
+### Global State (Frontend)
+- **useDateGroups()** hook (custom)
+  - Polls `/dates` every 30 seconds
+  - Falls back to mock data if API unavailable
+  - Returns: `{ groups: DateGroup[], loading, error, reload }`
+  - Used by: App, NoteList, EntityIndex, Admin
+
+### Local Component State
+- **App.tsx:** selectedNote, activeFilters, searchQuery, mobilePanel, booted
+- **NoteList.tsx:** collapsed dates, deletingId, summaryLoading
+- **Admin.tsx:** creatingShareFor, retryingNoteId, mergeMode, uploadingImageFor, etc.
+- **SessionOverride.tsx:** editing, value, saving
+
+### No Redux/Zustand — just React hooks and prop drilling (simple enough for scope)
+
+---
+
+## Performance Considerations
+
+1. **Polling interval:** 30 seconds (not real-time, acceptable for archive)
+2. **Large transcripts:** Groq has token limits, may need chunking for very long sessions
+3. **Entity extraction:** Fire-and-forget async (doesn't block note creation)
+4. **Image uploads:** No optimization, direct to R2
+5. **Search:** Client-side (in-memory filter on notes, acceptable for current volume)
+6. **List virtualization:** Not implemented yet (could add if thousands of notes)
+
+---
+
+## Error Handling
+
+- **Backend:** Global error handler in index.ts, returns `{ error: message }` 500
+- **API failures:** Frontend falls back to mock data, shows "API unavailable" warning
+- **Groq failures:** Entity extraction failures are caught, logged as warnings (don't block)
+- **R2 failures:** R2 delete on note deletion is best-effort (warns but doesn't fail)
+- **Turso failures:** Returns HTTP error, client sees 500
+
+---
+
+## Future Architectural Considerations
+
+1. **Real-time updates:** WebSocket instead of 30s polling
+2. **User authentication:** Currently none, consider Clerk/Auth0
+3. **Collaboration:** Multiple users, permissions model
+4. **Campaign templates:** Preset campaign archetypes
+5. **Advanced search:** Full-text search in Turso (FTS5)
+6. **Caching:** Redis for frequently accessed entities
+7. **Async workers:** Bullmq for long-running Groq tasks
+8. **Streaming responses:** Stream Groq completions to client
+9. **Incremental imports:** Bulk import from external sources
+10. **Analytics:** Campaign duration, entity mentions, activity trends
+

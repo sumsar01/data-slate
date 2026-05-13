@@ -6,6 +6,7 @@ import type { DateGroup } from "../shared"
 interface TimelineSession {
   session_id: string | null
   session_name: string | null
+  session_summary: string | null
   dates: string[]
   notes: DateGroup["notes"]
 }
@@ -19,6 +20,7 @@ function groupBySessions(groups: DateGroup[]): TimelineSession[] {
       map.set(key, {
         session_id: g.session_id,
         session_name: g.session_name,
+        session_summary: g.session_summary,
         dates: [],
         notes: [],
       })
