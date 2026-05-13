@@ -50,6 +50,22 @@ wikiRouter.get("/by-name/:name", async (c) => {
   return c.json(entity)
 })
 
+// Extract a context window from a transcript around the first mention of any of the given names
+function extractExcerpt(transcript: string, names: string[]): string {
+  const lower = transcript.toLowerCase()
+  let bestIdx = -1
+  for (const name of names) {
+    const idx = lower.indexOf(name.toLowerCase())
+    if (idx !== -1 && (bestIdx === -1 || idx < bestIdx)) bestIdx = idx
+  }
+  if (bestIdx === -1) return transcript.slice(0, 300).trim()
+  const start = Math.max(0, bestIdx - 100)
+  const end = Math.min(transcript.length, bestIdx + 300)
+  const prefix = start > 0 ? "..." : ""
+  const suffix = end < transcript.length ? "..." : ""
+  return prefix + transcript.slice(start, end).trim() + suffix
+}
+
 // GET /wiki/:id — entity detail with note excerpts
 wikiRouter.get("/:id", async (c) => {
   await ensureTable()
@@ -107,8 +123,7 @@ wikiRouter.get("/:id", async (c) => {
 
     if (matched) {
       sessionDates.add(note.date as string)
-      // Extract a short excerpt — first 300 chars of transcript
-      const excerpt = ((note.transcript as string) ?? "").slice(0, 300).trim()
+      const excerpt = extractExcerpt((note.transcript as string) ?? "", allNames)
       mentions.push({
         note_id: note.id as string,
         note_title: note.title as string,
