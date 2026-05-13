@@ -52,8 +52,21 @@ Environment variables are in `apps/api/.env` (see `apps/api/.env.example`).
 
 ## Deployment
 
-- `apps/web` → Vercel
+- `apps/web` → Vercel (auto-deploys from `main` branch)
 - `apps/api` → Railway (also has `Dockerfile` and `nixpacks.toml`)
+
+**Railway is NOT connected to GitHub.** It must be deployed manually via the CLI after every API change:
+
+```bash
+cd apps/api
+railway up --detach --service serene-analysis
+```
+
+The deploy is asynchronous (`--detach`). Poll the health endpoint to confirm it's live:
+
+```bash
+curl https://serene-analysis-production-145c.up.railway.app/health
+```
 
 No CI/CD workflows configured (no `.github/workflows/`).
 
