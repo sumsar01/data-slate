@@ -423,16 +423,6 @@ export default function Admin() {
                     }}
                   />
 
-                  {/* Generate summary */}
-                  <button
-                    className="admin-btn admin-btn--sm"
-                    onClick={() => generateSummary(entity.id)}
-                    disabled={generatingSummaryFor === entity.id}
-                    title={entity.summary ? "Regenerate Groq dossier" : "Generate Groq dossier"}
-                  >
-                    {generatingSummaryFor === entity.id ? "..." : entity.summary ? "↺ DOSSIER" : "+ DOSSIER"}
-                  </button>
-
                   {/* Image upload */}
                   {entity.image_url ? (
                     <button
@@ -459,6 +449,16 @@ export default function Admin() {
                       />
                     </label>
                   )}
+
+                  {/* Generate summary */}
+                  <button
+                    className="admin-btn admin-btn--sm"
+                    onClick={() => generateSummary(entity.id)}
+                    disabled={generatingSummaryFor === entity.id}
+                    title={entity.summary ? "Regenerate Groq dossier" : "Generate Groq dossier"}
+                  >
+                    {generatingSummaryFor === entity.id ? "..." : entity.summary ? "↺ DOSSIER" : "+ DOSSIER"}
+                  </button>
 
                   {/* Merge */}
                   {mergeMode === entity.id ? (
