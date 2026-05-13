@@ -118,14 +118,22 @@ export default function Record() {
     for (const t of tags) form.append("tags", t)
 
     try {
-      const res = await fetch(`${API_URL}/notes`, { method: "POST", body: form })
-      if (!res.ok) throw new Error(await res.text())
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 3 * 60 * 1000) // 3 min timeout
+      try {
+        const res = await fetch(`${API_URL}/notes`, { method: "POST", body: form, signal: controller.signal })
+        clearTimeout(timeout)
+        if (!res.ok) throw new Error(await res.text())
+      } finally {
+        clearTimeout(timeout)
+      }
       setStatus({ type: "ok", msg: "RECORD COMMITTED // OMNISSIAH APPROVES" })
       setAudioBlob(null)
       setElapsed(0)
       setTags([])
     } catch (err: any) {
-      setStatus({ type: "err", msg: `TRANSMISSION FAILED: ${err.message}` })
+      const msg = err.name === "AbortError" ? "TRANSMISSION TIMEOUT — COGITATOR OVERLOADED" : `TRANSMISSION FAILED: ${err.message}`
+      setStatus({ type: "err", msg })
     }
   }
 
