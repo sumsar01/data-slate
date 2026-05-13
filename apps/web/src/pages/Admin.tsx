@@ -22,6 +22,7 @@ type WikiEntity = {
   canonical_id: string | null
   description: string | null
   summary: string | null
+  image_url: string | null
 }
 
 const ENTITY_TYPES = ["NPC", "Location", "Faction", "Item", "Other"]
@@ -42,8 +43,10 @@ export default function Admin() {
   const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
   const [generatingSummaryFor, setGeneratingSummaryFor] = useState<string | null>(null)
   const [patchingId, setPatchingId] = useState<string | null>(null)
-  const [mergeMode, setMergeMode] = useState<string | null>(null) // entity id being merged (the one to drop)
+  const [mergeMode, setMergeMode] = useState<string | null>(null)
   const [mergeTargetId, setMergeTargetId] = useState<string>("")
+  const [uploadingImageFor, setUploadingImageFor] = useState<string | null>(null)
+  const [removingImageFor, setRemovingImageFor] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -174,6 +177,35 @@ export default function Admin() {
     } finally {
       setMergeMode(null)
       setMergeTargetId("")
+    }
+  }
+
+  async function uploadImage(entityId: string, file: File) {
+    setUploadingImageFor(entityId)
+    try {
+      const fd = new FormData()
+      fd.append("image", file)
+      const res = await fetch(`${API_URL}/wiki/${entityId}/image`, { method: "POST", body: fd })
+      if (res.ok) {
+        const { image_url } = await res.json()
+        setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, image_url } : e))
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setUploadingImageFor(null)
+    }
+  }
+
+  async function removeImage(entityId: string) {
+    setRemovingImageFor(entityId)
+    try {
+      await fetch(`${API_URL}/wiki/${entityId}/image`, { method: "DELETE" })
+      setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, image_url: null } : e))
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setRemovingImageFor(null)
     }
   }
 
@@ -400,6 +432,33 @@ export default function Admin() {
                   >
                     {generatingSummaryFor === entity.id ? "..." : entity.summary ? "↺ DOSSIER" : "+ DOSSIER"}
                   </button>
+
+                  {/* Image upload */}
+                  {entity.image_url ? (
+                    <button
+                      className="admin-btn admin-btn--sm admin-btn--danger"
+                      onClick={() => removeImage(entity.id)}
+                      disabled={removingImageFor === entity.id}
+                      title="Remove image"
+                    >
+                      {removingImageFor === entity.id ? "..." : "✕ IMG"}
+                    </button>
+                  ) : (
+                    <label className="admin-btn admin-btn--sm" style={{ cursor: "pointer" }} title="Upload image">
+                      {uploadingImageFor === entity.id ? "..." : "+ IMG"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        disabled={uploadingImageFor === entity.id}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (file) uploadImage(entity.id, file)
+                          e.target.value = ""
+                        }}
+                      />
+                    </label>
+                  )}
 
                   {/* Merge */}
                   {mergeMode === entity.id ? (

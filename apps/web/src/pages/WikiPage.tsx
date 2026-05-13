@@ -12,6 +12,7 @@ type WikiEntity = {
   canonical_id: string | null
   description: string | null
   summary: string | null
+  image_url: string | null
   created_at: string
 }
 
@@ -124,6 +125,13 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
       </header>
 
       <main className="admin-main wiki-main">
+
+        {/* Entity image */}
+        {entity.image_url && (
+          <div className="wiki-image-wrap">
+            <img src={entity.image_url} alt={entity.name} className="wiki-image" />
+          </div>
+        )}
 
         {/* Description */}
         {entity.description && (

@@ -1,10 +1,11 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
 import { summariseEntity } from "../lib/groq"
+import { uploadToR2, deleteFromR2 } from "../lib/r2"
 
 export const wikiRouter = new Hono()
 
-// Ensure entities table exists
+// Ensure entities table exists with all columns
 async function ensureTable() {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS entities (
@@ -14,9 +15,16 @@ async function ensureTable() {
       canonical_id TEXT,
       description TEXT,
       summary TEXT,
+      image_url TEXT,
       created_at TEXT NOT NULL
     )
   `)
+  // Add image_url column if table already existed without it
+  try {
+    await db.execute("ALTER TABLE entities ADD COLUMN image_url TEXT")
+  } catch {
+    // Column already exists — ignore
+  }
 }
 
 // GET /wiki — list all canonical entities
@@ -273,4 +281,55 @@ wikiRouter.post("/:id/summary", async (c) => {
   })
 
   return c.json({ summary })
+})
+
+// POST /wiki/:id/image — upload image to R2
+wikiRouter.post("/:id/image", async (c) => {
+  await ensureTable()
+  const id = c.req.param("id")
+  const { rows } = await db.execute({ sql: "SELECT * FROM entities WHERE id = ?1", args: [id] })
+  if (!rows.length) return c.json({ error: "not found" }, 404)
+  const entity = rows[0]
+
+  const formData = await c.req.formData()
+  const file = formData.get("image") as File | null
+  if (!file) return c.json({ error: "no image provided" }, 400)
+
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg"
+  const key = `wiki/images/${id}.${ext}`
+
+  // Delete old image from R2 if exists
+  if (entity.image_url) {
+    const publicBase = process.env.R2_PUBLIC_URL ?? ""
+    const oldKey = (entity.image_url as string).replace(`${publicBase}/`, "")
+    try { await deleteFromR2(oldKey) } catch { /* ignore */ }
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer())
+  const image_url = await uploadToR2(key, buffer, file.type || "image/jpeg")
+
+  await db.execute({
+    sql: "UPDATE entities SET image_url = ?1 WHERE id = ?2",
+    args: [image_url, id],
+  })
+
+  return c.json({ image_url })
+})
+
+// DELETE /wiki/:id/image — remove image
+wikiRouter.delete("/:id/image", async (c) => {
+  await ensureTable()
+  const id = c.req.param("id")
+  const { rows } = await db.execute({ sql: "SELECT image_url FROM entities WHERE id = ?1", args: [id] })
+  if (!rows.length) return c.json({ error: "not found" }, 404)
+
+  const image_url = rows[0].image_url as string | null
+  if (image_url) {
+    const publicBase = process.env.R2_PUBLIC_URL ?? ""
+    const key = image_url.replace(`${publicBase}/`, "")
+    try { await deleteFromR2(key) } catch { /* ignore */ }
+  }
+
+  await db.execute({ sql: "UPDATE entities SET image_url = NULL WHERE id = ?1", args: [id] })
+  return c.json({ ok: true })
 })
