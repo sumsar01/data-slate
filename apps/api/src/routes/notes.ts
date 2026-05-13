@@ -1,13 +1,13 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
 import { uploadToR2, deleteFromR2 } from "../lib/r2"
-import { transcribeAudio, extractEntities } from "../lib/groq"
+import { transcribeAudio, flavourTranscript, extractEntities } from "../lib/groq"
 import { randomUUID } from "crypto"
 import type { Tag } from "../lib/types"
 
 export const notesRouter = new Hono()
 
-// POST /notes — upload audio, transcribe, store
+// POST /notes — upload audio, transcribe, flavour, store
 notesRouter.post("/", async (c) => {
   const formData = await c.req.formData()
   const audio = formData.get("audio") as File | null
@@ -20,15 +20,23 @@ notesRouter.post("/", async (c) => {
   }
 
   const id = randomUUID()
-  const key = `audio/${id}.webm`
+  const ext = audio.name?.endsWith(".mp4") ? "mp4" : "webm"
+  const key = `audio/${id}.${ext}`
 
   const buffer = Buffer.from(await audio.arrayBuffer())
 
   // Upload to R2
   const audio_url = await uploadToR2(key, buffer, audio.type || "audio/webm")
 
-  // Transcribe
-  const { transcript, title } = await transcribeAudio(buffer, audio.name || "recording.webm")
+  // Transcribe — get raw transcript + detected language
+  const { transcript: rawTranscript, detectedLanguage } = await transcribeAudio(buffer, audio.name || `recording.${ext}`)
+
+  // Flavour the transcript with in-world 40K terminology
+  const transcript = await flavourTranscript(rawTranscript, detectedLanguage)
+
+  // Derive title from first sentence of flavoured transcript
+  const firstSentence = transcript.split(/[.!?]/)[0]?.trim() ?? "Untitled"
+  const title = firstSentence.slice(0, 60) || "Untitled"
 
   const created_at = new Date().toISOString()
   const tags = JSON.stringify(tagsRaw)
@@ -39,7 +47,7 @@ notesRouter.post("/", async (c) => {
     args: [id, date, title, transcript, audio_url, duration_s, tags, created_at],
   })
 
-  // Fire-and-forget entity extraction
+  // Fire-and-forget entity extraction on flavoured transcript
   ;(async () => {
     try {
       const entities = await extractEntities(transcript)
@@ -83,6 +91,42 @@ notesRouter.post("/:id/entities", async (c) => {
   return c.json({ id, entities })
 })
 
+// POST /notes/flavour-all — retroactively flavour all notes and re-extract entities
+notesRouter.post("/flavour-all", async (c) => {
+  const result = await db.execute("SELECT id, transcript FROM notes ORDER BY created_at ASC")
+  const notes = result.rows
+
+  let processed = 0
+  let failed = 0
+
+  for (const row of notes) {
+    const noteId = row.id as string
+    const rawTranscript = (row.transcript ?? "") as string
+    if (!rawTranscript.trim()) continue
+
+    try {
+      // Flavour (use "unknown" language — Groq will detect from text)
+      const flavoured = await flavourTranscript(rawTranscript, "the original language of the text")
+      // Re-derive title
+      const firstSentence = flavoured.split(/[.!?]/)[0]?.trim() ?? "Untitled"
+      const title = firstSentence.slice(0, 60) || "Untitled"
+      // Re-extract entities on flavoured text
+      const entities = await extractEntities(flavoured)
+
+      await db.execute({
+        sql: "UPDATE notes SET transcript = ?, title = ?, entities = ? WHERE id = ?",
+        args: [flavoured, title, JSON.stringify(entities), noteId],
+      })
+      processed++
+    } catch (e) {
+      console.warn(`[WARN] Flavour-all failed for note ${noteId}:`, e)
+      failed++
+    }
+  }
+
+  return c.json({ total: notes.length, processed, failed })
+})
+
 // DELETE /notes/:id
 notesRouter.delete("/:id", async (c) => {
   const id = c.req.param("id")
@@ -91,7 +135,6 @@ notesRouter.delete("/:id", async (c) => {
   const row = result.rows[0]!
 
   const audio_url = (row.audio_url ?? "") as string
-  // Derive the R2 key from the URL (everything after the public base URL)
   const publicBase = process.env.R2_PUBLIC_URL ?? ""
   const key = audio_url.startsWith(publicBase) ? audio_url.slice(publicBase.length + 1) : null
 

@@ -1,6 +1,7 @@
 export type Tag =
   | "NPC"
   | "Location"
+  | "Faction"
   | "Combat"
   | "Clue"
   | "Tech-Lore"
@@ -11,6 +12,7 @@ export type Tag =
 export const ALL_TAGS: Tag[] = [
   "NPC",
   "Location",
+  "Faction",
   "Combat",
   "Clue",
   "Tech-Lore",

@@ -22,6 +22,8 @@ export default function Admin() {
   const [creatingShareFor, setCreatingShareFor] = useState<string | null>(null)
   const [newShareUrl, setNewShareUrl] = useState<string | null>(null)
   const [retryingNoteId, setRetryingNoteId] = useState<string | null>(null)
+  const [flavouring, setFlavouring] = useState(false)
+  const [flavourResult, setFlavourResult] = useState<{ processed: number; failed: number; total: number } | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -61,12 +63,28 @@ export default function Admin() {
   async function retryEntities(noteId: string, transcript: string) {
     setRetryingNoteId(noteId)
     try {
-      // Re-trigger extraction by calling a dedicated endpoint (or use the existing one via admin)
       await fetch(`${API_URL}/notes/${noteId}/entities`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ transcript }) })
     } catch {
-      // endpoint may not exist yet — silently ignore
+      // silently ignore
     } finally {
       setRetryingNoteId(null)
+    }
+  }
+
+  async function flavourAll() {
+    setFlavouring(true)
+    setFlavourResult(null)
+    try {
+      const res = await fetch(`${API_URL}/notes/flavour-all`, { method: "POST" })
+      const data = await res.json()
+      setFlavourResult(data)
+      // Reload groups to reflect updated transcripts/titles
+      const g = await fetch(`${API_URL}/dates`).then((r) => r.json())
+      setGroups(g)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setFlavouring(false)
     }
   }
 
@@ -202,6 +220,33 @@ export default function Admin() {
               ))}
             </>
           )}
+        </section>
+
+        {/* ── Transcript flavouring ───────────────────────────── */}
+        <section className="admin-section">
+          <div className="admin-section-title">[ TRANSCRIPT FLAVOURING ]</div>
+          <div className="admin-row">
+            <span className="admin-label admin-label--dim">
+              Rewrite all transcripts with 40K in-world terminology. Re-extracts entities after processing.
+            </span>
+          </div>
+          {flavourResult && (
+            <div className="admin-row">
+              <span className={`admin-value ${flavourResult.failed > 0 ? "admin-value--warn" : ""}`}>
+                {flavourResult.processed}/{flavourResult.total} PROCESSED
+                {flavourResult.failed > 0 ? ` // ${flavourResult.failed} FAILED` : " // SUCCESS"}
+              </span>
+            </div>
+          )}
+          <div className="admin-row">
+            <button
+              className="admin-btn"
+              onClick={flavourAll}
+              disabled={flavouring}
+            >
+              {flavouring ? "COGITATOR PROCESSING... (this may take several minutes)" : "⚙ FLAVOUR ALL TRANSCRIPTS"}
+            </button>
+          </div>
         </section>
 
       </main>

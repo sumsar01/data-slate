@@ -2,20 +2,53 @@ import Groq from "groq-sdk"
 
 export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; title: string }> {
+export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; title: string; detectedLanguage: string }> {
   const file = new File([audioBuffer], filename, { type: "audio/webm" })
 
   const result = await groq.audio.transcriptions.create({
     file,
     model: "whisper-large-v3",
-    response_format: "text",
+    response_format: "verbose_json",
   })
 
-  const transcript = typeof result === "string" ? result : (result as any).text ?? ""
+  const transcript = (result as any).text ?? ""
+  const detectedLanguage = (result as any).language ?? "unknown"
   const firstSentence = transcript.split(/[.!?]/)[0]?.trim() ?? "Untitled"
   const title = firstSentence.slice(0, 60) || "Untitled"
 
-  return { transcript, title }
+  return { transcript, title, detectedLanguage }
+}
+
+export async function flavourTranscript(transcript: string, language: string): Promise<string> {
+  if (!transcript.trim()) return transcript
+  const chat = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a Warhammer 40K scribe. " +
+          "Lightly rewrite the following transcript, replacing modern real-world terms with Warhammer 40K in-universe equivalents. " +
+          `The transcript is written in ${language} — you MUST keep the output in ${language}. Do NOT translate to any other language. ` +
+          "Only make light substitutions where a clear 40K equivalent exists. Preserve meaning, tone, and sentence structure. " +
+          "Do not add new information. Do not add gothic flourishes or extra sentences. " +
+          "Examples of substitutions (adapt to the transcript language): " +
+          "gun/pistol→bolter/laspistol, soldier→guardsman, church/cathedral→shrine of the Emperor, " +
+          "computer→cogitator, phone/radio→vox-unit, car/vehicle→transport/rhino, " +
+          "police→Arbites, doctor→medicae, hospital→medicae bay, " +
+          "government→Administratum, city→hive city, factory→manufactorium, " +
+          "alien→xenos, magic→warp sorcery, priest→preacher/confessor, " +
+          "rebel→heretic, criminal gang→chaos cult (only if contextually appropriate). " +
+          "If no substitutions are needed, return the text unchanged.",
+      },
+      {
+        role: "user",
+        content: transcript,
+      },
+    ],
+    max_tokens: 1000,
+  })
+  return chat.choices[0]?.message?.content?.trim() ?? transcript
 }
 
 export type Entity = { name: string; type: "NPC" | "Location" | "Faction" | "Item" | "Other" }
