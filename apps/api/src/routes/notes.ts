@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
 import { uploadToR2, deleteFromR2 } from "../lib/r2"
-import { transcribeAudio, flavourTranscript, extractEntities } from "../lib/groq"
+import { transcribeAudio, flavourTranscript, generateTitle, extractEntities } from "../lib/groq"
 import { randomUUID } from "crypto"
 import type { Tag } from "../lib/types"
 
@@ -31,12 +31,11 @@ notesRouter.post("/", async (c) => {
   // Transcribe — get raw transcript + detected language
   const { transcript: rawTranscript, detectedLanguage } = await transcribeAudio(buffer, audio.name || `recording.${ext}`)
 
-  // Flavour the transcript with in-world 40K terminology
+  // Flavour the transcript with in-world 40K terminology (keeps original language)
   const transcript = await flavourTranscript(rawTranscript, detectedLanguage)
 
-  // Derive title from first sentence of flavoured transcript
-  const firstSentence = transcript.split(/[.!?]/)[0]?.trim() ?? "Untitled"
-  const title = firstSentence.slice(0, 60) || "Untitled"
+  // Generate English title from the flavoured transcript
+  const title = await generateTitle(transcript)
 
   const created_at = new Date().toISOString()
   const tags = JSON.stringify(tagsRaw)
@@ -105,11 +104,10 @@ notesRouter.post("/flavour-all", async (c) => {
     if (!rawTranscript.trim()) continue
 
     try {
-      // Flavour (use "unknown" language — Groq will detect from text)
+      // Flavour (tell Groq to detect language from text)
       const flavoured = await flavourTranscript(rawTranscript, "the original language of the text")
-      // Re-derive title
-      const firstSentence = flavoured.split(/[.!?]/)[0]?.trim() ?? "Untitled"
-      const title = firstSentence.slice(0, 60) || "Untitled"
+      // Generate English title
+      const title = await generateTitle(flavoured)
       // Re-extract entities on flavoured text
       const entities = await extractEntities(flavoured)
 

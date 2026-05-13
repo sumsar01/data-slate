@@ -2,7 +2,7 @@ import Groq from "groq-sdk"
 
 export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; title: string; detectedLanguage: string }> {
+export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; detectedLanguage: string }> {
   const file = new File([audioBuffer], filename, { type: "audio/webm" })
 
   const result = await groq.audio.transcriptions.create({
@@ -13,12 +13,11 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
 
   const transcript = (result as any).text ?? ""
   const detectedLanguage = (result as any).language ?? "unknown"
-  const firstSentence = transcript.split(/[.!?]/)[0]?.trim() ?? "Untitled"
-  const title = firstSentence.slice(0, 60) || "Untitled"
 
-  return { transcript, title, detectedLanguage }
+  return { transcript, detectedLanguage }
 }
 
+// Lightly rewrites transcript keeping original language, returns flavoured text
 export async function flavourTranscript(transcript: string, language: string): Promise<string> {
   if (!transcript.trim()) return transcript
   const chat = await groq.chat.completions.create({
@@ -51,6 +50,31 @@ export async function flavourTranscript(transcript: string, language: string): P
   return chat.choices[0]?.message?.content?.trim() ?? transcript
 }
 
+// Generates a short English title summarising the transcript content
+export async function generateTitle(transcript: string): Promise<string> {
+  if (!transcript.trim()) return "Untitled"
+  const chat = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a Warhammer 40K scribe. " +
+          "Generate a short English title (max 8 words) that summarises the content of the following transcript. " +
+          "The transcript may be in any language — always respond in English. " +
+          "Use 40K terminology where appropriate. No quotes, no punctuation at the end.",
+      },
+      {
+        role: "user",
+        content: transcript,
+      },
+    ],
+    max_tokens: 30,
+  })
+  const title = chat.choices[0]?.message?.content?.trim() ?? ""
+  return title.slice(0, 60) || "Untitled"
+}
+
 export type Entity = { name: string; type: "NPC" | "Location" | "Faction" | "Item" | "Other" }
 
 export async function extractEntities(transcript: string): Promise<Entity[]> {
@@ -61,8 +85,8 @@ export async function extractEntities(transcript: string): Promise<Entity[]> {
         role: "system",
         content:
           "You are an entity extractor for a Warhammer 40K tabletop RPG campaign. " +
-          "Extract named entities from the transcript. " +
-          "Return a JSON object with an 'entities' array. Each element has 'name' (string) and 'type' (one of: NPC, Location, Faction, Item, Other). " +
+          "Extract named entities from the transcript. The transcript may be in any language — always respond in English. " +
+          "Return a JSON object with an 'entities' array. Each element has 'name' (string, in English) and 'type' (one of: NPC, Location, Faction, Item, Other). " +
           "Example: {\"entities\":[{\"name\":\"Inquisitor Krell\",\"type\":\"NPC\"},{\"name\":\"Hive Sibellus\",\"type\":\"Location\"}]}",
       },
       {
@@ -93,6 +117,7 @@ export async function summariseSession(transcripts: string[]): Promise<string> {
         content:
           "You are a scribe for a Warhammer 40K tabletop RPG campaign. " +
           "Summarise the session notes provided into a concise but evocative battle report. " +
+          "The notes may be in any language — always write your summary in English. " +
           "Use gothic, Mechanicus-flavoured language. Focus on events, decisions, NPCs encountered, and locations visited. " +
           "Keep it under 300 words.",
       },
