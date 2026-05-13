@@ -138,7 +138,7 @@ export default function App() {
               onReload={reload}
               onDeleted={handleDeleted}
             />
-            <EntityIndex groups={groups} onFilter={(name) => setSearchQuery(name)} />
+            <EntityIndex groups={groups} />
           </aside>
 
           <div className="panel-divider" aria-hidden />

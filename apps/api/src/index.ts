@@ -4,6 +4,7 @@ import { notesRouter } from "./routes/notes"
 import { datesRouter } from "./routes/dates"
 import { sessionsRouter } from "./routes/sessions"
 import { sharesRouter } from "./routes/shares"
+import { wikiRouter } from "./routes/wiki"
 
 const app = new Hono()
 
@@ -28,6 +29,7 @@ app.route("/notes", notesRouter)
 app.route("/dates", datesRouter)
 app.route("/sessions", sessionsRouter)
 app.route("/shares", sharesRouter)
+app.route("/wiki", wikiRouter)
 
 export default {
   port: parseInt(process.env.PORT ?? "3001"),

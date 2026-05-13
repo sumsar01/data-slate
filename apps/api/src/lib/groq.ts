@@ -107,6 +107,29 @@ export async function extractEntities(transcript: string): Promise<Entity[]> {
   }
 }
 
+export async function summariseEntity(name: string, type: string, transcripts: string[]): Promise<string> {
+  const combined = transcripts.map((t, i) => `[Transcript ${i + 1}]: ${t}`).join("\n\n")
+  const chat = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a scribe-savant of the Adeptus Mechanicus, maintaining the campaign's entity dossiers. " +
+          "Based on the transcript excerpts provided, write a concise intel report about the named entity. " +
+          "Focus only on what is actually mentioned in the transcripts — do not invent details. " +
+          "Write in gothic Mechanicus flavour. Keep it under 200 words. No headers, just flowing text.",
+      },
+      {
+        role: "user",
+        content: `Compile a dossier on the following entity:\nName: ${name}\nType: ${type}\n\nTranscript excerpts:\n\n${combined}`,
+      },
+    ],
+    max_tokens: 350,
+  })
+  return chat.choices[0]?.message?.content?.trim() ?? ""
+}
+
 export async function summariseSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
   const chat = await groq.chat.completions.create({

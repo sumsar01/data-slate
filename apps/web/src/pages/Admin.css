@@ -210,8 +210,50 @@
   color: #ffb000;
 }
 
+.admin-select {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #c88800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.admin-select:focus {
+  outline: none;
+  border-color: #7a5500;
+}
+
+.admin-select option {
+  background: #0a0a0a;
+  color: #c88800;
+}
+
+.admin-input {
+  background: transparent;
+  border: 1px solid #1a0e00;
+  color: #c88800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.4rem;
+  flex: 1;
+  min-width: 6rem;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: #3a2800;
+}
+
+.admin-input::placeholder {
+  color: #3a2800;
+}
+
 .admin-footer {
-  padding: 0.35rem 1rem;
   border-top: 1px solid #3a2800;
   background: #0d0d0d;
   font-size: 0.5rem;

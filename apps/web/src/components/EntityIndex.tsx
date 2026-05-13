@@ -1,16 +1,18 @@
-import type { DateGroup, Entity, EntityType } from "../shared"
+import { useNavigate } from "react-router-dom"
+import type { DateGroup, EntityType } from "../shared"
 import "./EntityIndex.css"
 
 const TYPE_ORDER: EntityType[] = ["NPC", "Location", "Faction", "Item", "Other"]
 
 interface Props {
   groups: DateGroup[]
-  onFilter: (entityName: string) => void
 }
 
-export function EntityIndex({ groups, onFilter }: Props) {
+export function EntityIndex({ groups }: Props) {
+  const navigate = useNavigate()
+
   // Collect all unique entities across all notes
-  const entityMap = new Map<string, { entity: Entity; count: number }>()
+  const entityMap = new Map<string, { name: string; type: EntityType; count: number }>()
   for (const group of groups) {
     for (const note of group.notes) {
       for (const e of note.entities ?? []) {
@@ -18,7 +20,7 @@ export function EntityIndex({ groups, onFilter }: Props) {
         if (entityMap.has(key)) {
           entityMap.get(key)!.count++
         } else {
-          entityMap.set(key, { entity: e, count: 1 })
+          entityMap.set(key, { name: e.name, type: e.type as EntityType, count: 1 })
         }
       }
     }
@@ -27,11 +29,10 @@ export function EntityIndex({ groups, onFilter }: Props) {
   if (entityMap.size === 0) return null
 
   // Group by type
-  const byType = new Map<EntityType, Array<{ entity: Entity; count: number }>>()
+  const byType = new Map<EntityType, Array<{ name: string; type: EntityType; count: number }>>()
   for (const [, v] of entityMap) {
-    const t = v.entity.type as EntityType
-    if (!byType.has(t)) byType.set(t, [])
-    byType.get(t)!.push(v)
+    if (!byType.has(v.type)) byType.set(v.type, [])
+    byType.get(v.type)!.push(v)
   }
   // Sort each group by count desc
   for (const [, arr] of byType) arr.sort((a, b) => b.count - a.count)
@@ -43,14 +44,14 @@ export function EntityIndex({ groups, onFilter }: Props) {
         <div key={type} className="entity-group">
           <div className="entity-group-type">{type}</div>
           <div className="entity-group-items">
-            {byType.get(type)!.map(({ entity, count }) => (
+            {byType.get(type)!.map(({ name, count }) => (
               <button
-                key={entity.name}
+                key={name}
                 className="entity-pill"
-                onClick={() => onFilter(entity.name)}
-                title={`Search for ${entity.name}`}
+                onClick={() => navigate(`/wiki/name/${encodeURIComponent(name)}`)}
+                title={`View ${name} in wiki`}
               >
-                {entity.name}
+                {name}
                 {count > 1 && <span className="entity-pill-count">{count}</span>}
               </button>
             ))}

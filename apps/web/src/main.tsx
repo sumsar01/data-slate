@@ -5,6 +5,8 @@ import App from "./App.tsx"
 import Record from "./pages/Record.tsx"
 import ShareView from "./pages/ShareView.tsx"
 import Admin from "./pages/Admin.tsx"
+import Wiki from "./pages/Wiki.tsx"
+import WikiPage from "./pages/WikiPage.tsx"
 import "./index.css"
 
 createRoot(document.getElementById("root")!).render(
@@ -15,6 +17,9 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/record" element={<Record />} />
         <Route path="/share/:token" element={<ShareView />} />
         <Route path="/admin-mechanicus" element={<Admin />} />
+        <Route path="/wiki" element={<Wiki />} />
+        <Route path="/wiki/name/:name" element={<WikiPage byName />} />
+        <Route path="/wiki/:id" element={<WikiPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

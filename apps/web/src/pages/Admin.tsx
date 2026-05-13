@@ -15,6 +15,17 @@ type ShareRecord = {
   expires_at: string | null
 }
 
+type WikiEntity = {
+  id: string
+  name: string
+  type: string
+  canonical_id: string | null
+  description: string | null
+  summary: string | null
+}
+
+const ENTITY_TYPES = ["NPC", "Location", "Faction", "Item", "Other"]
+
 export default function Admin() {
   const [groups, setGroups] = useState<DateGroup[]>([])
   const [shares, setShares] = useState<ShareRecord[]>([])
@@ -25,13 +36,24 @@ export default function Admin() {
   const [flavouring, setFlavouring] = useState(false)
   const [flavourResult, setFlavourResult] = useState<{ processed: number; failed: number; total: number } | null>(null)
 
+  // Wiki state
+  const [wikiEntities, setWikiEntities] = useState<WikiEntity[]>([])
+  const [syncing, setSyncing] = useState(false)
+  const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
+  const [generatingSummaryFor, setGeneratingSummaryFor] = useState<string | null>(null)
+  const [patchingId, setPatchingId] = useState<string | null>(null)
+  const [mergeMode, setMergeMode] = useState<string | null>(null) // entity id being merged (the one to drop)
+  const [mergeTargetId, setMergeTargetId] = useState<string>("")
+
   useEffect(() => {
     Promise.all([
       fetch(`${API_URL}/dates`).then((r) => r.json()),
       fetch(`${API_URL}/shares`).then((r) => r.json()),
-    ]).then(([g, s]) => {
+      fetch(`${API_URL}/wiki`).then((r) => r.json()).catch(() => []),
+    ]).then(([g, s, w]) => {
       setGroups(g)
       setShares(s)
+      setWikiEntities(w)
     }).finally(() => setLoading(false))
   }, [])
 
@@ -85,6 +107,73 @@ export default function Admin() {
       console.error(e)
     } finally {
       setFlavouring(false)
+    }
+  }
+
+  async function syncWiki() {
+    setSyncing(true)
+    setSyncResult(null)
+    try {
+      const res = await fetch(`${API_URL}/wiki/sync`, { method: "POST" })
+      const data = await res.json()
+      setSyncResult(data)
+      const w = await fetch(`${API_URL}/wiki`).then((r) => r.json())
+      setWikiEntities(w)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  async function generateSummary(entityId: string) {
+    setGeneratingSummaryFor(entityId)
+    try {
+      const res = await fetch(`${API_URL}/wiki/${entityId}/summary`, { method: "POST" })
+      if (res.ok) {
+        const { summary } = await res.json()
+        setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, summary } : e))
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setGeneratingSummaryFor(null)
+    }
+  }
+
+  async function patchEntity(entityId: string, patch: Partial<WikiEntity>) {
+    setPatchingId(entityId)
+    try {
+      const res = await fetch(`${API_URL}/wiki/${entityId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      })
+      if (res.ok) {
+        const updated = await res.json()
+        setWikiEntities((prev) => prev.map((e) => e.id === entityId ? updated : e))
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setPatchingId(null)
+    }
+  }
+
+  async function mergeEntities(dropId: string, keepId: string) {
+    try {
+      await fetch(`${API_URL}/wiki/merge`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keep_id: keepId, drop_id: dropId }),
+      })
+      // Remove the dropped entity from the list
+      setWikiEntities((prev) => prev.filter((e) => e.id !== dropId))
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setMergeMode(null)
+      setMergeTargetId("")
     }
   }
 
@@ -247,6 +336,111 @@ export default function Admin() {
               {flavouring ? "COGITATOR PROCESSING... (this may take several minutes)" : "⚙ FLAVOUR ALL TRANSCRIPTS"}
             </button>
           </div>
+        </section>
+
+        {/* ── Entity Wiki ─────────────────────────────────────── */}
+        <section className="admin-section">
+          <div className="admin-section-title">[ ENTITY WIKI ]</div>
+          <div className="admin-row">
+            <span className="admin-label admin-label--dim">
+              Scan all transcripts and populate entity index. Safe to run repeatedly.
+            </span>
+          </div>
+          {syncResult && (
+            <div className="admin-row">
+              <span className="admin-value">{syncResult.inserted} NEW ENTITIES INDEXED</span>
+            </div>
+          )}
+          <div className="admin-row">
+            <button className="admin-btn" onClick={syncWiki} disabled={syncing}>
+              {syncing ? "SCANNING..." : "⚙ SYNC ENTITIES"}
+            </button>
+            <Link to="/wiki" className="admin-btn" style={{ textDecoration: "none", textAlign: "center" }}>
+              ↗ VIEW WIKI
+            </Link>
+          </div>
+
+          {wikiEntities.length > 0 && (
+            <>
+              <div className="admin-divider" />
+              <div className="admin-section-subtitle">INDEXED ENTITIES ({wikiEntities.length})</div>
+              {wikiEntities.map((entity) => (
+                <div key={entity.id} className="admin-row" style={{ flexWrap: "wrap", gap: "0.4rem", alignItems: "flex-start" }}>
+                  <span className="admin-label" style={{ minWidth: "8rem" }}>{entity.name}</span>
+
+                  {/* Type selector */}
+                  <select
+                    className="admin-select"
+                    value={entity.type}
+                    disabled={patchingId === entity.id}
+                    onChange={(e) => patchEntity(entity.id, { type: e.target.value })}
+                  >
+                    {ENTITY_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+
+                  {/* Description inline input */}
+                  <input
+                    className="admin-input"
+                    placeholder="Add description..."
+                    defaultValue={entity.description ?? ""}
+                    onBlur={(e) => {
+                      const val = e.target.value.trim()
+                      if (val !== (entity.description ?? "")) {
+                        patchEntity(entity.id, { description: val || null as any })
+                      }
+                    }}
+                  />
+
+                  {/* Generate summary */}
+                  <button
+                    className="admin-btn admin-btn--sm"
+                    onClick={() => generateSummary(entity.id)}
+                    disabled={generatingSummaryFor === entity.id}
+                    title={entity.summary ? "Regenerate Groq dossier" : "Generate Groq dossier"}
+                  >
+                    {generatingSummaryFor === entity.id ? "..." : entity.summary ? "↺ DOSSIER" : "+ DOSSIER"}
+                  </button>
+
+                  {/* Merge */}
+                  {mergeMode === entity.id ? (
+                    <>
+                      <select
+                        className="admin-select"
+                        value={mergeTargetId}
+                        onChange={(e) => setMergeTargetId(e.target.value)}
+                      >
+                        <option value="">→ merge into...</option>
+                        {wikiEntities.filter((e) => e.id !== entity.id).map((e) => (
+                          <option key={e.id} value={e.id}>{e.name}</option>
+                        ))}
+                      </select>
+                      <button
+                        className="admin-btn admin-btn--sm admin-btn--danger"
+                        disabled={!mergeTargetId}
+                        onClick={() => mergeEntities(entity.id, mergeTargetId)}
+                      >
+                        CONFIRM
+                      </button>
+                      <button
+                        className="admin-btn admin-btn--sm"
+                        onClick={() => { setMergeMode(null); setMergeTargetId("") }}
+                      >
+                        CANCEL
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="admin-btn admin-btn--sm"
+                      onClick={() => { setMergeMode(entity.id); setMergeTargetId("") }}
+                      title="Merge this entity into another (marks as duplicate)"
+                    >
+                      ⇒ MERGE
+                    </button>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
         </section>
 
       </main>
