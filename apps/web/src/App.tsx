@@ -41,8 +41,10 @@ function SkullIcon() {
   )
 }
 
+let hasBooted = false
+
 export default function App() {
-  const [booted, setBooted] = useState(false)
+  const [booted, setBooted] = useState(hasBooted)
   const [selectedNote, setSelectedNote] = useState<Note | null>(null)
   const [activeFilters, setActiveFilters] = useState<Tag[]>([])
   const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
@@ -74,7 +76,7 @@ export default function App() {
 
   return (
     <>
-      {!booted && <BootSequence onComplete={() => setBooted(true)} />}
+      {!booted && <BootSequence onComplete={() => { hasBooted = true; setBooted(true) }} />}
       <div className={`app ${booted ? "app--visible" : ""}`}>
         <div className="scanlines" aria-hidden />
 
