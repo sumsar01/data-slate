@@ -101,6 +101,9 @@ export default function App() {
             <Link to="/admin-mechanicus" className="app-export-btn" title="Admin panel">
               ⚙
             </Link>
+            <Link to="/timeline" className="app-export-btn" title="Campaign timeline">
+              ◈ TIMELINE
+            </Link>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />
               <span className="app-header-status-text">REC</span>

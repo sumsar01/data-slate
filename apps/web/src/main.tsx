@@ -7,6 +7,7 @@ import ShareView from "./pages/ShareView.tsx"
 import Admin from "./pages/Admin.tsx"
 import Wiki from "./pages/Wiki.tsx"
 import WikiPage from "./pages/WikiPage.tsx"
+import Timeline from "./pages/Timeline.tsx"
 import "./index.css"
 
 createRoot(document.getElementById("root")!).render(
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/wiki" element={<Wiki />} />
         <Route path="/wiki/name/:name" element={<WikiPage byName />} />
         <Route path="/wiki/:id" element={<WikiPage />} />
+        <Route path="/timeline" element={<Timeline />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

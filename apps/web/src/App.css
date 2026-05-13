@@ -400,6 +400,210 @@ a, button, [role="button"],
   }
 }
 
+/* ── Timeline ───────────────────────────────────────────── */
+
+.tl-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #0a0a0a;
+}
+
+.tl-main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tl-panel-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+  padding: 0.6rem 1rem 0.5rem;
+  border-bottom: 1px solid #1e1600;
+  background: #0d0d0d;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.tl-panel-label::before {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, #ffb000 0%, #3a2800 30%);
+}
+
+.tl-list {
+  padding: 1.5rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tl-empty {
+  padding: 2rem 1.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+}
+
+/* Entry = spine + card side by side */
+.tl-entry {
+  display: flex;
+  gap: 0;
+  min-height: 2.5rem;
+}
+
+/* Spine column */
+.tl-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2rem;
+  flex-shrink: 0;
+}
+
+.tl-node {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #ffb000;
+  background: #0a0a0a;
+  box-shadow: 0 0 6px #ffb00066;
+  flex-shrink: 0;
+  margin-top: 0.65rem;
+}
+
+.tl-line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, #ffb00066, #3a2800);
+  margin-top: 2px;
+  margin-bottom: 0;
+  min-height: 1rem;
+}
+
+/* Card column */
+.tl-card-wrap {
+  flex: 1;
+  padding-bottom: 1.25rem;
+  min-width: 0;
+}
+
+.tl-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #1e1600;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.tl-card-header:hover {
+  background: #0f0900;
+}
+
+.tl-card-header--expanded {
+  border-bottom-color: #3a2800;
+  background: #0d0900;
+}
+
+.tl-card-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.tl-card-meta {
+  color: #7a5500;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tl-card-chevron {
+  color: #7a5500;
+  font-size: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Expanded body */
+.tl-card-body {
+  border: 1px solid #3a2800;
+  border-top: none;
+  background: #0d0d0d;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tl-card-dates {
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: #7a5500;
+}
+
+.tl-card-recordings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tl-card-rec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.6rem;
+  color: #c88800;
+  letter-spacing: 0.04em;
+}
+
+.tl-card-rec-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tl-card-rec-dur {
+  flex-shrink: 0;
+  color: #7a5500;
+}
+
+.tl-card-goto {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.6rem;
+  transition: color 0.1s, background 0.1s, border-color 0.1s;
+}
+
+.tl-card-goto:hover {
+  color: #ffb000;
+  background: #1a0e00;
+  border-color: #7a5500;
+}
+
 /* ── CRT flicker ────────────────────────────────────────── */
 @keyframes crt-flicker {
   0%   { opacity: 1; }
