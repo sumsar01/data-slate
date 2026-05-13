@@ -16,7 +16,7 @@ sessionsRouter.post("/auto", async (c) => {
   // Fetch transcripts for these dates
   const placeholders = dates.map(() => "?").join(",")
   const notesResult = await db.execute({
-    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) ORDER BY created_at ASC`,
+    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) AND reference = 0 ORDER BY created_at ASC`,
     args: dates,
   })
   const transcripts = notesResult.rows
@@ -89,7 +89,7 @@ sessionsRouter.post("/:id/summary", async (c) => {
   // Fetch all notes for the dates in this session
   const placeholders = dates.map(() => "?").join(",")
   const notesResult = await db.execute({
-    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) ORDER BY created_at ASC`,
+    sql: `SELECT transcript FROM notes WHERE date IN (${placeholders}) AND reference = 0 ORDER BY created_at ASC`,
     args: dates,
   })
 

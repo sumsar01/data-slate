@@ -214,3 +214,16 @@
   from { opacity: 0.6; }
   to { opacity: 1; }
 }
+
+.note-item-badge {
+  font-size: 0.55rem;
+  font-family: inherit;
+  letter-spacing: 0.08em;
+  color: #7a6a3a;
+  border: 1px solid #4a3a1a;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  line-height: 1.4;
+  margin-left: 0.25rem;
+}

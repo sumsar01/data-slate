@@ -37,6 +37,7 @@ export type Note = {
   duration_s: number
   tags: Tag[]
   entities: Entity[]
+  reference?: boolean
   created_at: string
 }
 

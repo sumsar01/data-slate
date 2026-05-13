@@ -142,6 +142,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
                     >
                       <span className="note-item-prefix">›</span>
                       <span className="note-item-title">{note.title}</span>
+                      {note.reference && <span className="note-item-badge">REF</span>}
                       <span className="note-item-time">{formatTime(note.created_at)}</span>
                     </button>
                     <button

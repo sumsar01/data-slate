@@ -1,3 +1,5 @@
+import type { Tag } from "../shared"
+
 const API_URL = import.meta.env.VITE_API_URL ?? ""
 
 export async function upsertSession(date: string, name: string, existingId?: string): Promise<void> {
@@ -41,4 +43,20 @@ export async function autoAnalyseSession(dates: string[]): Promise<{ id: string;
   })
   if (!res.ok) throw new Error(`Auto-analyse failed: HTTP ${res.status}`)
   return res.json()
+}
+
+export async function createTextNote(
+  date: string,
+  title: string,
+  content: string,
+  tags: Tag[],
+  reference = true,
+): Promise<void> {
+  if (!API_URL) throw new Error("No API configured")
+  const res = await fetch(`${API_URL}/notes/text`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ date, title, content, tags, reference }),
+  })
+  if (!res.ok) throw new Error(`Create text note failed: HTTP ${res.status}`)
 }

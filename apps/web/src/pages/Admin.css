@@ -262,3 +262,8 @@
   font-family: "JetBrains Mono", monospace;
   flex-shrink: 0;
 }
+
+.admin-btn--active {
+  color: #c8a84b;
+  border-color: #c8a84b;
+}

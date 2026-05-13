@@ -29,6 +29,8 @@ export type Note = {
   audio_url: string | null
   duration_s: number
   tags: Tag[]
+  entities: any[]
+  reference: boolean
   created_at: string
 }
 
