@@ -1,6 +1,7 @@
 import type { Note } from "../shared"
 import { useTypewriter } from "../hooks/useTypewriter"
 import { AudioPlayer } from "./AudioPlayer"
+import { linkEntities } from "../lib/linkEntities"
 import "./NoteReader.css"
 
 interface Props {
@@ -59,7 +60,9 @@ export function NoteReader({ note }: Props) {
 
       <div className="note-reader-body" onClick={() => { if (!done) skip() }}>
         <div className="note-reader-transcript">
-          {displayed}
+          {done
+            ? linkEntities(note.transcript, note.entities ?? [])
+            : displayed}
           {!done && <span className="blink">█</span>}
         </div>
         {!done && <div className="note-reader-skip-hint">[ TAP TO SKIP ]</div>}

@@ -162,3 +162,15 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+.entity-link {
+  color: #c88800;
+  text-decoration: none;
+  border-bottom: 1px solid #c8880066;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.entity-link:hover {
+  color: #ffb000;
+  border-bottom-color: #ffb000;
+}
