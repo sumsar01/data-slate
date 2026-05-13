@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import type { DateGroup } from "../shared"
+import { generateSummary } from "../data/api"
 
 interface TimelineSession {
   session_id: string | null
@@ -38,6 +39,8 @@ function formatDateRange(dates: string[]): string {
 
 export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const [expanded, setExpanded] = useState(false)
+  const [summary, setSummary] = useState<string | null>(session.session_summary)
+  const [summaryLoading, setSummaryLoading] = useState(false)
   const navigate = useNavigate()
 
   const totalDuration = session.notes.reduce((sum, n) => sum + (n.duration_s ?? 0), 0)
@@ -48,6 +51,19 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
 
   function handleGoToLog() {
     navigate(`/?date=${earliestDate}`)
+  }
+
+  async function handleRegenerate() {
+    if (!session.session_id) return
+    setSummaryLoading(true)
+    try {
+      const newSummary = await generateSummary(session.session_id)
+      setSummary(newSummary)
+    } catch (e) {
+      console.error("Summary regeneration failed", e)
+    } finally {
+      setSummaryLoading(false)
+    }
   }
 
   return (
@@ -74,10 +90,30 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
 
         {expanded && (
           <div className="tl-card-body">
-            {session.session_summary && (
+            {session.session_id && (
               <div className="tl-card-section tl-card-section--summary">
-                <div className="tl-card-section-label">BATTLE REPORT</div>
-                <div className="tl-card-summary">{session.session_summary}</div>
+                <div className="tl-card-section-label">
+                  BATTLE REPORT
+                  {summary && (
+                    <button
+                      className="tl-card-regen-btn"
+                      onClick={handleRegenerate}
+                      disabled={summaryLoading}
+                    >
+                      {summaryLoading ? "PROCESSING..." : "↺ REGENERATE"}
+                    </button>
+                  )}
+                </div>
+                {summary
+                  ? <div className="tl-card-summary">{summary}</div>
+                  : <button
+                      className="tl-card-goto"
+                      onClick={handleRegenerate}
+                      disabled={summaryLoading}
+                    >
+                      {summaryLoading ? "COGITATOR PROCESSING..." : "▶ GENERATE BATTLE REPORT"}
+                    </button>
+                }
               </div>
             )}
             <div className="tl-card-section tl-card-section--recordings">
