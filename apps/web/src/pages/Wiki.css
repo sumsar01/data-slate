@@ -2,18 +2,85 @@
   max-width: 800px;
 }
 
-.wiki-image-wrap {
+.wiki-top-section {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.wiki-top-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.wiki-description-block,
+.wiki-summary-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wiki-no-dossier {
+  font-size: 0.55rem;
+  color: #3a2800;
+  letter-spacing: 0.1em;
+}
+
+.wiki-image-col {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+.wiki-image-box {
+  width: 260px;
+  height: 320px;
   border: 1px solid #3a2800;
-  display: inline-block;
-  max-width: 100%;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .wiki-image {
-  display: block;
   max-width: 100%;
-  max-height: 320px;
+  max-height: 100%;
   object-fit: contain;
   filter: sepia(0.15) brightness(0.95);
+  display: block;
+}
+
+.wiki-image-caption {
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Mobile: stack image below text */
+@media (max-width: 600px) {
+  .wiki-top-section {
+    flex-direction: column;
+  }
+  .wiki-image-col {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .wiki-image-box {
+    width: 100%;
+    height: 220px;
+  }
+}
+
+.wiki-image-wrap {
+  display: none; /* removed, replaced by wiki-image-col */
 }
 
 .wiki-entity-grid {

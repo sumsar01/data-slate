@@ -126,28 +126,42 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
 
       <main className="admin-main wiki-main">
 
-        {/* Entity image */}
-        {entity.image_url && (
-          <div className="wiki-image-wrap">
-            <img src={entity.image_url} alt={entity.name} className="wiki-image" />
+        {/* Top section: text left, image right */}
+        <section className="admin-section wiki-top-section">
+          <div className="wiki-top-content">
+
+            {/* Description */}
+            {entity.description && (
+              <div className="wiki-description-block">
+                <div className="admin-section-title">[ FIELD NOTES ]</div>
+                <div className="wiki-description">{entity.description}</div>
+              </div>
+            )}
+
+            {/* Groq summary */}
+            {entity.summary && (
+              <div className="wiki-summary-block">
+                <div className="admin-section-title">[ COGITATOR DOSSIER ]</div>
+                <div className="wiki-summary">{entity.summary}</div>
+              </div>
+            )}
+
+            {!entity.description && !entity.summary && (
+              <div className="wiki-no-dossier">NO DOSSIER ON FILE</div>
+            )}
+
           </div>
-        )}
 
-        {/* Description */}
-        {entity.description && (
-          <section className="admin-section">
-            <div className="admin-section-title">[ FIELD NOTES ]</div>
-            <div className="wiki-description">{entity.description}</div>
-          </section>
-        )}
-
-        {/* Groq summary */}
-        {entity.summary && (
-          <section className="admin-section wiki-summary-section">
-            <div className="admin-section-title">[ COGITATOR DOSSIER ]</div>
-            <div className="wiki-summary">{entity.summary}</div>
-          </section>
-        )}
+          {/* Image right column */}
+          {entity.image_url && (
+            <div className="wiki-image-col">
+              <div className="wiki-image-box">
+                <img src={entity.image_url} alt={entity.name} className="wiki-image" />
+              </div>
+              <div className="wiki-image-caption">[ PICT-CAPTURE // AUSPEX SCAN ]</div>
+            </div>
+          )}
+        </section>
 
         {/* Stats */}
         <section className="admin-section">
