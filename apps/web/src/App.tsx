@@ -156,6 +156,11 @@ export default function App() {
           <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
           <span>RECORDS: {totalNotes} // SESSIONS: {groups.length}</span>
         </footer>
+
+        <Link to="/record" className="app-rec-fab" aria-label="Record">
+          <span className="status-dot status-dot--red app-rec-fab__dot" />
+          <span className="app-rec-fab__label">REC</span>
+        </Link>
       </div>
     </>
   )

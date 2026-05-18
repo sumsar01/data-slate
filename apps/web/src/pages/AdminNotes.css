@@ -241,3 +241,14 @@
   border-color: #660000;
   background: #140000;
 }
+
+.an-note-ref-badge {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: #c8a84b;
+  border: 1px solid #4a3a1a;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}

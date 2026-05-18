@@ -169,16 +169,27 @@ notesRouter.patch("/:id", async (c) => {
   const id = c.req.param("id")
   const body = await c.req.json()
 
-  const allowed = ["title", "date", "transcript", "tags", "entities"] as const
   const updates: string[] = []
   const args: unknown[] = []
 
-  for (const field of allowed) {
+  const textFields = ["title", "date", "transcript"] as const
+  const jsonFields = ["tags", "entities"] as const
+
+  for (const field of textFields) {
     if (field in body) {
       updates.push(`${field} = ?`)
-      const val = body[field]
-      args.push(field === "tags" || field === "entities" ? JSON.stringify(val) : val)
+      args.push(body[field])
     }
+  }
+  for (const field of jsonFields) {
+    if (field in body) {
+      updates.push(`${field} = ?`)
+      args.push(JSON.stringify(body[field]))
+    }
+  }
+  if (typeof body.reference === "boolean") {
+    updates.push("reference = ?")
+    args.push(body.reference ? 1 : 0)
   }
 
   if (updates.length === 0) return c.json({ error: "No valid fields to update" }, 400)
@@ -189,30 +200,6 @@ notesRouter.patch("/:id", async (c) => {
   const result = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
   if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
   return c.json(rowToNote(result.rows[0]))
-})
-
-// PATCH /notes/:id — update mutable fields (e.g. reference flag)
-notesRouter.patch("/:id", async (c) => {
-  const id = c.req.param("id")
-  const body = await c.req.json<{ reference?: boolean }>()
-
-  const existing = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
-  if (existing.rows.length === 0) return c.json({ error: "Not found" }, 404)
-
-  const updates: string[] = []
-  const args: (string | number | null)[] = []
-
-  if (typeof body.reference === "boolean") {
-    updates.push("reference = ?")
-    args.push(body.reference ? 1 : 0)
-  }
-
-  if (updates.length === 0) return c.json({ error: "No fields to update" }, 400)
-
-  args.push(id)
-  await db.execute({ sql: `UPDATE notes SET ${updates.join(", ")} WHERE id = ?`, args })
-
-  return c.json(rowToNote({ ...existing.rows[0]!, reference: body.reference ? 1 : 0 }))
 })
 
 // DELETE /notes/:id

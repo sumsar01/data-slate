@@ -327,6 +327,52 @@ a, button, [role="button"],
 
 /* ── Responsive ─────────────────────────────────────────── */
 
+/* ── Record FAB (mobile only) ────────────────────────────── */
+
+.app-rec-fab {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .app-rec-fab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    position: fixed;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    right: 1.5rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #1a0000;
+    border: 1px solid #ff2200;
+    color: #ff2200;
+    text-decoration: none;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    z-index: 100;
+    box-shadow: 0 0 16px rgba(255, 34, 0, 0.4);
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+
+  .app-rec-fab:active {
+    background: #2a0000;
+    box-shadow: 0 0 24px rgba(255, 34, 0, 0.6);
+  }
+
+  .app-rec-fab__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .app-rec-fab__label {
+    font-weight: 700;
+  }
+}
+
 @media (max-width: 640px) {
   /* Show back button on mobile */
   .app-back-btn {

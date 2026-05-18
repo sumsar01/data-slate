@@ -14,6 +14,7 @@ type EditState = {
   transcript: string
   tags: Tag[]
   entities: Entity[]
+  reference: boolean
 }
 
 function noteToEditState(note: Note): EditState {
@@ -23,6 +24,7 @@ function noteToEditState(note: Note): EditState {
     transcript: note.transcript,
     tags: [...note.tags],
     entities: note.entities.map((e) => ({ ...e })),
+    reference: note.reference ?? false,
   }
 }
 
@@ -182,6 +184,7 @@ export default function AdminNotes() {
                       <span className="an-note-date">{note.date}</span>
                       <span className="an-note-title">{note.title}</span>
                       <span className="an-note-meta">{note.tags.join(", ") || "—"}</span>
+                      {note.reference && <span className="an-note-ref-badge">REF</span>}
                       <button className="an-btn an-btn--edit" onClick={() => startEdit(note)}>
                         EDIT
                       </button>
@@ -233,6 +236,18 @@ export default function AdminNotes() {
                               </label>
                             ))}
                           </div>
+                        </div>
+
+                        <div className="an-field-row">
+                          <label className="an-label">REFERENCE</label>
+                          <label className="an-tag-option" style={{ cursor: "pointer" }}>
+                            <input
+                              type="checkbox"
+                              checked={editState.reference}
+                              onChange={(e) => setEditState((s) => s && { ...s, reference: e.target.checked })}
+                            />
+                            Exclude from session summaries
+                          </label>
                         </div>
 
                         <div className="an-field-row">
