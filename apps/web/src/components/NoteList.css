@@ -227,3 +227,29 @@
   line-height: 1.4;
   margin-left: 0.25rem;
 }
+
+.note-ref-btn {
+  background: transparent;
+  border: none;
+  color: #3a3020;
+  font-family: inherit;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+  transition: color 0.1s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.note-ref-btn:hover:not(:disabled) {
+  color: #7a6a3a;
+}
+
+.note-ref-btn--active {
+  color: #c8a84b;
+}
+
+.note-ref-btn--active:hover:not(:disabled) {
+  color: #a08030;
+}

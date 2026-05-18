@@ -2,7 +2,7 @@ import { useState } from "react"
 import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
-import { upsertSession, deleteNote, autoAnalyseSession } from "../data/api"
+import { upsertSession, deleteNote, autoAnalyseSession, patchNote } from "../data/api"
 import "./NoteList.css"
 
 interface Props {
@@ -21,6 +21,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [autoLoading, setAutoLoading] = useState<Set<string>>(new Set())
+  const [togglingRefId, setTogglingRefId] = useState<string | null>(null)
 
   function toggleGroup(date: string) {
     setCollapsed((prev) => {
@@ -95,7 +96,19 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
       {groups.map((group) => {
         const notes = filteredNotes(group.notes)
         const isCollapsed = collapsed.has(group.date)
-        return (
+  async function handleToggleReference(note: Note) {
+    setTogglingRefId(note.id)
+    try {
+      await patchNote(note.id, { reference: !note.reference })
+      onReload()
+    } catch (e) {
+      console.error("Toggle reference failed", e)
+    } finally {
+      setTogglingRefId(null)
+    }
+  }
+
+  return (
           <div key={group.date} className="note-group">
             <button className="note-group-header" onClick={() => toggleGroup(group.date)}>
               <span className="note-group-chevron">{isCollapsed ? "▶" : "▼"}</span>
@@ -144,6 +157,15 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
                       <span className="note-item-title">{note.title}</span>
                       {note.reference && <span className="note-item-badge">REF</span>}
                       <span className="note-item-time">{formatTime(note.created_at)}</span>
+                    </button>
+                    <button
+                      className={`note-ref-btn ${note.reference ? "note-ref-btn--active" : ""}`}
+                      onClick={() => handleToggleReference(note)}
+                      disabled={togglingRefId === note.id}
+                      aria-label={note.reference ? "Unmark as reference" : "Mark as reference"}
+                      title={note.reference ? "Reference entry — click to unmark" : "Mark as reference (exclude from summaries)"}
+                    >
+                      {togglingRefId === note.id ? "…" : "REF"}
                     </button>
                     <button
                       className={`note-delete-btn ${confirmId === note.id ? "note-delete-btn--confirm" : ""}`}
