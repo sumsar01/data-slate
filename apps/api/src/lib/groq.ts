@@ -38,7 +38,9 @@ export async function flavourTranscript(transcript: string, language: string): P
           "government→Administratum, city→hive city, factory→manufactorium, " +
           "alien→xenos, magic→warp sorcery, priest→preacher/confessor, " +
           "rebel→heretic, criminal gang→chaos cult (only if contextually appropriate). " +
-          "If no substitutions are needed, return the text unchanged.",
+          "If no substitutions are needed, return the text unchanged. " +
+          "NEVER add parenthetical notes, explanations, or comments about what substitutions were or were not made. " +
+          "Output ONLY the rewritten transcript text — nothing else.",
       },
       {
         role: "user",
