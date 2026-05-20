@@ -7,7 +7,7 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
 
   const result = await groq.audio.transcriptions.create({
     file,
-    model: "whisper-large-v3-turbo",
+    model: "whisper-large-v3",
     response_format: "verbose_json",
   })
 
