@@ -61,10 +61,10 @@ export async function generateTitle(transcript: string): Promise<string> {
       {
         role: "system",
         content:
-          "You are a Warhammer 40K scribe. " +
-          "Generate a short English title (max 8 words) that summarises the content of the following transcript. " +
-          "The transcript may be in any language — always respond in English. " +
-          "Use 40K terminology where appropriate. No quotes, no punctuation at the end.",
+          "Generate a short title (max 8 words) that summarises the content of the following transcript. " +
+          "Respond in Danish. If the transcript is clearly in another language, respond in that language instead. " +
+          "Be factual and descriptive — only reflect what is actually in the transcript. No dramatic framing, no invented terms. " +
+          "No quotes, no punctuation at the end.",
       },
       {
         role: "user",
@@ -117,10 +117,11 @@ export async function summariseEntity(name: string, type: string, transcripts: s
       {
         role: "system",
         content:
-          "You are a scribe-savant of the Adeptus Mechanicus, maintaining the campaign's entity dossiers. " +
+          "You are maintaining entity dossiers for a Warhammer 40K tabletop RPG campaign. " +
           "Based on the transcript excerpts provided, write a concise intel report about the named entity. " +
           "Focus only on what is actually mentioned in the transcripts — do not invent details. " +
-          "Write in gothic Mechanicus flavour. Keep it under 200 words. No headers, just flowing text.",
+          "Write in Danish. If the transcript excerpts are clearly in another language, write in that language instead. " +
+          "Use light Warhammer 40K flavour, but keep it factual and grounded. Keep it under 200 words. No headers, just flowing text.",
       },
       {
         role: "user",

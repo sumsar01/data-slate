@@ -8,7 +8,6 @@ import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
 import { soundClick } from "./audio/sounds"
 import { exportGroupsToMarkdown, downloadMarkdown } from "./data/export"
-import { EntityIndex } from "./components/EntityIndex"
 import "./App.css"
 
 function CogIcon() {
@@ -104,6 +103,9 @@ export default function App() {
             <Link to="/timeline" className="app-export-btn" title="Campaign timeline">
               ◈ TIMELINE
             </Link>
+            <Link to="/wiki" className="app-export-btn" title="Entity wiki">
+              ◈ WIKI
+            </Link>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />
               <span className="app-header-status-text">REC</span>
@@ -141,7 +143,6 @@ export default function App() {
               onReload={reload}
               onDeleted={handleDeleted}
             />
-            <EntityIndex groups={groups} />
           </aside>
 
           <div className="panel-divider" aria-hidden />
