@@ -164,6 +164,32 @@ notesRouter.post("/flavour-all", async (c) => {
   return c.json({ total: notes.length, processed, failed })
 })
 
+// POST /notes/retitle-all — regenerate titles for all notes using current generateTitle logic
+notesRouter.post("/retitle-all", async (c) => {
+  const result = await db.execute("SELECT id, transcript FROM notes ORDER BY created_at ASC")
+  const notes = result.rows
+
+  let processed = 0
+  let failed = 0
+
+  for (const row of notes) {
+    const noteId = row.id as string
+    const transcript = (row.transcript ?? "") as string
+    if (!transcript.trim()) continue
+
+    try {
+      const title = await generateTitle(transcript)
+      await db.execute({ sql: "UPDATE notes SET title = ? WHERE id = ?", args: [title, noteId] })
+      processed++
+    } catch (e) {
+      console.warn(`[WARN] Retitle failed for note ${noteId}:`, e)
+      failed++
+    }
+  }
+
+  return c.json({ total: notes.length, processed, failed })
+})
+
 // PATCH /notes/:id — update editable fields
 notesRouter.patch("/:id", async (c) => {
   const id = c.req.param("id")
