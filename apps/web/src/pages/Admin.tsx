@@ -43,6 +43,8 @@ export default function Admin() {
 
   // Wiki state
   const [wikiEntities, setWikiEntities] = useState<WikiEntity[]>([])
+  const [wikiFilter, setWikiFilter] = useState("")
+  const [wikiTypeFilter, setWikiTypeFilter] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
   const [duplicates, setDuplicates] = useState<Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: string }>>([])
@@ -463,8 +465,37 @@ export default function Admin() {
           {wikiEntities.length > 0 && (
             <>
               <div className="admin-divider" />
-              <div className="admin-section-subtitle">INDEXED ENTITIES ({wikiEntities.length})</div>
-              {wikiEntities.map((entity) => (
+              {/* Filter controls */}
+              <div className="admin-row" style={{ flexWrap: "wrap", gap: "0.4rem", alignItems: "center" }}>
+                <input
+                  className="admin-input"
+                  placeholder="FILTRER ENTITETER..."
+                  value={wikiFilter}
+                  onChange={(e) => setWikiFilter(e.target.value)}
+                  style={{ flex: "1", minWidth: "10rem" }}
+                />
+                {ENTITY_TYPES.map((t) => (
+                  <button
+                    key={t}
+                    className={`admin-btn admin-btn--sm ${wikiTypeFilter === t ? "admin-btn--active" : ""}`}
+                    onClick={() => setWikiTypeFilter((prev) => prev === t ? null : t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              {(() => {
+                const filtered = wikiEntities.filter((e) => {
+                  const nameMatch = !wikiFilter || e.name.toLowerCase().includes(wikiFilter.toLowerCase())
+                  const typeMatch = !wikiTypeFilter || e.type === wikiTypeFilter
+                  return nameMatch && typeMatch
+                })
+                return (
+                  <>
+                    <div className="admin-section-subtitle">
+                      ENTITETER: {filtered.length}{filtered.length !== wikiEntities.length ? ` AF ${wikiEntities.length}` : ""}
+                    </div>
+                    {filtered.map((entity) => (
                 <div key={entity.id} className="admin-row" style={{ flexWrap: "wrap", gap: "0.4rem", alignItems: "flex-start" }}>
                   <span className="admin-label" style={{ minWidth: "8rem" }}>{entity.name}</span>
 
@@ -571,11 +602,14 @@ export default function Admin() {
                       onClick={() => { setMergeMode(entity.id); setMergeTargetId("") }}
                       title="Merge this entity into another (marks as duplicate)"
                     >
-                      ⇒ MERGE
-                    </button>
-                  )}
-                </div>
-              ))}
+                        ⇒ MERGE
+                      </button>
+                    )}
+                  </div>
+                ))}
+                  </>
+                )
+              })()}
             </>
           )}
         </section>

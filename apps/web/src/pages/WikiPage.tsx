@@ -27,6 +27,15 @@ const STATUS_COLORS: Record<string, string> = {
   INQUISITUS: "#5a3a7a",
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  VIVENDE:    "I live",
+  MORTIS:     "Afdød",
+  IGNOTUS:    "Ukendt",
+  HOSTILIS:   "Fjendtlig",
+  FOEDERATUS: "Allieret",
+  INQUISITUS: "Under efterforskning",
+}
+
 type Mention = {
   note_id: string
   note_title: string
@@ -166,6 +175,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
               <span
                 className="wiki-status-badge"
                 style={{ color: STATUS_COLORS[entity.status] ?? "#7a5500", borderColor: STATUS_COLORS[entity.status] ?? "#7a5500" }}
+                title={`${entity.status} — ${STATUS_LABELS[entity.status] ?? ""}`}
               >
                 {entity.status}
               </span>

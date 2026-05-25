@@ -25,6 +25,15 @@ const STATUS_COLORS: Record<string, string> = {
   INQUISITUS: "#5a3a7a",
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  VIVENDE:    "I live",
+  MORTIS:     "Afdød",
+  IGNOTUS:    "Ukendt",
+  HOSTILIS:   "Fjendtlig",
+  FOEDERATUS: "Allieret",
+  INQUISITUS: "Under efterforskning",
+}
+
 const TYPE_ORDER = ["NPC", "Location", "Faction", "Item", "Other"]
 
 export default function Wiki() {
@@ -96,7 +105,7 @@ export default function Wiki() {
                       <span
                         className="wiki-entity-card-status"
                         style={{ color: STATUS_COLORS[entity.status] ?? "#3a2800" }}
-                        title={entity.status}
+                        title={`${entity.status} — ${STATUS_LABELS[entity.status] ?? ""}`}
                       >
                         {entity.status}
                       </span>
