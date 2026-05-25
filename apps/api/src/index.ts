@@ -21,7 +21,9 @@ app.use("*", cors({
   allowHeaders: ["Content-Type", "Authorization"],
 }))
 
-app.onError((err, c) => {
+app.onError((err: any, c) => {
+  const status = err.status ?? err.statusCode ?? 500
+  if (status < 500) return c.json({ error: err.message }, status)
   console.error(`[ERROR] ${c.req.method} ${c.req.url}:`, err)
   return c.json({ error: err.message }, 500)
 })
