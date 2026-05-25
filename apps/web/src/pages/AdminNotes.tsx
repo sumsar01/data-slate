@@ -29,6 +29,23 @@ function noteToEditState(note: Note): EditState {
   }
 }
 
+type DateGroup = {
+  date: string
+  notes: Note[]
+}
+
+function groupByDate(notes: Note[]): DateGroup[] {
+  const map = new Map<string, Note[]>()
+  for (const note of notes) {
+    const key = note.date || "UNKNOWN"
+    if (!map.has(key)) map.set(key, [])
+    map.get(key)!.push(note)
+  }
+  return Array.from(map.entries())
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([date, notes]) => ({ date, notes }))
+}
+
 export default function AdminNotes() {
   const [notes, setNotes] = useState<Note[]>([])
   const [loading, setLoading] = useState(true)
@@ -37,13 +54,23 @@ export default function AdminNotes() {
   const [saving, setSaving] = useState(false)
   const [reextracting, setReextracting] = useState(false)
   const [saveResult, setSaveResult] = useState<string | null>(null)
+  const [collapsedDates, setCollapsedDates] = useState<Set<string>>(new Set())
+
+  function toggleDateGroup(date: string) {
+    setCollapsedDates((prev) => {
+      const next = new Set(prev)
+      if (next.has(date)) next.delete(date)
+      else next.add(date)
+      return next
+    })
+  }
 
   useEffect(() => {
     authFetch(`${API_URL}/notes`)
       .then((r) => r.json())
       .then((data: Note[]) => {
         // Sort newest first
-        setNotes(data.sort((a, b) => b.created_at.localeCompare(a.created_at)))
+        setNotes(data.sort((a, b) => b.date.localeCompare(a.date) || b.created_at.localeCompare(a.created_at)))
       })
       .finally(() => setLoading(false))
   }, [])
@@ -176,23 +203,35 @@ export default function AdminNotes() {
           )}
 
           <div className="an-note-list">
-            {notes.map((note) => {
-              const isEditing = editingId === note.id
+            {groupByDate(notes).map(({ date, notes: groupNotes }) => {
+              const isCollapsed = collapsedDates.has(date)
               return (
-                <div key={note.id} className={`an-note-row ${isEditing ? "an-note-row--editing" : ""}`}>
-                  {!isEditing ? (
-                    <div className="an-note-summary">
-                      <span className="an-note-date">{note.date}</span>
-                      <span className="an-note-title">{note.title}</span>
-                      <span className="an-note-meta">{note.tags.join(", ") || "—"}</span>
-                      {note.reference && <span className="an-note-ref-badge">REF</span>}
-                      <button className="an-btn an-btn--edit" onClick={() => startEdit(note)}>
-                        EDIT
-                      </button>
-                    </div>
-                  ) : (
-                    editState && (
-                      <div className="an-edit-form">
+                <div key={date} className="an-date-group">
+                  <button
+                    className="an-date-group-header"
+                    onClick={() => toggleDateGroup(date)}
+                  >
+                    <span className="an-date-group-arrow">{isCollapsed ? "▶" : "▼"}</span>
+                    <span className="an-date-group-label">SESSION // {date}</span>
+                    <span className="an-date-group-count">{groupNotes.length} {groupNotes.length === 1 ? "RECORD" : "RECORDS"}</span>
+                  </button>
+
+                  {!isCollapsed && groupNotes.map((note) => {
+                    const isEditing = editingId === note.id
+                    return (
+                      <div key={note.id} className={`an-note-row ${isEditing ? "an-note-row--editing" : ""}`}>
+                        {!isEditing ? (
+                          <div className="an-note-summary">
+                            <span className="an-note-title">{note.title}</span>
+                            <span className="an-note-meta">{note.tags.join(", ") || "—"}</span>
+                            {note.reference && <span className="an-note-ref-badge">REF</span>}
+                            <button className="an-btn an-btn--edit" onClick={() => startEdit(note)}>
+                              EDIT
+                            </button>
+                          </div>
+                        ) : (
+                          editState && (
+                            <div className="an-edit-form">
                         <div className="an-field-row">
                           <label className="an-label">TITLE</label>
                           <input
@@ -314,6 +353,9 @@ export default function AdminNotes() {
                       </div>
                     )
                   )}
+                    </div>
+                  )
+                })}
                 </div>
               )
             })}
