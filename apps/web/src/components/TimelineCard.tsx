@@ -1,15 +1,7 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import type { DateGroup } from "../shared"
-import { generateSummary } from "../data/api"
-
-interface TimelineSession {
-  session_id: string | null
-  session_name: string | null
-  session_summary: string | null
-  dates: string[]
-  notes: DateGroup["notes"]
-}
+import type { Entity, TimelineSession } from "../shared"
+import { generateSummary, uploadSessionCover, removeSessionCover } from "../data/api"
 
 interface TimelineCardProps {
   session: TimelineSession
@@ -37,10 +29,59 @@ function formatDateRange(dates: string[]): string {
   return `${fmt(sorted[0])} – ${fmt(sorted[sorted.length - 1])}`
 }
 
+function toRoman(n: number): string {
+  const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
+  const syms = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
+  let out = ""
+  for (let i = 0; i < vals.length; i++) {
+    while (n >= vals[i]) { out += syms[i]; n -= vals[i] }
+  }
+  return out
+}
+
+const ENTITY_TYPE_LABELS: Record<string, string> = {
+  NPC: "NPC",
+  Location: "LOC",
+  Faction: "FACTION",
+  Item: "ITEM",
+  Other: "OTHER",
+}
+
+function EntityStrip({ entities }: { entities: Entity[] }) {
+  // Deduplicate by name+type
+  const seen = new Set<string>()
+  const unique = entities.filter(e => {
+    const key = `${e.type}::${e.name}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+  if (unique.length === 0) return null
+  return (
+    <div className="tl-card-section tl-card-section--entities">
+      <div className="tl-card-section-label">
+        ENTITIES ENCOUNTERED
+        <span className="tl-card-section-meta">{unique.length} LOGGED</span>
+      </div>
+      <div className="tl-entity-strip">
+        {unique.map((e, i) => (
+          <span key={i} className={`tl-entity-tag tl-entity-tag--${e.type}`}>
+            {e.name}
+            <span className="tl-entity-tag-type">{ENTITY_TYPE_LABELS[e.type] ?? e.type}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [summary, setSummary] = useState<string | null>(session.session_summary)
   const [summaryLoading, setSummaryLoading] = useState(false)
+  const [coverUrl, setCoverUrl] = useState<string | null | undefined>(session.session_cover_image_url)
+  const [coverLoading, setCoverLoading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
 
   const totalDuration = session.notes.reduce((sum, n) => sum + (n.duration_s ?? 0), 0)
@@ -48,6 +89,10 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const dateRange = formatDateRange(session.dates)
   const label = session.session_name ?? `Session · ${dateRange}`
   const earliestDate = [...session.dates].sort()[0] ?? ""
+  const opusNum = session.opusIndex != null ? toRoman(session.opusIndex + 1) : null
+
+  // Collect all entities across notes, deduplicated
+  const allEntities: Entity[] = session.notes.flatMap(n => n.entities ?? [])
 
   function handleGoToLog() {
     navigate(`/?date=${earliestDate}`)
@@ -66,27 +111,82 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
     }
   }
 
+  async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !session.session_id) return
+    setCoverLoading(true)
+    try {
+      const url = await uploadSessionCover(session.session_id, file)
+      setCoverUrl(url)
+    } catch (err) {
+      console.error("Cover upload failed", err)
+    } finally {
+      setCoverLoading(false)
+    }
+  }
+
+  async function handleCoverRemove() {
+    if (!session.session_id) return
+    await removeSessionCover(session.session_id)
+    setCoverUrl(null)
+  }
+
+  const hasCover = !!coverUrl
+
   return (
     <div className="tl-entry">
-      {/* spine */}
-      <div className="tl-spine">
-        <div className="tl-node" />
+      {/* spine — feature 5: chrono-seal */}
+      <div className={`tl-spine ${opusNum ? "tl-spine--seal" : ""}`}>
+        {opusNum ? (
+          <div className="tl-seal">
+            <div className="tl-seal-hex">
+              <span className="tl-seal-num">{opusNum}</span>
+            </div>
+            <span className="tl-seal-opus">OPUS</span>
+          </div>
+        ) : (
+          <div className="tl-node" />
+        )}
         {!isLast && <div className="tl-line" />}
       </div>
 
       {/* card */}
       <div className="tl-card-wrap">
-        <button
-          className={`tl-card-header ${expanded ? "tl-card-header--expanded" : ""}`}
-          onClick={() => setExpanded(v => !v)}
-          aria-expanded={expanded}
-        >
-          <span className="tl-card-name">{label}</span>
-          <span className="tl-card-meta">
-            {recordingCount} REC · {formatDuration(totalDuration)}
-          </span>
-          <span className="tl-card-chevron">{expanded ? "▲" : "▼"}</span>
-        </button>
+        {/* feature 7: cover tile (only when expanded or cover exists) */}
+        {hasCover ? (
+          <div
+            className="tl-card-cover"
+            onClick={() => setExpanded(v => !v)}
+            role="button"
+            aria-expanded={expanded}
+          >
+            <img src={coverUrl!} alt="" className="tl-card-cover-img" />
+            <div className="tl-card-cover-overlay" />
+            <div className="tl-card-cover-label">
+              <span>{label}</span>
+              <span className="tl-card-cover-sublabel">{dateRange} · {recordingCount} REC · {formatDuration(totalDuration)}</span>
+            </div>
+            {session.session_id && (
+              <button
+                className="tl-card-cover-remove"
+                onClick={e => { e.stopPropagation(); handleCoverRemove() }}
+                title="Fjern billede"
+              >✕</button>
+            )}
+          </div>
+        ) : (
+          <button
+            className={`tl-card-header ${expanded ? "tl-card-header--expanded" : ""}`}
+            onClick={() => setExpanded(v => !v)}
+            aria-expanded={expanded}
+          >
+            <span className="tl-card-name">{label}</span>
+            <span className="tl-card-meta">
+              {recordingCount} REC · {formatDuration(totalDuration)}
+            </span>
+            <span className="tl-card-chevron">{expanded ? "▲" : "▼"}</span>
+          </button>
+        )}
 
         {expanded && (
           <div className="tl-card-body">
@@ -116,6 +216,10 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
                 }
               </div>
             )}
+
+            {/* feature 2: entity strip */}
+            {allEntities.length > 0 && <EntityStrip entities={allEntities} />}
+
             <div className="tl-card-section tl-card-section--recordings">
               <div className="tl-card-section-label">
                 RECORDINGS <span className="tl-card-section-meta">[{recordingCount}] · {formatDuration(totalDuration)}</span>
@@ -129,10 +233,30 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
                 ))}
               </div>
             </div>
+
             <div className="tl-card-section tl-card-section--actions">
               <button className="tl-card-goto" onClick={handleGoToLog}>
                 GO TO LOG →
               </button>
+              {/* feature 7: attach cover button */}
+              {session.session_id && !hasCover && (
+                <>
+                  <button
+                    className="tl-card-goto tl-card-goto--dim"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={coverLoading}
+                  >
+                    {coverLoading ? "UPLOADING..." : "⊕ ATTACH PICT"}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleCoverUpload}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
@@ -140,3 +264,4 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
     </div>
   )
 }
+

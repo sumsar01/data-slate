@@ -713,6 +713,435 @@ a, button, [role="button"],
   border-color: #7a5500;
 }
 
+/* ── Feature 2: Entity strip ───────────────────────────── */
+
+.tl-card-section--entities {
+  background: #0a0a0a;
+}
+
+.tl-entity-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.1rem;
+}
+
+.tl-entity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  padding: 0.18rem 0.45rem;
+  border: 1px solid;
+  cursor: default;
+  transition: filter 0.1s;
+}
+
+.tl-entity-tag:hover { filter: brightness(1.3); }
+
+.tl-entity-tag--NPC      { border-color: #7a5500; color: #c88800; background: #0f0900; }
+.tl-entity-tag--Location { border-color: #1a4a1a; color: #4a9a4a; background: #030a03; }
+.tl-entity-tag--Faction  { border-color: #4a1a4a; color: #b04ab0; background: #0a030a; }
+.tl-entity-tag--Item     { border-color: #1a3a4a; color: #4a8aaa; background: #030a0f; }
+.tl-entity-tag--Other    { border-color: #3a2800; color: #7a5500; background: #0d0d0d; }
+
+.tl-entity-tag-type {
+  font-size: 0.38rem;
+  opacity: 0.55;
+  letter-spacing: 0.1em;
+}
+
+/* ── Feature 5: Chrono-seal ────────────────────────────── */
+
+.tl-spine--seal {
+  width: 3.5rem;
+}
+
+.tl-seal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 0.4rem;
+}
+
+.tl-seal-hex {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tl-seal-hex::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #0a0a0a;
+  border: 1px solid #ffb000;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow: 0 0 8px #ffb00033;
+}
+
+.tl-seal-num {
+  position: relative;
+  z-index: 1;
+  font-size: 0.42rem;
+  letter-spacing: 0.04em;
+  color: #ffb000;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tl-seal-opus {
+  font-size: 0.32rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+  margin-top: 0.18rem;
+}
+
+/* ── Feature 7: Cover image ────────────────────────────── */
+
+.tl-card-cover {
+  width: 100%;
+  height: 72px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #3a2800;
+  background: #0d0900;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.tl-card-cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+  opacity: 0.35;
+  filter: sepia(1) contrast(1.3);
+}
+
+.tl-card-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0a0a0a 0%, transparent 65%);
+}
+
+.tl-card-cover-label {
+  position: relative;
+  z-index: 1;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: #c88800;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  width: 100%;
+  text-shadow: 0 0 8px #0a0a0a;
+}
+
+.tl-card-cover-sublabel {
+  font-size: 0.42rem;
+  color: #7a5500;
+  letter-spacing: 0.08em;
+}
+
+.tl-card-cover-remove {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.4rem;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.5rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: color 0.1s;
+}
+
+.tl-card-cover-remove:hover { color: #7a5500; }
+
+.tl-card-goto--dim {
+  color: #3a2800;
+  border-color: #1e1600;
+  margin-left: 0.5rem;
+}
+
+.tl-card-goto--dim:hover {
+  color: #7a5500;
+  border-color: #3a2800;
+  background: transparent;
+}
+
+/* ── Feature 9: View toggle ────────────────────────────── */
+
+.tl-panel-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tl-view-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid #3a2800;
+}
+
+.tl-view-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #3a2800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;
+}
+
+.tl-view-toggle-btn + .tl-view-toggle-btn {
+  border-left: 1px solid #3a2800;
+}
+
+.tl-view-toggle-btn:hover:not(.tl-view-toggle-btn--active) {
+  color: #7a5500;
+}
+
+.tl-view-toggle-btn--active {
+  background: #0f0900;
+  color: #ffb000;
+}
+
+/* ── Feature 9: Entity thread view ─────────────────────── */
+
+.tl-thread-view {
+  padding: 1rem 1.5rem 2rem;
+  overflow-x: auto;
+}
+
+.tl-thread-header {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.tl-thread-entity-col {
+  width: 150px;
+  flex-shrink: 0;
+  font-size: 0.4rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+  text-align: right;
+  padding-right: 0.75rem;
+}
+
+.tl-thread-session-cols {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+}
+
+.tl-thread-session-label {
+  flex: 1;
+  text-align: center;
+  font-size: 0.4rem;
+  letter-spacing: 0.06em;
+  color: #3a2800;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #1e1600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.tl-thread-session-label:hover { color: #7a5500; }
+
+.tl-thread-type-group {
+  margin-top: 0.6rem;
+}
+
+.tl-thread-type-header {
+  font-size: 0.4rem;
+  letter-spacing: 0.14em;
+  margin: 0 0 0.25rem 150px;
+  border-top: 1px solid #1e1600;
+  padding-top: 0.35rem;
+}
+
+.tl-thread-row {
+  display: flex;
+  align-items: center;
+  min-height: 1.75rem;
+}
+
+.tl-thread-row:hover .tl-thread-entity-name { filter: brightness(1.25); }
+
+.tl-thread-entity-col {
+  width: 150px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 0.75rem;
+  overflow: hidden;
+}
+
+.tl-thread-entity-name {
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  transition: filter 0.1s;
+}
+
+.tl-thread-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+  position: relative;
+  border-bottom: 1px solid #111;
+}
+
+.tl-thread-connector {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.tl-thread-node {
+  width: 8px;
+  height: 8px;
+  border: 2px solid;
+  background: #0a0a0a;
+  position: relative;
+  z-index: 1;
+  cursor: default;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tl-thread-node--faint {
+  border-color: #1e1600 !important;
+  box-shadow: none !important;
+}
+
+.tl-thread-count {
+  position: absolute;
+  top: -0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.35rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tl-thread-empty {
+  padding: 2rem 1.5rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+}
+
+.tl-thread-footer {
+  margin-top: 1.5rem;
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+  border-top: 1px solid #1e1600;
+  padding-top: 0.5rem;
+}
+
+/* ── Feature 11: Arc grouping ──────────────────────────── */
+
+.tl-arc-group {
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+
+.tl-arc-bracket {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    transparent 3%,
+    var(--arc-color, #7a5500) 10%,
+    var(--arc-color, #7a5500) 90%,
+    transparent 97%
+  );
+}
+
+.tl-arc-bracket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 7px;
+  height: 1px;
+  background: var(--arc-color, #7a5500);
+  opacity: 0.5;
+}
+
+.tl-arc-label-wrap {
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  padding-top: 0.1rem;
+}
+
+.tl-arc-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  padding: 0.18rem 0.55rem;
+  border: 1px solid var(--arc-color, #7a5500);
+  color: var(--arc-color, #7a5500);
+  background: #0a0a0a;
+}
+
+.tl-arc-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--arc-color, #7a5500);
+  box-shadow: 0 0 4px var(--arc-color, #7a5500);
+  flex-shrink: 0;
+}
+
+.tl-arc-session-count {
+  font-size: 0.38rem;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+.tl-arc-sessions {
+  padding-left: 1.25rem;
+}
+
 /* ── PC / large-screen layout ──────────────────────────── */
 
 @media (min-width: 1280px) {
