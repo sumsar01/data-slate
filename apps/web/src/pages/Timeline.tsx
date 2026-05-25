@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { useDateGroups } from "../hooks/useDateGroups"
 import { TimelineCard } from "../components/TimelineCard"
 import { EntityThreadView } from "../components/EntityThreadView"
-import type { DateGroup, TimelineSession } from "../shared"
+import { ArcManager } from "../components/ArcManager"
+import { fetchArcs } from "../data/api"
+import type { DateGroup, TimelineSession, Arc } from "../shared"
 
 interface ArcGroup {
   arc_id: string | null
@@ -78,11 +80,25 @@ function groupByArcs(sessions: TimelineSession[]): ArcGroup[] {
 type ViewMode = "sessions" | "threads"
 
 export default function Timeline() {
-  const { groups, loading } = useDateGroups()
+  const { groups, loading, reload } = useDateGroups()
   const [viewMode, setViewMode] = useState<ViewMode>("sessions")
+  const [arcManagerOpen, setArcManagerOpen] = useState(false)
+  const [arcs, setArcs] = useState<Arc[]>([])
   const sessions = groupBySessions(groups)
   const arcGroups = groupByArcs(sessions)
   const hasArcs = arcGroups.some(a => a.arc_id !== null)
+
+  async function openArcManager() {
+    const fetched = await fetchArcs()
+    setArcs(fetched)
+    setArcManagerOpen(true)
+  }
+
+  const handleArcChanged = useCallback(async () => {
+    const fetched = await fetchArcs()
+    setArcs(fetched)
+    reload()
+  }, [reload])
 
   return (
     <div className="tl-page">
@@ -96,6 +112,7 @@ export default function Timeline() {
           </span>
         </div>
         <div className="app-header-right">
+          <button className="app-export-btn" onClick={openArcManager}>ARCS</button>
           <Link to="/" className="app-export-btn">◄ LOG</Link>
           <span className="app-header-status">
             <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
@@ -191,6 +208,15 @@ export default function Timeline() {
         <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
         <span>SESSIONER: {sessions.length}</span>
       </footer>
+
+      {arcManagerOpen && (
+        <ArcManager
+          arcs={arcs}
+          sessions={sessions}
+          onClose={() => setArcManagerOpen(false)}
+          onChanged={handleArcChanged}
+        />
+      )}
     </div>
   )
 }

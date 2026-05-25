@@ -17,7 +17,6 @@ interface Props {
 
 export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, onSelect, onReload, onDeleted }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
-  const [sessionIds] = useState<Map<string, string>>(new Map())
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [autoLoading, setAutoLoading] = useState<Set<string>>(new Set())
@@ -57,9 +56,8 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
     return new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
   }
 
-  async function handleSessionSave(date: string, name: string) {
-    const existingId = sessionIds.get(date)
-    await upsertSession(date, name, existingId)
+  async function handleSessionSave(date: string, name: string, existingId: string | null) {
+    await upsertSession(date, name, existingId ?? undefined)
     onReload()
   }
 
@@ -120,7 +118,7 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
               <SessionOverride
                 date={group.date}
                 currentName={group.session_name}
-                onSave={(name) => handleSessionSave(group.date, name)}
+                onSave={(name) => handleSessionSave(group.date, name, group.session_id)}
               />
             )}
 

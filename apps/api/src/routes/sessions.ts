@@ -62,6 +62,7 @@ sessionsRouter.post("/auto", async (c) => {
 
 // POST /sessions — create session override
 sessionsRouter.post("/", async (c) => {
+  const body = await c.req.json<{ name: string; dates: string[] }>()
   if (!body.name || !Array.isArray(body.dates)) {
     return c.json({ error: "Missing required fields: name, dates" }, 400)
   }

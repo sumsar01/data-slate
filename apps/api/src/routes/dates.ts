@@ -68,6 +68,7 @@ datesRouter.get("/", async (c) => {
       duration_s: row.duration_s as number,
       tags: JSON.parse(row.tags as string),
       entities: row.entities ? JSON.parse(row.entities as string) : [],
+      reference: row.reference === 1 || row.reference === true,
       created_at: row.created_at as string,
     })
   }

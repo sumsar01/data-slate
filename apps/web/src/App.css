@@ -1192,3 +1192,38 @@ a, button, [role="button"],
 #root {
   animation: crt-flicker 8s infinite;
 }
+
+/* ── Entity thread filter bar ──────────────────────────────── */
+
+.tl-thread-filter-bar {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.tl-thread-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #2a2a2a;
+  background: #0a0a0a;
+  color: #555;
+  cursor: pointer;
+}
+.tl-thread-filter-btn:hover { border-color: #7a5500; color: #c88800; }
+.tl-thread-filter-btn--active {
+  border-color: #7a5500;
+  color: #c88800;
+  background: #111;
+}
+
+/* Entity name as link in thread view */
+a.tl-thread-entity-name {
+  text-decoration: none;
+}
+a.tl-thread-entity-name:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}

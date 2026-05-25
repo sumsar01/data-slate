@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
 import type { TimelineSession, EntityType } from "../shared"
 
 interface EntityThreadViewProps {
@@ -30,6 +31,7 @@ function abbreviateSessionName(name: string | null, index: number): string {
 
 export function EntityThreadView({ sessions }: EntityThreadViewProps) {
   const navigate = useNavigate()
+  const [typeFilter, setTypeFilter] = useState<EntityType | null>(null)
   // Sessions in chronological order for columns (oldest first)
   const chronological = [...sessions].reverse()
 
@@ -72,6 +74,22 @@ export function EntityThreadView({ sessions }: EntityThreadViewProps) {
 
   return (
     <div className="tl-thread-view">
+      {/* Type filter bar */}
+      <div className="tl-thread-filter-bar">
+        <button
+          className={`tl-thread-filter-btn ${typeFilter === null ? "tl-thread-filter-btn--active" : ""}`}
+          onClick={() => setTypeFilter(null)}
+        >ALLE</button>
+        {TYPE_ORDER.map(t => (
+          <button
+            key={t}
+            className={`tl-thread-filter-btn ${typeFilter === t ? "tl-thread-filter-btn--active" : ""}`}
+            style={typeFilter === t ? { color: TYPE_COLORS[t].node, borderColor: TYPE_COLORS[t].node } : {}}
+            onClick={() => setTypeFilter(t === typeFilter ? null : t)}
+          >{t}</button>
+        ))}
+      </div>
+
       {/* Column headers */}
       <div className="tl-thread-header">
         <div className="tl-thread-entity-col" />
@@ -90,7 +108,7 @@ export function EntityThreadView({ sessions }: EntityThreadViewProps) {
       </div>
 
       {/* Entity rows grouped by type */}
-      {TYPE_ORDER.map(type => {
+      {TYPE_ORDER.filter(t => typeFilter === null || t === typeFilter).map(type => {
         const rows = rowsByType.get(type) ?? []
         if (rows.length === 0) return null
         const colors = TYPE_COLORS[type]
@@ -107,9 +125,14 @@ export function EntityThreadView({ sessions }: EntityThreadViewProps) {
               return (
                 <div key={`${row.type}::${row.name}`} className="tl-thread-row">
                   <div className="tl-thread-entity-col">
-                    <span className="tl-thread-entity-name" style={{ color: colors.label }}>
+                    <Link
+                      to={`/wiki/name/${encodeURIComponent(row.name)}`}
+                      className="tl-thread-entity-name"
+                      style={{ color: colors.label }}
+                      title={`Åbn ${row.name} i wiki`}
+                    >
                       {row.name}
-                    </span>
+                    </Link>
                   </div>
                   <div className="tl-thread-session-cols">
                     {row.counts.map((count, ci) => {

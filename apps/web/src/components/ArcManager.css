@@ -1,0 +1,258 @@
+.arc-manager-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4rem;
+}
+
+.arc-manager-panel {
+  background: #0f0f0f;
+  border: 1px solid #7a5500;
+  width: min(540px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 32px #7a550044;
+}
+
+.arc-manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid #7a5500;
+  background: #0a0a0a;
+}
+
+.arc-manager-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  color: #c88800;
+}
+
+.arc-manager-close {
+  background: none;
+  border: none;
+  color: #7a5500;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.1rem 0.25rem;
+}
+.arc-manager-close:hover { color: #ffb000; }
+
+.arc-manager-body {
+  overflow-y: auto;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.arc-manager-empty {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  color: #7a5500;
+  padding: 0.8rem 0;
+  text-align: center;
+}
+
+/* Arc row */
+.arc-manager-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #1a1a1a;
+  background: #111;
+}
+
+.arc-manager-row-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--arc-color, #7a5500);
+  box-shadow: 0 0 6px var(--arc-color, #7a5500);
+  flex-shrink: 0;
+}
+
+.arc-manager-row-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.arc-manager-row-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--arc-color, #c88800);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arc-manager-row-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.38rem;
+  color: #555;
+  letter-spacing: 0.1em;
+}
+
+.arc-manager-row-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.arc-manager-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #3a2800;
+  background: #0a0a0a;
+  color: #c88800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.arc-manager-btn:hover:not(:disabled) { border-color: #c88800; color: #ffb000; }
+.arc-manager-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.arc-manager-btn--primary {
+  border-color: #7a5500;
+  background: #1a0e00;
+  color: #ffb000;
+}
+.arc-manager-btn--primary:hover:not(:disabled) { background: #2a1800; border-color: #ffb000; }
+
+.arc-manager-btn--danger { color: #aa4444; border-color: #3a1a1a; }
+.arc-manager-btn--danger:hover:not(:disabled) { color: #ff6666; border-color: #aa4444; }
+.arc-manager-btn--confirm { background: #2a0000; border-color: #aa4444; color: #ff6666; }
+
+.arc-manager-create-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  padding: 0.4rem;
+  border: 1px dashed #3a2800;
+  background: transparent;
+  color: #7a5500;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.2rem;
+}
+.arc-manager-create-btn:hover { border-color: #c88800; color: #c88800; }
+
+/* Arc form */
+.arc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid var(--arc-color, #7a5500);
+  background: #0d0d0d;
+}
+
+.arc-form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.arc-form-row--actions {
+  justify-content: flex-end;
+}
+
+.arc-form-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.12em;
+  color: #555;
+  padding-top: 0.35rem;
+  white-space: nowrap;
+  min-width: 4.5rem;
+}
+
+.arc-form-input {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  background: #0a0a0a;
+  border: 1px solid #3a2800;
+  color: #ffb000;
+  padding: 0.3rem 0.5rem;
+  outline: none;
+  letter-spacing: 0.08em;
+}
+.arc-form-input:focus { border-color: var(--arc-color, #c88800); }
+
+.arc-form-color-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.arc-form-color-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.arc-form-color-swatch--active {
+  box-shadow: 0 0 5px currentColor;
+}
+
+.arc-form-color-picker {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #3a2800;
+  background: #0a0a0a;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.arc-form-sessions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+.arc-form-session-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid #2a2a2a;
+  background: #0a0a0a;
+  color: #555;
+  cursor: pointer;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.arc-form-session-pill:hover { border-color: var(--arc-color, #c88800); color: #aaa; }
+.arc-form-session-pill--active {
+  border-color: var(--arc-color, #7a5500);
+  color: var(--arc-color, #c88800);
+  background: #111;
+  box-shadow: 0 0 4px var(--arc-color, #7a5500)44;
+}
