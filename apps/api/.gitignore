@@ -1,8 +1,7 @@
 # dependencies (bun install)
 node_modules
 
-# local lockfile copy (generated for Railway deploy, root bun.lock is canonical)
-bun.lock
+
 
 # output
 out
