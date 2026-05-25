@@ -1,8 +1,8 @@
 FROM oven/bun:latest AS base
 WORKDIR /app
 
-COPY package.json ./
-RUN bun install
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 COPY src/ ./src/
 
