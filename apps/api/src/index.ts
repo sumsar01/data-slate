@@ -40,7 +40,7 @@ function requireAuthForWrites(c: Context, next: Next) {
 }
 
 // ── Public routes ──────────────────────────────────────────────────────────
-app.get("/health", (c) => c.json({ status: "ok", ts: new Date().toISOString() }))
+app.get("/health", (c) => c.json({ status: "ok", ts: new Date().toISOString(), v: 2 }))
 app.route("/auth", authRouter)
 
 // Public share view — GET /shares/shared/:token only
