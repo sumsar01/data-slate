@@ -1,11 +1,13 @@
 import Groq from "groq-sdk"
 
-export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+function getGroq() {
+  return new Groq({ apiKey: process.env.GROQ_API_KEY ?? "" })
+}
 
 export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; detectedLanguage: string }> {
   const file = new File([audioBuffer], filename, { type: "audio/webm" })
 
-  const result = await groq.audio.transcriptions.create({
+  const result = await getGroq().audio.transcriptions.create({
     file,
     model: "whisper-large-v3",
     response_format: "verbose_json",
@@ -20,7 +22,7 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
 // Lightly rewrites transcript keeping original language, returns flavoured text
 export async function flavourTranscript(transcript: string, language: string): Promise<string> {
   if (!transcript.trim()) return transcript
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
@@ -55,7 +57,7 @@ export async function flavourTranscript(transcript: string, language: string): P
 // Generates a short English title summarising the transcript content
 export async function generateTitle(transcript: string): Promise<string> {
   if (!transcript.trim()) return "Untitled"
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
@@ -80,7 +82,7 @@ export async function generateTitle(transcript: string): Promise<string> {
 export type Entity = { name: string; type: "NPC" | "Location" | "Faction" | "Item" | "Other" }
 
 export async function extractEntities(transcript: string): Promise<Entity[]> {
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
@@ -111,7 +113,7 @@ export async function extractEntities(transcript: string): Promise<Entity[]> {
 
 export async function summariseEntity(name: string, type: string, transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Transcript ${i + 1}]: ${t}`).join("\n\n")
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
@@ -135,7 +137,7 @@ export async function summariseEntity(name: string, type: string, transcripts: s
 
 export async function nameSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
@@ -159,7 +161,7 @@ export async function nameSession(transcripts: string[]): Promise<string> {
 
 export async function summariseSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
-  const chat = await groq.chat.completions.create({
+  const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {

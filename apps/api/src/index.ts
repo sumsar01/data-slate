@@ -27,7 +27,7 @@ app.onError((err, c) => {
 })
 
 const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret-change-me"
-const jwtMiddleware = jwt({ secret: JWT_SECRET })
+const jwtMiddleware = jwt({ secret: JWT_SECRET, alg: "HS256" })
 
 // Require auth on any non-GET request, or always (for fully-protected paths)
 function requireAuth(c: Context, next: Next) {
