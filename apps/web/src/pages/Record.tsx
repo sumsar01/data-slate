@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { ALL_TAGS, type Tag } from "../shared"
+import { authFetch } from "../data/api"
 import "./Record.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001"
@@ -121,7 +122,7 @@ export default function Record() {
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 3 * 60 * 1000) // 3 min timeout
       try {
-        const res = await fetch(`${API_URL}/notes`, { method: "POST", body: form, signal: controller.signal })
+        const res = await authFetch(`${API_URL}/notes`, { method: "POST", body: form, signal: controller.signal })
         clearTimeout(timeout)
         if (!res.ok) throw new Error(await res.text())
       } finally {

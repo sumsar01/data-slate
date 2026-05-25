@@ -9,6 +9,8 @@ import Wiki from "./pages/Wiki.tsx"
 import WikiPage from "./pages/WikiPage.tsx"
 import Timeline from "./pages/Timeline.tsx"
 import AdminNotes from "./pages/AdminNotes.tsx"
+import Login from "./pages/Login.tsx"
+import RequireAuth from "./components/RequireAuth.tsx"
 import "./index.css"
 
 createRoot(document.getElementById("root")!).render(
@@ -16,14 +18,15 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/record" element={<Record />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/share/:token" element={<ShareView />} />
-        <Route path="/admin-mechanicus" element={<Admin />} />
         <Route path="/wiki" element={<Wiki />} />
         <Route path="/wiki/name/:name" element={<WikiPage byName />} />
         <Route path="/wiki/:id" element={<WikiPage />} />
         <Route path="/timeline" element={<Timeline />} />
-        <Route path="/admin-mechanicus/notes" element={<AdminNotes />} />
+        <Route path="/record" element={<RequireAuth><Record /></RequireAuth>} />
+        <Route path="/admin-mechanicus" element={<RequireAuth><Admin /></RequireAuth>} />
+        <Route path="/admin-mechanicus/notes" element={<RequireAuth><AdminNotes /></RequireAuth>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

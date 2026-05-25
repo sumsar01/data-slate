@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import type { Note, Tag, Entity, EntityType } from "../shared"
 import { ALL_TAGS } from "../shared"
+import { authFetch } from "../data/api"
 import "./AdminNotes.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -38,7 +39,7 @@ export default function AdminNotes() {
   const [saveResult, setSaveResult] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(`${API_URL}/notes`)
+    authFetch(`${API_URL}/notes`)
       .then((r) => r.json())
       .then((data: Note[]) => {
         // Sort newest first
@@ -64,7 +65,7 @@ export default function AdminNotes() {
     setSaving(true)
     setSaveResult(null)
     try {
-      const res = await fetch(`${API_URL}/notes/${note.id}`, {
+      const res = await authFetch(`${API_URL}/notes/${note.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editState),
@@ -88,7 +89,7 @@ export default function AdminNotes() {
     setSaving(true)
     setSaveResult(null)
     try {
-      const patchRes = await fetch(`${API_URL}/notes/${noteId}`, {
+      const patchRes = await authFetch(`${API_URL}/notes/${noteId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editState),
@@ -96,7 +97,7 @@ export default function AdminNotes() {
       if (!patchRes.ok) throw new Error(await patchRes.text())
 
       setReextracting(true)
-      const extractRes = await fetch(`${API_URL}/notes/${noteId}/entities`, { method: "POST" })
+      const extractRes = await authFetch(`${API_URL}/notes/${noteId}/entities`, { method: "POST" })
       if (!extractRes.ok) throw new Error(await extractRes.text())
       const { entities } = await extractRes.json()
 

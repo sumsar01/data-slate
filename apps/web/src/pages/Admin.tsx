@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import type { DateGroup, Tag } from "../shared"
 import { ALL_TAGS } from "../shared"
 import { exportGroupsToMarkdown, exportSessionToMarkdown, downloadMarkdown } from "../data/export"
-import { createTextNote } from "../data/api"
+import { createTextNote, authFetch } from "../data/api"
 import "./Admin.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -61,9 +61,9 @@ export default function Admin() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${API_URL}/dates`).then((r) => r.json()),
-      fetch(`${API_URL}/shares`).then((r) => r.json()),
-      fetch(`${API_URL}/wiki`).then((r) => r.json()).catch(() => []),
+      authFetch(`${API_URL}/dates`).then((r) => r.json()),
+      authFetch(`${API_URL}/shares`).then((r) => r.json()),
+      authFetch(`${API_URL}/wiki`).then((r) => r.json()).catch(() => []),
     ]).then(([g, s, w]) => {
       setGroups(g)
       setShares(s)
@@ -75,7 +75,7 @@ export default function Admin() {
     setCreatingShareFor(sessionId)
     setNewShareUrl(null)
     try {
-      const res = await fetch(`${API_URL}/shares`, {
+      const res = await authFetch(`${API_URL}/shares`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId }),
@@ -92,14 +92,14 @@ export default function Admin() {
   }
 
   async function revokeShare(shareId: string) {
-    await fetch(`${API_URL}/shares/${shareId}`, { method: "DELETE" })
+    await authFetch(`${API_URL}/shares/${shareId}`, { method: "DELETE" })
     setShares((prev) => prev.filter((s) => s.id !== shareId))
   }
 
   async function retryEntities(noteId: string, transcript: string) {
     setRetryingNoteId(noteId)
     try {
-      await fetch(`${API_URL}/notes/${noteId}/entities`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ transcript }) })
+      await authFetch(`${API_URL}/notes/${noteId}/entities`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ transcript }) })
     } catch {
       // silently ignore
     } finally {
@@ -111,11 +111,11 @@ export default function Admin() {
     setFlavouring(true)
     setFlavourResult(null)
     try {
-      const res = await fetch(`${API_URL}/notes/flavour-all`, { method: "POST" })
+      const res = await authFetch(`${API_URL}/notes/flavour-all`, { method: "POST" })
       const data = await res.json()
       setFlavourResult(data)
       // Reload groups to reflect updated transcripts/titles
-      const g = await fetch(`${API_URL}/dates`).then((r) => r.json())
+      const g = await authFetch(`${API_URL}/dates`).then((r) => r.json())
       setGroups(g)
     } catch (e) {
       console.error(e)
@@ -128,10 +128,10 @@ export default function Admin() {
     setSyncing(true)
     setSyncResult(null)
     try {
-      const res = await fetch(`${API_URL}/wiki/sync`, { method: "POST" })
+      const res = await authFetch(`${API_URL}/wiki/sync`, { method: "POST" })
       const data = await res.json()
       setSyncResult(data)
-      const w = await fetch(`${API_URL}/wiki`).then((r) => r.json())
+      const w = await authFetch(`${API_URL}/wiki`).then((r) => r.json())
       setWikiEntities(w)
     } catch (e) {
       console.error(e)
@@ -143,7 +143,7 @@ export default function Admin() {
   async function generateSummary(entityId: string) {
     setGeneratingSummaryFor(entityId)
     try {
-      const res = await fetch(`${API_URL}/wiki/${entityId}/summary`, { method: "POST" })
+      const res = await authFetch(`${API_URL}/wiki/${entityId}/summary`, { method: "POST" })
       if (res.ok) {
         const { summary } = await res.json()
         setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, summary } : e))
@@ -158,7 +158,7 @@ export default function Admin() {
   async function patchEntity(entityId: string, patch: Partial<WikiEntity>) {
     setPatchingId(entityId)
     try {
-      const res = await fetch(`${API_URL}/wiki/${entityId}`, {
+      const res = await authFetch(`${API_URL}/wiki/${entityId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patch),
@@ -176,7 +176,7 @@ export default function Admin() {
 
   async function mergeEntities(dropId: string, keepId: string) {
     try {
-      await fetch(`${API_URL}/wiki/merge`, {
+      await authFetch(`${API_URL}/wiki/merge`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ keep_id: keepId, drop_id: dropId }),
@@ -196,7 +196,7 @@ export default function Admin() {
     try {
       const fd = new FormData()
       fd.append("image", file)
-      const res = await fetch(`${API_URL}/wiki/${entityId}/image`, { method: "POST", body: fd })
+      const res = await authFetch(`${API_URL}/wiki/${entityId}/image`, { method: "POST", body: fd })
       if (res.ok) {
         const { image_url } = await res.json()
         setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, image_url } : e))
@@ -211,7 +211,7 @@ export default function Admin() {
   async function removeImage(entityId: string) {
     setRemovingImageFor(entityId)
     try {
-      await fetch(`${API_URL}/wiki/${entityId}/image`, { method: "DELETE" })
+      await authFetch(`${API_URL}/wiki/${entityId}/image`, { method: "DELETE" })
       setWikiEntities((prev) => prev.map((e) => e.id === entityId ? { ...e, image_url: null } : e))
     } catch (e) {
       console.error(e)

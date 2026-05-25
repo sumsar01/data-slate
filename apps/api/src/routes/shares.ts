@@ -2,52 +2,8 @@ import { Hono } from "hono"
 import { db } from "../lib/db"
 import { randomUUID } from "crypto"
 
-export const sharesRouter = new Hono()
-
-// POST /shares — create a read-only share token for a session
-sharesRouter.post("/", async (c) => {
-  const body = await c.req.json<{ session_id: string; expires_in_days?: number }>()
-  if (!body.session_id) return c.json({ error: "Missing session_id" }, 400)
-
-  // Verify session exists
-  const session = await db.execute({
-    sql: "SELECT id FROM session_overrides WHERE id = ?",
-    args: [body.session_id],
-  })
-  if (session.rows.length === 0) return c.json({ error: "Session not found" }, 404)
-
-  const id = randomUUID()
-  const token = randomUUID().replace(/-/g, "")
-  const created_at = new Date().toISOString()
-  const expires_at = body.expires_in_days
-    ? new Date(Date.now() + body.expires_in_days * 86400_000).toISOString()
-    : null
-
-  await db.execute({
-    sql: "INSERT INTO shares (id, token, session_id, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
-    args: [id, token, body.session_id, created_at, expires_at],
-  })
-
-  return c.json({ id, token, session_id: body.session_id, created_at, expires_at }, 201)
-})
-
-// GET /shares — list all shares (for admin panel)
-sharesRouter.get("/", async (c) => {
-  const result = await db.execute(
-    "SELECT s.*, so.name as session_name FROM shares s LEFT JOIN session_overrides so ON s.session_id = so.id ORDER BY s.created_at DESC"
-  )
-  return c.json(result.rows)
-})
-
-// DELETE /shares/:id — revoke a share
-sharesRouter.delete("/:id", async (c) => {
-  const id = c.req.param("id")
-  await db.execute({ sql: "DELETE FROM shares WHERE id = ?", args: [id] })
-  return c.json({ deleted: id })
-})
-
-// GET /shared/:token — public read-only access
-sharesRouter.get("/shared/:token", async (c) => {
+// Shared handler for public read-only share view
+async function getSharedSession(c: any) {
   const token = c.req.param("token")
 
   const shareResult = await db.execute({
@@ -57,7 +13,6 @@ sharesRouter.get("/shared/:token", async (c) => {
   if (shareResult.rows.length === 0) return c.json({ error: "Share not found" }, 404)
 
   const share = shareResult.rows[0]!
-  // Check expiry
   if (share.expires_at) {
     if (new Date(share.expires_at as string) < new Date()) {
       return c.json({ error: "Share link has expired" }, 410)
@@ -66,7 +21,6 @@ sharesRouter.get("/shared/:token", async (c) => {
 
   const sessionId = share.session_id as string
 
-  // Fetch the session override
   const sessionResult = await db.execute({
     sql: "SELECT * FROM session_overrides WHERE id = ?",
     args: [sessionId],
@@ -76,14 +30,12 @@ sharesRouter.get("/shared/:token", async (c) => {
   const session = sessionResult.rows[0]!
   const dates: string[] = JSON.parse(session.dates as string)
 
-  // Fetch all notes for those dates
   const placeholders = dates.map(() => "?").join(",")
   const notesResult = await db.execute({
     sql: `SELECT * FROM notes WHERE date IN (${placeholders}) ORDER BY date ASC, created_at ASC`,
     args: dates,
   })
 
-  // Group by date
   const groups: any[] = []
   const dateMap = new Map<string, any>()
 
@@ -120,4 +72,55 @@ sharesRouter.get("/shared/:token", async (c) => {
     session_name: session.name,
     groups: groups.filter((g) => g.notes.length > 0),
   })
+}
+
+// Public router — only the read-only share view, no auth required
+export const publicSharesRouter = new Hono()
+publicSharesRouter.get("/shared/:token", getSharedSession)
+
+// Protected router — all share management endpoints
+export const sharesRouter = new Hono()
+
+// POST /shares — create a read-only share token for a session
+sharesRouter.post("/", async (c) => {
+  const body = await c.req.json<{ session_id: string; expires_in_days?: number }>()
+  if (!body.session_id) return c.json({ error: "Missing session_id" }, 400)
+
+  const session = await db.execute({
+    sql: "SELECT id FROM session_overrides WHERE id = ?",
+    args: [body.session_id],
+  })
+  if (session.rows.length === 0) return c.json({ error: "Session not found" }, 404)
+
+  const id = randomUUID()
+  const token = randomUUID().replace(/-/g, "")
+  const created_at = new Date().toISOString()
+  const expires_at = body.expires_in_days
+    ? new Date(Date.now() + body.expires_in_days * 86400_000).toISOString()
+    : null
+
+  await db.execute({
+    sql: "INSERT INTO shares (id, token, session_id, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
+    args: [id, token, body.session_id, created_at, expires_at],
+  })
+
+  return c.json({ id, token, session_id: body.session_id, created_at, expires_at }, 201)
 })
+
+// GET /shares — list all shares (for admin panel)
+sharesRouter.get("/", async (c) => {
+  const result = await db.execute(
+    "SELECT s.*, so.name as session_name FROM shares s LEFT JOIN session_overrides so ON s.session_id = so.id ORDER BY s.created_at DESC"
+  )
+  return c.json(result.rows)
+})
+
+// DELETE /shares/:id — revoke a share
+sharesRouter.delete("/:id", async (c) => {
+  const id = c.req.param("id")
+  await db.execute({ sql: "DELETE FROM shares WHERE id = ?", args: [id] })
+  return c.json({ deleted: id })
+})
+
+// GET /shares/shared/:token — also accessible via authenticated route
+sharesRouter.get("/shared/:token", getSharedSession)
