@@ -12,7 +12,17 @@ type WikiEntity = {
   canonical_id: string | null
   description: string | null
   summary: string | null
+  status: string | null
   created_at: string
+}
+
+const STATUS_COLORS: Record<string, string> = {
+  VIVENDE:    "#4a7a4a",
+  MORTIS:     "#8a2a2a",
+  IGNOTUS:    "#3a2800",
+  HOSTILIS:   "#8a3a00",
+  FOEDERATUS: "#2a5a7a",
+  INQUISITUS: "#5a3a7a",
 }
 
 const TYPE_ORDER = ["NPC", "Location", "Faction", "Item", "Other"]
@@ -82,6 +92,15 @@ export default function Wiki() {
                     onClick={() => navigate(`/wiki/${entity.id}`)}
                   >
                     <span className="wiki-entity-card-name">{entity.name}</span>
+                    {entity.status && (
+                      <span
+                        className="wiki-entity-card-status"
+                        style={{ color: STATUS_COLORS[entity.status] ?? "#3a2800" }}
+                        title={entity.status}
+                      >
+                        {entity.status}
+                      </span>
+                    )}
                     {entity.summary && <span className="wiki-entity-card-dot" title="Has dossier" />}
                   </button>
                 ))}

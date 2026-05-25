@@ -63,6 +63,8 @@
   flex-direction: column;
   gap: 1.5rem;
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .admin-main::-webkit-scrollbar { width: 4px; }
@@ -267,3 +269,49 @@
   color: #c8a84b;
   border-color: #c8a84b;
 }
+
+.admin-dupe-box {
+  border: 1px solid #7a5500;
+  background: rgba(122, 85, 0, 0.06);
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-dupe-title {
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+  margin-bottom: 0.2rem;
+}
+
+.admin-dupe-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-dupe-names {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.55rem;
+  color: #c88800;
+  letter-spacing: 0.03em;
+}
+
+.admin-dupe-sep {
+  color: #7a5500;
+}
+
+.admin-dupe-sim {
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  border: 1px solid currentColor;
+  padding: 0.05rem 0.3rem;
+}
+
+.admin-dupe-sim--high { color: #8a3a00; }
+.admin-dupe-sim--medium { color: #7a5500; }

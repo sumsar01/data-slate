@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link, useParams, useNavigate } from "react-router-dom"
+import { linkEntities } from "../lib/linkEntities"
 import "./Admin.css"
 import "./Wiki.css"
 
@@ -13,7 +14,17 @@ type WikiEntity = {
   description: string | null
   summary: string | null
   image_url: string | null
+  status: string | null
   created_at: string
+}
+
+const STATUS_COLORS: Record<string, string> = {
+  VIVENDE:    "#4a7a4a",
+  MORTIS:     "#8a2a2a",
+  IGNOTUS:    "#3a2800",
+  HOSTILIS:   "#8a3a00",
+  FOEDERATUS: "#2a5a7a",
+  INQUISITUS: "#5a3a7a",
 }
 
 type Mention = {
@@ -24,10 +35,42 @@ type Mention = {
   session_name: string | null
 }
 
+type Relation = {
+  id: string
+  from_id: string
+  from_name: string
+  to_id: string
+  to_name: string
+  relation_type: string
+  source: string
+}
+
 type EntityDetail = {
   entity: WikiEntity
   aliases: string[]
   mentions: Mention[]
+  all_entities: { id: string; name: string }[]
+  relations: Relation[]
+}
+
+const INVERSE: Record<string, string> = {
+  COMMANDS: "SUBORDINATE_TO",
+  SUBORDINATE_TO: "COMMANDS",
+  LEADS: "MEMBER_OF",
+  MEMBER_OF: "LEADS",
+  CONTROLS: "CONTROLLED_BY",
+  ALLIED_WITH: "ALLIED_WITH",
+  HOSTILE_TO: "HOSTILE_TO",
+  INVESTIGATES: "INVESTIGATED_BY",
+  AFFILIATED_WITH: "AFFILIATED_WITH",
+  WITNESSED_AT: "HOST_OF",
+  LOCATED_IN: "CONTAINS",
+  OPERATES_FROM: "BASE_OF",
+  OWNS: "OWNED_BY",
+}
+
+function inverseRelation(rel: string): string {
+  return INVERSE[rel] ?? `← ${rel}`
 }
 
 export default function WikiPage({ byName }: { byName?: boolean }) {
@@ -96,7 +139,11 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
     )
   }
 
-  const { entity, aliases, mentions } = detail
+  const { entity, aliases, mentions, all_entities, relations } = detail
+  // Build entity list for linker, excluding self
+  const linkableEntities = all_entities
+    .filter((e) => e.id !== entity.id)
+    .map((e) => ({ name: e.name, type: "Other" as const }))
 
   // Group mentions by session
   const sessionMap = new Map<string, { session_name: string | null; date: string; items: Mention[] }>()
@@ -115,6 +162,14 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
           <div className="admin-header-title">{entity.name.toUpperCase()}</div>
           <div className="admin-header-sub">
             {entity.type.toUpperCase()}
+            {entity.status && (
+              <span
+                className="wiki-status-badge"
+                style={{ color: STATUS_COLORS[entity.status] ?? "#7a5500", borderColor: STATUS_COLORS[entity.status] ?? "#7a5500" }}
+              >
+                {entity.status}
+              </span>
+            )}
             {aliases.length > 0 && ` // ALSO KNOWN AS: ${aliases.join(", ")}`}
           </div>
         </div>
@@ -134,7 +189,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
             {entity.description && (
               <div className="wiki-description-block">
                 <div className="admin-section-title">[ FIELD NOTES ]</div>
-                <div className="wiki-description">{entity.description}</div>
+                <div className="wiki-description">{linkEntities(entity.description, linkableEntities)}</div>
               </div>
             )}
 
@@ -142,7 +197,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
             {entity.summary && (
               <div className="wiki-summary-block">
                 <div className="admin-section-title">[ COGITATOR DOSSIER ]</div>
-                <div className="wiki-summary">{entity.summary}</div>
+                <div className="wiki-summary">{linkEntities(entity.summary, linkableEntities)}</div>
               </div>
             )}
 
@@ -163,7 +218,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
           )}
         </section>
 
-        {/* Stats */}
+        {/* Stats + Timeline */}
         <section className="admin-section">
           <div className="admin-section-title">[ INTELLIGENCE REPORT ]</div>
           <div className="admin-row">
@@ -180,7 +235,78 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
               <span className="admin-value">{aliases.join(", ")}</span>
             </div>
           )}
+
+          {/* Session activity chart */}
+          {sessionMap.size > 0 && (() => {
+            const sessions = [...sessionMap.values()]
+            const maxCount = Math.max(...sessions.map((s) => s.items.length), 1)
+            const firstSeen = sessions[sessions.length - 1]?.session_name ?? sessions[sessions.length - 1]?.date ?? "—"
+            const lastActive = sessions[0]?.session_name ?? sessions[0]?.date ?? "—"
+            const peak = sessions.reduce((a, b) => a.items.length >= b.items.length ? a : b)
+            const peakLabel = peak.session_name ?? peak.date
+            return (
+              <>
+                <div className="admin-divider" />
+                <div className="wiki-timeline-meta">
+                  <span>FØRSTE SET: <span className="wiki-timeline-val">{firstSeen}</span></span>
+                  <span>SIDST AKTIV: <span className="wiki-timeline-val">{lastActive}</span></span>
+                  <span>PEAK: <span className="wiki-timeline-val">{peakLabel} ({peak.items.length})</span></span>
+                </div>
+                <div className="wiki-timeline-chart" aria-label="Session activity chart">
+                  {[...sessions].reverse().map((s, i) => {
+                    const count = s.items.length
+                    const heightPct = (count / maxCount) * 100
+                    const label = s.session_name ?? s.date
+                    return (
+                      <div key={i} className="wiki-timeline-bar-col">
+                        <div className="wiki-timeline-count">{count > 0 ? count : ""}</div>
+                        <div className="wiki-timeline-bar-wrap">
+                          <div
+                            className="wiki-timeline-bar"
+                            style={{ height: count > 0 ? `${heightPct}%` : "2px", opacity: count > 0 ? 1 : 0.2 }}
+                          />
+                        </div>
+                        <div className="wiki-timeline-label" title={label}>
+                          {label.length > 8 ? label.slice(0, 8) + "…" : label}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </>
+            )
+          })()}
         </section>
+
+        {/* Known associations */}
+        {relations.length > 0 && (
+          <section className="admin-section">
+            <div className="admin-section-title">[ KENDTE ASSOCIATIONER ]</div>
+            <div className="wiki-relations-list">
+              {relations.map((r) => {
+                const isFrom = r.from_id === entity.id
+                const otherName = isFrom ? r.to_name : r.from_name
+                const otherId = all_entities.find((e) => e.name.toLowerCase() === otherName.toLowerCase())?.id
+                const label = isFrom
+                  ? r.relation_type
+                  : inverseRelation(r.relation_type)
+                return (
+                  <div key={r.id} className="wiki-relation-row">
+                    {otherId ? (
+                      <Link to={`/wiki/${otherId}`} className="wiki-relation-target">
+                        {otherName}
+                      </Link>
+                    ) : (
+                      <span className="wiki-relation-target wiki-relation-target--nolink">{otherName}</span>
+                    )}
+                    <span className="wiki-relation-type">{label}</span>
+                    {r.source === "ai" && <span className="wiki-relation-badge">AI</span>}
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Transcript excerpts by session */}
         {sessionMap.size > 0 && (
@@ -195,7 +321,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
                   <div key={m.note_id} className="wiki-excerpt">
                     <div className="wiki-excerpt-title">{m.note_title}</div>
                     <div className="wiki-excerpt-text">
-                      {m.excerpt}{m.excerpt.length >= 300 ? "..." : ""}
+                      {linkEntities(m.excerpt + (m.excerpt.length >= 300 ? "..." : ""), linkableEntities)}
                     </div>
                   </div>
                 ))}

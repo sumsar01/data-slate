@@ -159,6 +159,65 @@ export async function nameSession(transcripts: string[]): Promise<string> {
   return chat.choices[0]?.message?.content?.trim() ?? "Unnamed Session"
 }
 
+export type Relation = {
+  from_name: string
+  to_name: string
+  relation_type: string
+}
+
+const VALID_RELATIONS = [
+  "COMMANDS", "SUBORDINATE_TO", "MEMBER_OF", "LEADS",
+  "LOCATED_IN", "CONTROLS", "OPERATES_FROM",
+  "ALLIED_WITH", "HOSTILE_TO", "INVESTIGATES",
+  "AFFILIATED_WITH", "WITNESSED_AT", "OWNS",
+]
+
+export async function extractRelations(
+  entityName: string,
+  entityType: string,
+  knownEntityNames: string[],
+  transcripts: string[]
+): Promise<Relation[]> {
+  if (!transcripts.length || !knownEntityNames.length) return []
+  const combined = transcripts.map((t, i) => `[Transcript ${i + 1}]: ${t}`).join("\n\n")
+  const knownList = knownEntityNames.join(", ")
+  const validList = VALID_RELATIONS.join(", ")
+  const chat = await getGroq().chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You extract entity relationships for a Warhammer 40K tabletop RPG campaign. " +
+          "Given transcripts, identify relationships between the focal entity and other known entities. " +
+          `Valid relation types: ${validList}. ` +
+          "Return a JSON object: {\"relations\": [{\"from_name\": \"...\", \"to_name\": \"...\", \"relation_type\": \"...\"}]}. " +
+          "Only use entities from the provided known entities list. Only include relations clearly supported by the transcripts. " +
+          "Respond in English. Return an empty relations array if none are found.",
+      },
+      {
+        role: "user",
+        content:
+          `Focal entity: ${entityName} (${entityType})\n` +
+          `Known entities: ${knownList}\n\n` +
+          `Transcripts:\n\n${combined}`,
+      },
+    ],
+    max_tokens: 400,
+    response_format: { type: "json_object" },
+  })
+  const text = chat.choices[0]?.message?.content ?? "{}"
+  try {
+    const parsed = JSON.parse(text)
+    const arr: Relation[] = Array.isArray(parsed) ? parsed : (parsed.relations ?? [])
+    return arr.filter((r) =>
+      r.from_name && r.to_name && VALID_RELATIONS.includes(r.relation_type)
+    )
+  } catch {
+    return []
+  }
+}
+
 export async function summariseSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
   const chat = await getGroq().chat.completions.create({

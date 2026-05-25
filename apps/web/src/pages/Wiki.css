@@ -1,5 +1,126 @@
+.wiki-timeline-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.48rem;
+  color: #7a5500;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.wiki-timeline-val {
+  color: #c88800;
+}
+
+.wiki-timeline-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  height: 64px;
+  padding-bottom: 1.2rem;
+  position: relative;
+}
+
+.wiki-timeline-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  position: relative;
+}
+
+.wiki-timeline-bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.wiki-timeline-bar {
+  width: 100%;
+  max-width: 28px;
+  background: #7a5500;
+  min-height: 2px;
+  transition: height 0.2s;
+}
+
+.wiki-timeline-count {
+  font-size: 0.42rem;
+  color: #c88800;
+  letter-spacing: 0.04em;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  text-align: center;
+}
+
+.wiki-timeline-label {
+  position: absolute;
+  bottom: -1.1rem;
+  font-size: 0.38rem;
+  color: #3a2800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.wiki-relations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.wiki-relation-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+}
+
+.wiki-relation-target {
+  color: #ffb000;
+  text-decoration: none;
+  border-bottom: 1px dashed #7a5500;
+  min-width: 8rem;
+}
+
+.wiki-relation-target:hover {
+  color: #ffb000;
+  border-bottom-color: #ffb000;
+}
+
+.wiki-relation-target--nolink {
+  color: #c88800;
+  border-bottom: none;
+  min-width: 8rem;
+}
+
+.wiki-relation-type {
+  color: #7a5500;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+}
+
+.wiki-relation-badge {
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  border: 1px solid #3a2800;
+  color: #3a2800;
+  padding: 0.02rem 0.25rem;
+}
+
 .wiki-main {
   max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .wiki-top-section {
@@ -114,6 +235,25 @@
 
 .wiki-entity-card-name {
   flex: 1;
+}
+
+.wiki-entity-card-status {
+  font-size: 0.45rem;
+  letter-spacing: 0.08em;
+  border: 1px solid currentColor;
+  padding: 0.05rem 0.25rem;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.wiki-status-badge {
+  display: inline-block;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  border: 1px solid currentColor;
+  padding: 0.05rem 0.3rem;
+  margin-left: 0.6rem;
+  vertical-align: middle;
 }
 
 .wiki-entity-card-dot {

@@ -25,9 +25,11 @@ type WikiEntity = {
   description: string | null
   summary: string | null
   image_url: string | null
+  status: string | null
 }
 
 const ENTITY_TYPES = ["NPC", "Location", "Faction", "Item", "Other"]
+const ENTITY_STATUSES = ["", "VIVENDE", "MORTIS", "IGNOTUS", "HOSTILIS", "FOEDERATUS", "INQUISITUS"]
 
 export default function Admin() {
   const [groups, setGroups] = useState<DateGroup[]>([])
@@ -43,6 +45,8 @@ export default function Admin() {
   const [wikiEntities, setWikiEntities] = useState<WikiEntity[]>([])
   const [syncing, setSyncing] = useState(false)
   const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
+  const [duplicates, setDuplicates] = useState<Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: string }>>([])
+  const [dismissedDupes, setDismissedDupes] = useState<Set<string>>(new Set())
   const [generatingSummaryFor, setGeneratingSummaryFor] = useState<string | null>(null)
   const [patchingId, setPatchingId] = useState<string | null>(null)
   const [mergeMode, setMergeMode] = useState<string | null>(null)
@@ -127,10 +131,13 @@ export default function Admin() {
   async function syncWiki() {
     setSyncing(true)
     setSyncResult(null)
+    setDuplicates([])
+    setDismissedDupes(new Set())
     try {
       const res = await authFetch(`${API_URL}/wiki/sync`, { method: "POST" })
       const data = await res.json()
       setSyncResult(data)
+      if (data.potential_duplicates) setDuplicates(data.potential_duplicates)
       const w = await authFetch(`${API_URL}/wiki`).then((r) => r.json())
       setWikiEntities(w)
     } catch (e) {
@@ -415,6 +422,35 @@ export default function Admin() {
               <span className="admin-value">{syncResult.inserted} NEW ENTITIES INDEXED</span>
             </div>
           )}
+          {duplicates.filter((d) => !dismissedDupes.has(`${d.a.id}:${d.b.id}`)).length > 0 && (
+            <div className="admin-dupe-box">
+              <div className="admin-dupe-title">⚠ POTENTIELLE DUBLETTER DETEKTERET</div>
+              {duplicates
+                .filter((d) => !dismissedDupes.has(`${d.a.id}:${d.b.id}`))
+                .map((d) => (
+                  <div key={`${d.a.id}:${d.b.id}`} className="admin-dupe-row">
+                    <span className="admin-dupe-names">
+                      <span className="admin-dupe-name">{d.a.name}</span>
+                      <span className="admin-dupe-sep"> ↔ </span>
+                      <span className="admin-dupe-name">{d.b.name}</span>
+                    </span>
+                    <span className={`admin-dupe-sim admin-dupe-sim--${d.similarity.toLowerCase()}`}>{d.similarity}</span>
+                    <button
+                      className="admin-btn admin-btn--sm admin-btn--danger"
+                      onClick={() => mergeEntities(d.b.id, d.a.id)}
+                    >
+                      FLET →
+                    </button>
+                    <button
+                      className="admin-btn admin-btn--sm"
+                      onClick={() => setDismissedDupes((prev) => new Set([...prev, `${d.a.id}:${d.b.id}`]))}
+                    >
+                      AFVIS
+                    </button>
+                  </div>
+                ))}
+            </div>
+          )}
           <div className="admin-row">
             <button className="admin-btn" onClick={syncWiki} disabled={syncing}>
               {syncing ? "SCANNING..." : "⚙ SYNC ENTITIES"}
@@ -440,6 +476,16 @@ export default function Admin() {
                     onChange={(e) => patchEntity(entity.id, { type: e.target.value })}
                   >
                     {ENTITY_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+
+                  {/* Status selector */}
+                  <select
+                    className="admin-select"
+                    value={entity.status ?? ""}
+                    disabled={patchingId === entity.id}
+                    onChange={(e) => patchEntity(entity.id, { status: e.target.value || null })}
+                  >
+                    {ENTITY_STATUSES.map((s) => <option key={s} value={s}>{s || "— STATUS —"}</option>)}
                   </select>
 
                   {/* Description inline input */}

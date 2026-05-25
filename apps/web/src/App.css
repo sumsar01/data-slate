@@ -713,6 +713,42 @@ a, button, [role="button"],
   border-color: #7a5500;
 }
 
+/* ── PC / large-screen layout ──────────────────────────── */
+
+@media (min-width: 1280px) {
+  .panel-left {
+    width: 360px;
+  }
+
+  .app-header {
+    padding: 0.5rem 2rem;
+  }
+
+  .app-footer {
+    padding: 0.35rem 2rem;
+  }
+
+  .tl-list {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 1600px) {
+  .panel-left {
+    width: 420px;
+  }
+
+  .app-header {
+    padding: 0.5rem 3rem;
+  }
+
+  .app-footer {
+    padding: 0.35rem 3rem;
+  }
+}
+
 /* ── CRT flicker ────────────────────────────────────────── */
 @keyframes crt-flicker {
   0%   { opacity: 1; }

@@ -1,5 +1,44 @@
 # Agent Instructions
 
+## Product Context
+
+Data-Slate is an **in-world data slate** — a personal prop and campaign tool built for a
+single Dark Heresy 1st Edition character. It is not a generic SaaS product.
+
+### What it is
+
+A Warhammer 40K-flavoured session logger and campaign companion. It records audio from
+tabletop RPG sessions, transcribes them, rewrites the text in 40K in-universe prose, and
+builds a living dossier of entities (NPCs, locations, factions, items) encountered during
+play. The aesthetic should feel like a genuine artefact of the Imperium — not a modern web app.
+
+### Game System
+
+**Dark Heresy 1st Edition** — an investigative horror RPG set in the Warhammer 40K universe.
+Players are Acolytes serving an Inquisitor. The tone is grimdark, paranoid, and bureaucratic.
+Key terminology: Acolyte, Inquisitor, Throne Gelt, Medicae, Vox, Cogitator, Adeptus, Sanctioned
+Psyker, Arbites, Hab-block, Underhive, Servitor.
+
+### Design Philosophy
+
+- The UI should feel like a piece of Imperial technology — functional, gothic, slightly arcane
+- Flavour and immersion take priority over modern UX conventions
+- Features should serve the campaign, not scale to a general audience
+- The "user" is a single acolyte (the character) — there is no multi-user, multi-tenant, or
+  public product vision
+
+### Language
+
+The campaign group plays in **Danish**. All user-facing AI output (transcripts, titles, summaries,
+dossiers) should default to Danish. Do not "fix" Danish-language prompts or outputs — this is
+intentional.
+
+### What NOT to suggest
+
+- Generic SaaS patterns (onboarding, subscription billing, user accounts, dashboards)
+- Anything that breaks the in-world fiction or makes it feel like a modern productivity tool
+- Over-engineering for scale — this serves one campaign
+
 This project uses **bd** (beads) for issue tracking. Run `bd prime` for full workflow context.
 
 ## Quick Reference

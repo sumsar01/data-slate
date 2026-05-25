@@ -1,7 +1,50 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
-import { summariseEntity } from "../lib/groq"
+import { summariseEntity, extractRelations } from "../lib/groq"
 import { uploadToR2, deleteFromR2 } from "../lib/r2"
+
+// Levenshtein distance between two strings
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  )
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1]
+        ? dp[i-1][j-1]
+        : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+  return dp[m][n]
+}
+
+// Find potential duplicates among entity names
+function findDuplicates(entities: { id: string; name: string }[]): Array<{
+  a: { id: string; name: string }
+  b: { id: string; name: string }
+  similarity: "HIGH" | "MEDIUM"
+}> {
+  const results: Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: "HIGH" | "MEDIUM" }> = []
+  for (let i = 0; i < entities.length; i++) {
+    for (let j = i + 1; j < entities.length; j++) {
+      const a = entities[i].name.toLowerCase()
+      const b = entities[j].name.toLowerCase()
+      // Skip if one contains the other (likely a short alias vs full name)
+      if (a.includes(b) || b.includes(a)) {
+        // Only flag if the shorter one is ≥ 4 chars to avoid noise
+        if (Math.min(a.length, b.length) >= 4) {
+          results.push({ a: entities[i], b: entities[j], similarity: "HIGH" })
+        }
+        continue
+      }
+      const dist = levenshtein(a, b)
+      const maxLen = Math.max(a.length, b.length)
+      const ratio = 1 - dist / maxLen
+      if (ratio >= 0.85) results.push({ a: entities[i], b: entities[j], similarity: "HIGH" })
+      else if (ratio >= 0.70) results.push({ a: entities[i], b: entities[j], similarity: "MEDIUM" })
+    }
+  }
+  return results
+}
 
 export const wikiRouter = new Hono()
 
@@ -25,6 +68,23 @@ async function ensureTable() {
   } catch {
     // Column already exists — ignore
   }
+  // Add status column if table already existed without it
+  try {
+    await db.execute("ALTER TABLE entities ADD COLUMN status TEXT")
+  } catch {
+    // Column already exists — ignore
+  }
+  // Ensure entity_relations table exists
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS entity_relations (
+      id TEXT PRIMARY KEY,
+      from_id TEXT NOT NULL,
+      to_id TEXT NOT NULL,
+      relation_type TEXT NOT NULL,
+      source TEXT NOT NULL DEFAULT 'manual',
+      created_at TEXT NOT NULL
+    )
+  `)
 }
 
 // GET /wiki — list all canonical entities
@@ -158,10 +218,39 @@ wikiRouter.get("/:id", async (c) => {
     session_name: dateToSession.get(m.date) ?? null,
   }))
 
+  // Collect all entity names for cross-linking
+  const { rows: allEntities } = await db.execute(
+    "SELECT id, name FROM entities WHERE canonical_id IS NULL"
+  )
+
+  // Fetch relations (both directions) for this entity
+  const entityId = entity.id as string
+  const { rows: relRows } = await db.execute({
+    sql: `SELECT r.id, r.from_id, r.to_id, r.relation_type, r.source,
+                 f.name as from_name, t.name as to_name
+          FROM entity_relations r
+          JOIN entities f ON f.id = r.from_id
+          JOIN entities t ON t.id = r.to_id
+          WHERE r.from_id = ?1 OR r.to_id = ?1`,
+    args: [entityId],
+  })
+
+  const relations = relRows.map((r) => ({
+    id: r.id as string,
+    from_id: r.from_id as string,
+    from_name: r.from_name as string,
+    to_id: r.to_id as string,
+    to_name: r.to_name as string,
+    relation_type: r.relation_type as string,
+    source: r.source as string,
+  }))
+
   return c.json({
     entity,
     aliases: allNames.slice(1),
     mentions: mentionsWithSession,
+    all_entities: allEntities.map((e) => ({ id: e.id as string, name: e.name as string })),
+    relations,
   })
 })
 
@@ -169,13 +258,14 @@ wikiRouter.get("/:id", async (c) => {
 wikiRouter.patch("/:id", async (c) => {
   await ensureTable()
   const id = c.req.param("id")
-  const body = await c.req.json<{ name?: string; type?: string; description?: string }>()
+  const body = await c.req.json<{ name?: string; type?: string; description?: string; status?: string | null }>()
 
   const fields: string[] = []
   const args: (string | null)[] = []
   if (body.name !== undefined) { fields.push("name = ?"); args.push(body.name) }
   if (body.type !== undefined) { fields.push("type = ?"); args.push(body.type) }
   if (body.description !== undefined) { fields.push("description = ?"); args.push(body.description) }
+  if (body.status !== undefined) { fields.push("status = ?"); args.push(body.status ?? null) }
 
   if (!fields.length) return c.json({ error: "nothing to update" }, 400)
 
@@ -217,7 +307,15 @@ wikiRouter.post("/sync", async (c) => {
     }
   }
 
-  return c.json({ inserted })
+  // Find potential duplicates across all canonical entities
+  const { rows: allEntities } = await db.execute(
+    "SELECT id, name FROM entities WHERE canonical_id IS NULL"
+  )
+  const potential_duplicates = findDuplicates(
+    allEntities.map((e) => ({ id: e.id as string, name: e.name as string }))
+  )
+
+  return c.json({ inserted, potential_duplicates })
 })
 
 // POST /wiki/merge — merge drop_id into keep_id
@@ -280,7 +378,65 @@ wikiRouter.post("/:id/summary", async (c) => {
     args: [summary, id],
   })
 
+  // Auto-extract relations from transcripts
+  const { rows: allEntityRows } = await db.execute({
+    sql: "SELECT id, name FROM entities WHERE canonical_id IS NULL AND id != ?1",
+    args: [id],
+  })
+  const knownNames = allEntityRows.map((e) => e.name as string)
+  try {
+    const relations = await extractRelations(
+      entity.name as string,
+      entity.type as string,
+      knownNames,
+      excerpts
+    )
+    for (const rel of relations) {
+      // Resolve names to ids
+      const fromRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.from_name.toLowerCase())
+        ?? (rel.from_name.toLowerCase() === (entity.name as string).toLowerCase() ? { id } : null)
+      const toRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.to_name.toLowerCase())
+        ?? (rel.to_name.toLowerCase() === (entity.name as string).toLowerCase() ? { id } : null)
+      if (!fromRow || !toRow || fromRow.id === toRow.id) continue
+      const fromId = typeof fromRow.id === "string" ? fromRow.id : fromRow.id as string
+      const toId = typeof toRow.id === "string" ? toRow.id : toRow.id as string
+      // Skip if this relation already exists
+      const { rows: existing } = await db.execute({
+        sql: "SELECT id FROM entity_relations WHERE from_id = ?1 AND to_id = ?2 AND relation_type = ?3",
+        args: [fromId, toId, rel.relation_type],
+      })
+      if (existing.length) continue
+      await db.execute({
+        sql: "INSERT INTO entity_relations (id, from_id, to_id, relation_type, source, created_at) VALUES (?1, ?2, ?3, ?4, 'ai', ?5)",
+        args: [crypto.randomUUID(), fromId, toId, rel.relation_type, new Date().toISOString()],
+      })
+    }
+  } catch {
+    // Relation extraction failure is non-fatal
+  }
+
   return c.json({ summary })
+})
+
+// POST /wiki/relations — create a manual relation
+wikiRouter.post("/relations", async (c) => {
+  await ensureTable()
+  const { from_id, to_id, relation_type } = await c.req.json<{ from_id: string; to_id: string; relation_type: string }>()
+  if (!from_id || !to_id || !relation_type || from_id === to_id) return c.json({ error: "invalid" }, 400)
+  const relId = crypto.randomUUID()
+  await db.execute({
+    sql: "INSERT INTO entity_relations (id, from_id, to_id, relation_type, source, created_at) VALUES (?1, ?2, ?3, ?4, 'manual', ?5)",
+    args: [relId, from_id, to_id, relation_type, new Date().toISOString()],
+  })
+  return c.json({ id: relId, from_id, to_id, relation_type, source: "manual" })
+})
+
+// DELETE /wiki/relations/:id — remove a relation
+wikiRouter.delete("/relations/:id", async (c) => {
+  await ensureTable()
+  const relId = c.req.param("id")
+  await db.execute({ sql: "DELETE FROM entity_relations WHERE id = ?1", args: [relId] })
+  return c.json({ ok: true })
 })
 
 // POST /wiki/:id/image — upload image to R2

@@ -153,6 +153,28 @@
   animation: blink 1.2s step-end infinite;
 }
 
+/* ── PC / large-screen reading width ───────────────────── */
+
+@media (min-width: 1280px) {
+  .note-reader {
+    padding: 1.5rem 2.5rem;
+    align-items: center;
+  }
+
+  .note-reader-header,
+  .note-reader-body,
+  .note-reader-footer {
+    width: 100%;
+    max-width: 560px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .note-reader {
+    padding: 1.5rem 3rem;
+  }
+}
+
 .blink {
   animation: blink 0.8s step-end infinite;
   color: #ffb000;
