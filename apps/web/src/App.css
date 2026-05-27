@@ -502,6 +502,7 @@ a, button, [role="button"],
   display: flex;
   gap: 0;
   min-height: 2.5rem;
+  width: 100%;
 }
 
 /* Spine column */
