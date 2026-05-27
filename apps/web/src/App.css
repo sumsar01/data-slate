@@ -611,6 +611,46 @@ a, button, [role="button"],
   font-style: italic;
 }
 
+.tl-card-summary p {
+  margin: 0 0 0.5em;
+}
+.tl-card-summary p:last-child {
+  margin-bottom: 0;
+}
+.tl-card-summary strong {
+  font-style: normal;
+  font-weight: 700;
+  color: #e0a000;
+}
+.tl-card-summary em {
+  font-style: italic;
+  color: #a87200;
+}
+.tl-card-summary h1,
+.tl-card-summary h2,
+.tl-card-summary h3 {
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #e0a000;
+  margin: 0.6em 0 0.2em;
+  font-size: 0.65rem;
+}
+.tl-card-summary ul,
+.tl-card-summary ol {
+  margin: 0.3em 0 0.5em 1.2em;
+  padding: 0;
+  font-style: italic;
+}
+.tl-card-summary li {
+  margin-bottom: 0.2em;
+}
+.tl-card-summary hr {
+  border: none;
+  border-top: 1px solid #3a2800;
+  margin: 0.6em 0;
+}
+
 /* Sections inside expanded card */
 .tl-card-section {
   padding: 0.6rem 0.75rem;
@@ -1158,7 +1198,7 @@ a, button, [role="button"],
   }
 
   .tl-list {
-    max-width: 560px;
+    max-width: 794px; /* A4 width at 96dpi */
     margin-left: auto;
     margin-right: auto;
   }

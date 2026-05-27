@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import ReactMarkdown from "react-markdown"
 import type { Entity, TimelineSession } from "../shared"
 import { generateSummary, uploadSessionCover, removeSessionCover } from "../data/api"
 
@@ -205,7 +206,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
                   )}
                 </div>
                 {summary
-                  ? <div className="tl-card-summary">{summary}</div>
+                  ? <div className="tl-card-summary"><ReactMarkdown>{summary}</ReactMarkdown></div>
                   : <button
                       className="tl-card-goto"
                       onClick={handleRegenerate}
