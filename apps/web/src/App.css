@@ -545,8 +545,8 @@ a, button, [role="button"],
   gap: 0.75rem;
   width: 100%;
   background: transparent;
-  border: none;
-  border-bottom: 1px solid #1e1600;
+  border: 1px solid #1e1600;
+  box-sizing: border-box;
   color: #ffb000;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.65rem;
@@ -561,7 +561,8 @@ a, button, [role="button"],
 }
 
 .tl-card-header--expanded {
-  border-bottom-color: #3a2800;
+  border-color: #3a2800;
+  border-bottom-color: transparent;
   background: #0d0900;
 }
 
@@ -591,6 +592,7 @@ a, button, [role="button"],
 .tl-card-body {
   border: 1px solid #3a2800;
   border-top: none;
+  box-sizing: border-box;
   background: #0d0d0d;
   display: flex;
   flex-direction: column;
