@@ -7,7 +7,7 @@ export const datesRouter = new Hono()
 // GET /dates — returns DateGroup[] with session names, summaries, cover images and arc info merged in
 datesRouter.get("/", async (c) => {
   const [notesResult, sessionsResult, arcsResult] = await Promise.all([
-    db.execute("SELECT * FROM notes ORDER BY date ASC, created_at ASC"),
+    db.execute("SELECT * FROM notes ORDER BY date DESC, created_at ASC"),
     db.execute("SELECT * FROM session_overrides"),
     db.execute("SELECT * FROM arcs").catch(() => ({ rows: [] })),
   ])
