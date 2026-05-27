@@ -241,3 +241,56 @@ export async function summariseSession(transcripts: string[]): Promise<string> {
   })
   return chat.choices[0]?.message?.content ?? ""
 }
+
+/**
+ * Generate a mission briefing for a session (or recent sessions).
+ * Returns a structured Danish in-universe briefing document.
+ */
+export async function generateBriefing(params: {
+  sessionName: string | null
+  sessionSummaries: string[]
+  activeEntities: Array<{ name: string; type: string; status: string | null; description: string | null }>
+  recentNotes: string[]
+}): Promise<string> {
+  const { sessionName, sessionSummaries, activeEntities, recentNotes } = params
+
+  const entityBlock = activeEntities.length
+    ? activeEntities
+        .map((e) => `- ${e.name} [${e.type}${e.status ? `, STATUS: ${e.status}` : ""}]: ${e.description ?? "Ingen kendte oplysninger"}`)
+        .join("\n")
+    : "Ingen kendte entiteter"
+
+  const summaryBlock = sessionSummaries.length
+    ? sessionSummaries.join("\n\n---\n\n")
+    : recentNotes.slice(0, 3).join("\n\n---\n\n")
+
+  const chat = await getGroq().chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "Du er en Inquisitoriel cogitator-ånd der genererer missionsbriefinger til akolytten. " +
+          "Skriv på dansk i et dystert, bureaukratisk Warhammer 40K-stil. " +
+          "Strukturer briefingen med disse sektioner (brug markdown-overskrifter):\n" +
+          "## SITUATIONSRAPPORT\n" +
+          "## KENDTE TRUSLER\n" +
+          "## AKTIVE ENTITETER\n" +
+          "## ÅBNE TRÅDE\n" +
+          "## ORDRER\n\n" +
+          "Hold det faktabaseret — opfind ikke nye detaljer. Brug kun det der er givet. " +
+          "Imperiums-terminologi: akolyt, Inquisitor, Throne Gelt, medicae, vox, cogitator, Adeptus, Hab-blok, Underhive. " +
+          "Maks 400 ord total.",
+      },
+      {
+        role: "user",
+        content:
+          `Mission/Session: ${sessionName ?? "Igangværende operation"}\n\n` +
+          `Seneste session-rapporter:\n${summaryBlock}\n\n` +
+          `Kendte entiteter:\n${entityBlock}`,
+      },
+    ],
+    max_tokens: 700,
+  })
+  return chat.choices[0]?.message?.content?.trim() ?? ""
+}

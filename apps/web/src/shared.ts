@@ -80,3 +80,56 @@ export interface TimelineSession {
   notes: DateGroup["notes"]
   opusIndex?: number
 }
+
+// ── Search ────────────────────────────────────────────────────────────────
+
+export type SearchResult = {
+  id: string
+  date: string
+  title: string
+  excerpt: string
+  tags: Tag[]
+  session_name: string | null
+}
+
+// ── Clue Tracker ──────────────────────────────────────────────────────────
+
+export type ClueStatus = "ACTIVE" | "COLD" | "RESOLVED"
+
+export type Clue = {
+  id: string
+  title: string
+  description: string | null
+  status: ClueStatus
+  priority: number
+  created_at: string
+  updated_at: string
+  linked_notes: number
+}
+
+export type ClueDetail = Clue & {
+  notes: Array<{ id: string; title: string; date: string }>
+}
+
+// ── Entity Graph (Threat Matrix) ──────────────────────────────────────────
+
+export type GraphNode = {
+  id: string
+  name: string
+  type: EntityType
+  status: string | null
+}
+
+export type GraphEdge = {
+  id: string
+  from_id: string
+  to_id: string
+  relation_type: string
+  source: "ai" | "manual"
+}
+
+export type EntityGraph = {
+  nodes: GraphNode[]
+  edges: GraphEdge[]
+}
+

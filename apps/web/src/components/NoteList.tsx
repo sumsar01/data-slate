@@ -3,6 +3,7 @@ import type { Note, Tag, DateGroup } from "../shared"
 import { soundClick } from "../audio/sounds"
 import { SessionOverride } from "./SessionOverride"
 import { upsertSession, deleteNote, autoAnalyseSession, patchNote } from "../data/api"
+import { toImperialDate } from "../utils/imperialDate"
 import "./NoteList.css"
 
 interface Props {
@@ -48,8 +49,10 @@ export function NoteList({ groups, selectedId, activeTagFilters, searchQuery, on
   }
 
   function formatDate(dateStr: string) {
+    const imperial = toImperialDate(dateStr)
     const d = new Date(dateStr + "T00:00:00")
-    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
+    const human = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase()
+    return `${imperial} · ${human}`
   }
 
   function formatTime(iso: string) {

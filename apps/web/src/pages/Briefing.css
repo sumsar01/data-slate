@@ -1,0 +1,166 @@
+.brief-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #c8a96e;
+  font-family: var(--font-mono, monospace);
+}
+
+.brief-main {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.brief-loading,
+.brief-error {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.brief-loading-text {
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: #ffb000;
+  margin-bottom: 0.75rem;
+}
+
+.brief-loading-sub {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.brief-error {
+  color: #8a2a2a;
+  border: 1px solid #4a1010;
+  max-width: 600px;
+  padding: 2rem;
+  line-height: 1.8;
+}
+
+/* Document */
+.brief-document {
+  width: 100%;
+  max-width: 720px;
+  border: 1px solid #4a3a10;
+  background: #0d0c08;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 0 40px rgba(255, 176, 0, 0.04);
+}
+
+@media (max-width: 600px) {
+  .brief-document { padding: 1.5rem 1.25rem; }
+}
+
+/* Stamp */
+.brief-stamp {
+  text-align: center;
+  border: 2px solid #3a2800;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.brief-stamp-top,
+.brief-stamp-bottom {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #7a5500;
+}
+
+.brief-stamp-seal {
+  font-size: 1.5rem;
+  color: #3a2800;
+  margin: 0.3rem 0;
+}
+
+/* Title block */
+.brief-title-block {
+  margin-bottom: 1.25rem;
+}
+
+.brief-doc-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: #7a5500;
+  margin-bottom: 0.4rem;
+}
+
+.brief-doc-title {
+  font-size: 1.3rem;
+  color: #ffb000;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.brief-doc-meta {
+  font-size: 0.7rem;
+  color: #7a6040;
+  letter-spacing: 0.08em;
+}
+
+/* Divider */
+.brief-divider {
+  border: none;
+  border-top: 1px solid #2a1800;
+  margin: 1.25rem 0;
+}
+
+/* Content */
+.brief-content {
+  line-height: 1.7;
+}
+
+.brief-section-heading {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: #ffb000;
+  margin: 1.5rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #2a1800;
+  font-weight: normal;
+}
+
+.brief-para {
+  font-size: 0.88rem;
+  color: #b09060;
+  margin-bottom: 0.75rem;
+}
+
+.brief-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+}
+
+.brief-list-item {
+  font-size: 0.85rem;
+  color: #b09060;
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+.brief-list-item::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: #ffb000;
+}
+
+/* Footer */
+.brief-footer {
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: #3a2800;
+  line-height: 1.8;
+}
+
+.blink-cursor {
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

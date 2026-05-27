@@ -1,0 +1,8 @@
+.imperial-date {
+  font-family: inherit;
+  color: #ffb000;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+  font-size: 0.85em;
+}

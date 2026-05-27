@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import type { Entity, TimelineSession } from "../shared"
 import { generateSummary, uploadSessionCover, removeSessionCover } from "../data/api"
+import { toImperialDate } from "../utils/imperialDate"
 
 interface TimelineCardProps {
   session: TimelineSession
@@ -91,6 +92,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const label = session.session_name ?? `Session · ${dateRange}`
   const earliestDate = [...session.dates].sort()[0] ?? ""
   const opusNum = session.opusIndex != null ? toRoman(session.opusIndex + 1) : null
+  const imperialDate = earliestDate ? toImperialDate(earliestDate) : null
 
   // Collect all entities across notes, deduplicated
   const allEntities: Entity[] = session.notes.flatMap(n => n.entities ?? [])
@@ -165,7 +167,10 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
             <div className="tl-card-cover-overlay" />
             <div className="tl-card-cover-label">
               <span>{label}</span>
-              <span className="tl-card-cover-sublabel">{dateRange} · {recordingCount} REC · {formatDuration(totalDuration)}</span>
+              <span className="tl-card-cover-sublabel">
+                {dateRange} · {recordingCount} REC · {formatDuration(totalDuration)}
+                {imperialDate && <> · {imperialDate}</>}
+              </span>
             </div>
             {session.session_id && (
               <button
@@ -184,6 +189,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
             <span className="tl-card-name">{label}</span>
             <span className="tl-card-meta">
               {recordingCount} REC · {formatDuration(totalDuration)}
+              {imperialDate && <span className="tl-card-imperial"> · {imperialDate}</span>}
             </span>
             <span className="tl-card-chevron">{expanded ? "▲" : "▼"}</span>
           </button>

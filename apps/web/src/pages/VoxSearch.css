@@ -1,0 +1,157 @@
+.vox-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg, #0a0a0a);
+  color: var(--fg, #c8a96e);
+  font-family: var(--font-mono, monospace);
+}
+
+.vox-main {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.vox-search-form {
+  margin-bottom: 1.5rem;
+}
+
+.vox-search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #ffb000;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  background: #0f0f0f;
+}
+
+.vox-prompt {
+  color: #ffb000;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.vox-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #c8a96e;
+  font-family: inherit;
+  font-size: 0.95rem;
+  caret-color: #ffb000;
+}
+
+.vox-search-input::placeholder { color: #4a3a20; }
+
+.vox-search-btn {
+  background: transparent;
+  border: 1px solid #ffb000;
+  color: #ffb000;
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+}
+.vox-search-btn:hover:not(:disabled) { background: #ffb000; color: #0a0a0a; }
+.vox-search-btn:disabled { opacity: 0.5; cursor: default; }
+
+.vox-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.vox-tag-btn {
+  background: transparent;
+  border: 1px solid #3a2a10;
+  color: #7a6040;
+  font-family: inherit;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.15s;
+}
+.vox-tag-btn:hover { border-color: #ffb000; color: #c8a96e; }
+.vox-tag-btn--active { border-color: #ffb000; color: #ffb000; background: #1a1200; }
+
+.vox-idle {
+  text-align: center;
+  padding: 4rem 0;
+  opacity: 0.4;
+}
+.vox-idle-text { font-size: 1.1rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+.vox-idle-sub { font-size: 0.8rem; }
+
+.vox-results-header {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #ffb000;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2a1800;
+}
+
+.vox-result-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #2a1800;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  background: #0d0d0d;
+  transition: border-color 0.15s;
+}
+.vox-result-card:hover { border-color: #ffb000; background: #111008; }
+
+.vox-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.vox-result-title {
+  font-size: 0.9rem;
+  color: #c8a96e;
+  font-weight: bold;
+}
+
+.vox-result-meta {
+  font-size: 0.7rem;
+  color: #7a6040;
+  white-space: nowrap;
+}
+
+.vox-result-tags {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.vox-result-tag {
+  font-size: 0.65rem;
+  border: 1px solid #3a2a10;
+  color: #7a6040;
+  padding: 0.1rem 0.35rem;
+}
+
+.vox-result-excerpt {
+  font-size: 0.8rem;
+  color: #8a7050;
+  line-height: 1.5;
+}
+
+.vox-highlight {
+  background: #3a2a00;
+  color: #ffb000;
+  padding: 0 1px;
+}

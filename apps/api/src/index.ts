@@ -8,6 +8,9 @@ import { sessionsRouter } from "./routes/sessions"
 import { sharesRouter, publicSharesRouter } from "./routes/shares"
 import { wikiRouter } from "./routes/wiki"
 import { authRouter } from "./routes/auth"
+import { searchRouter } from "./routes/search"
+import { briefingRouter } from "./routes/briefing"
+import { cluesRouter } from "./routes/clues"
 
 const app = new Hono()
 
@@ -67,12 +70,26 @@ app.use("/sessions", requireAuthForWrites)
 app.use("/wiki/*", requireAuthForWrites)
 app.use("/wiki", requireAuthForWrites)
 
+// /search — fully public GET
+app.use("/search", requireAuthForWrites)
+
+// /briefing — GET is public (used by briefing page)
+app.use("/briefing/*", requireAuthForWrites)
+app.use("/briefing", requireAuthForWrites)
+
+// /clues — GET public, mutations protected
+app.use("/clues/*", requireAuthForWrites)
+app.use("/clues", requireAuthForWrites)
+
 // ── Routers ────────────────────────────────────────────────────────────────
 app.route("/notes", notesRouter)
 app.route("/dates", datesRouter)
 app.route("/sessions", sessionsRouter)
 app.route("/shares", sharesRouter)
 app.route("/wiki", wikiRouter)
+app.route("/search", searchRouter)
+app.route("/briefing", briefingRouter)
+app.route("/clues", cluesRouter)
 
 export default {
   port: parseInt(process.env.PORT ?? "3001"),
