@@ -334,6 +334,83 @@ wikiRouter.post("/sync", async (c) => {
   return c.json({ inserted, potential_duplicates })
 })
 
+// POST /wiki/link-all — extract relations for all canonical entities (no dossier generation)
+wikiRouter.post("/link-all", async (c) => {
+  await ensureTable()
+
+  const { rows: allEntityRows } = await db.execute(
+    "SELECT id, name, type FROM entities WHERE canonical_id IS NULL"
+  )
+  const { rows: notes } = await db.execute("SELECT transcript, entities FROM notes ORDER BY date ASC")
+
+  let processed = 0
+  let skipped = 0
+  let relationsAdded = 0
+
+  for (const entity of allEntityRows) {
+    const entityId = entity.id as string
+    const entityName = entity.name as string
+    const entityType = entity.type as string
+
+    // Collect alias names
+    const { rows: aliases } = await db.execute({
+      sql: "SELECT name FROM entities WHERE canonical_id = ?1",
+      args: [entityId],
+    })
+    const allNames = [entityName, ...aliases.map((a) => a.name as string)]
+
+    // Gather transcript excerpts where this entity appears
+    const excerpts: string[] = []
+    for (const note of notes) {
+      let noteEntities: Array<{ name: string }> = []
+      try { noteEntities = JSON.parse((note.entities as string) ?? "[]") } catch {}
+      const matched = noteEntities.some((e) =>
+        allNames.some((n) => n.toLowerCase() === e.name.toLowerCase())
+      )
+      if (matched && note.transcript) {
+        excerpts.push(note.transcript as string)
+      }
+    }
+
+    if (!excerpts.length) {
+      skipped++
+      continue
+    }
+
+    const otherEntityNames = allEntityRows
+      .filter((e) => e.id !== entityId)
+      .map((e) => e.name as string)
+
+    try {
+      const relations = await extractRelations(entityName, entityType, otherEntityNames, excerpts)
+      for (const rel of relations) {
+        const fromRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.from_name.toLowerCase())
+          ?? (rel.from_name.toLowerCase() === entityName.toLowerCase() ? { id: entityId } : null)
+        const toRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.to_name.toLowerCase())
+          ?? (rel.to_name.toLowerCase() === entityName.toLowerCase() ? { id: entityId } : null)
+        if (!fromRow || !toRow || fromRow.id === toRow.id) continue
+        const fromId = fromRow.id as string
+        const toId = toRow.id as string
+        const { rows: existing } = await db.execute({
+          sql: "SELECT id FROM entity_relations WHERE from_id = ?1 AND to_id = ?2 AND relation_type = ?3",
+          args: [fromId, toId, rel.relation_type],
+        })
+        if (existing.length) continue
+        await db.execute({
+          sql: "INSERT INTO entity_relations (id, from_id, to_id, relation_type, source, created_at) VALUES (?1, ?2, ?3, ?4, 'ai', ?5)",
+          args: [crypto.randomUUID(), fromId, toId, rel.relation_type, new Date().toISOString()],
+        })
+        relationsAdded++
+      }
+      processed++
+    } catch {
+      skipped++
+    }
+  }
+
+  return c.json({ processed, skipped, relations_added: relationsAdded })
+})
+
 // POST /wiki/merge — merge drop_id into keep_id
 wikiRouter.post("/merge", async (c) => {
   await ensureTable()
