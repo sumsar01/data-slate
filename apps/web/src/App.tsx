@@ -7,7 +7,6 @@ import { TagFilter } from "./components/TagFilter"
 import { NoteList } from "./components/NoteList"
 import { NoteReader } from "./components/NoteReader"
 import { soundClick } from "./audio/sounds"
-import { exportGroupsToMarkdown, downloadMarkdown } from "./data/export"
 import "./App.css"
 
 function CogIcon() {
@@ -68,11 +67,6 @@ export default function App() {
     reload()
   }
 
-  function handleExportAll() {
-    const md = exportGroupsToMarkdown(groups)
-    downloadMarkdown(md, `data-slate-export-${new Date().toISOString().slice(0, 10)}.md`)
-  }
-
   return (
     <>
       {!booted && <BootSequence onComplete={() => { hasBooted = true; setBooted(true) }} />}
@@ -94,9 +88,6 @@ export default function App() {
             </span>
           </div>
           <div className="app-header-right">
-            <button className="app-export-btn" onClick={handleExportAll} title="Export all sessions as markdown">
-              ↓ EXPORT
-            </button>
             <Link to="/admin-mechanicus" className="app-export-btn" title="Admin panel">
               ⚙
             </Link>
