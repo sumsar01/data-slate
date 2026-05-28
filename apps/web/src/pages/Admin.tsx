@@ -47,6 +47,8 @@ export default function Admin() {
   const [wikiTypeFilter, setWikiTypeFilter] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
+  const [linkingAll, setLinkingAll] = useState(false)
+  const [linkAllResult, setLinkAllResult] = useState<{ processed: number; skipped: number; relations_added: number } | null>(null)
   const [duplicates, setDuplicates] = useState<Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: string }>>([])
   const [dismissedDupes, setDismissedDupes] = useState<Set<string>>(new Set())
   const [generatingSummaryFor, setGeneratingSummaryFor] = useState<string | null>(null)
@@ -127,6 +129,20 @@ export default function Admin() {
       console.error(e)
     } finally {
       setFlavouring(false)
+    }
+  }
+
+  async function linkAllEntities() {
+    setLinkingAll(true)
+    setLinkAllResult(null)
+    try {
+      const res = await authFetch(`${API_URL}/wiki/link-all`, { method: "POST" })
+      const data = await res.json()
+      setLinkAllResult(data)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLinkingAll(false)
     }
   }
 
@@ -424,6 +440,13 @@ export default function Admin() {
               <span className="admin-value">{syncResult.inserted} NEW ENTITIES INDEXED</span>
             </div>
           )}
+          {linkAllResult && (
+            <div className="admin-row">
+              <span className="admin-value">
+                {linkAllResult.relations_added} CONNECTIONS FORGED // {linkAllResult.processed} PROCESSED // {linkAllResult.skipped} SKIPPED
+              </span>
+            </div>
+          )}
           {duplicates.filter((d) => !dismissedDupes.has(`${d.a.id}:${d.b.id}`)).length > 0 && (
             <div className="admin-dupe-box">
               <div className="admin-dupe-title">⚠ POTENTIELLE DUBLETTER DETEKTERET</div>
@@ -456,6 +479,9 @@ export default function Admin() {
           <div className="admin-row">
             <button className="admin-btn" onClick={syncWiki} disabled={syncing}>
               {syncing ? "SCANNING..." : "⚙ SYNC ENTITIES"}
+            </button>
+            <button className="admin-btn" onClick={linkAllEntities} disabled={linkingAll}>
+              {linkingAll ? "CORRELATING DATA-STREAMS..." : "⇌ LINK ALL ENTITIES"}
             </button>
             <Link to="/wiki" className="admin-btn" style={{ textDecoration: "none", textAlign: "center" }}>
               ↗ VIEW WIKI
