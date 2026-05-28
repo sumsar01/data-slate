@@ -167,6 +167,85 @@ a, button, [role="button"],
   background: #1a0e00;
 }
 
+/* ── Nav inline / dropdown ──────────────────────────────── */
+
+.app-nav-inline {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.app-nav-wrapper {
+  display: none;
+  position: relative;
+}
+
+.app-nav-toggle {
+  background: transparent;
+  border: 1px solid #3a2800;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;
+}
+
+.app-nav-toggle:hover,
+.app-nav-toggle.open {
+  color: #ffb000;
+  background: #1a0e00;
+}
+
+.app-nav-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #0d0d0d;
+  border: 1px solid #3a2800;
+  z-index: 901;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-nav-dropdown a {
+  display: block;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+  border-bottom: 1px solid #1e1400;
+  transition: color 0.1s, background 0.1s;
+}
+
+.app-nav-dropdown a:last-child {
+  border-bottom: none;
+}
+
+.app-nav-dropdown a:hover {
+  color: #ffb000;
+  background: #1a0e00;
+}
+
+.app-nav-separator {
+  border: none;
+  border-top: 1px solid #3a2800;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .app-nav-inline {
+    display: none;
+  }
+  .app-nav-wrapper {
+    display: block;
+  }
+}
+
 .app-search-row {
   display: flex;
   align-items: center;

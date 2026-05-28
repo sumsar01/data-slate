@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Link } from "react-router-dom"
 import type { Note, Tag } from '@data-slate/shared'
 import { useDateGroups } from "./hooks/useDateGroups"
@@ -48,6 +48,19 @@ export default function App() {
   const [mobilePanel, setMobilePanel] = useState<"list" | "reader">("list")
   const [searchQuery, setSearchQuery] = useState("")
 
+  const [navOpen, setNavOpen] = useState(false)
+  const navRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setNavOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
   const { groups, loading, reload } = useDateGroups(!!selectedNote)
 
   const totalNotes = groups.reduce((a, g) => a + g.notes.length, 0)
@@ -88,27 +101,39 @@ export default function App() {
             </span>
           </div>
           <div className="app-header-right">
-            <Link to="/admin-mechanicus" className="app-export-btn" title="Admin panel">
-              ⚙
-            </Link>
-            <Link to="/timeline" className="app-export-btn" title="Campaign timeline">
-              ◈ TIMELINE
-            </Link>
-            <Link to="/wiki" className="app-export-btn" title="Entity wiki">
-              ◈ WIKI
-            </Link>
-            <Link to="/threat-matrix" className="app-export-btn" title="Threat assessment">
-              ◈ THREATS
-            </Link>
-            <Link to="/dead-drop" className="app-export-btn" title="Dead Drop — lead tracker">
-              ◈ DEAD DROP
-            </Link>
-            <Link to="/briefing" className="app-export-btn" title="Mission briefing">
-              ◈ BRIEFING
-            </Link>
-            <Link to="/vox-search" className="app-export-btn" title="Search vox-log">
-              ⌕ SEARCH
-            </Link>
+            {/* Inline links — visible above 900px */}
+            <div className="app-nav-inline">
+              <Link to="/admin-mechanicus" className="app-export-btn" title="Admin panel">⚙</Link>
+              <Link to="/timeline" className="app-export-btn" title="Campaign timeline">◈ TIMELINE</Link>
+              <Link to="/wiki" className="app-export-btn" title="Entity wiki">◈ WIKI</Link>
+              <Link to="/threat-matrix" className="app-export-btn" title="Threat assessment">◈ THREATS</Link>
+              <Link to="/dead-drop" className="app-export-btn" title="Dead Drop — lead tracker">◈ DEAD DROP</Link>
+              <Link to="/briefing" className="app-export-btn" title="Mission briefing">◈ BRIEFING</Link>
+              <Link to="/vox-search" className="app-export-btn" title="Search vox-log">⌕ SEARCH</Link>
+            </div>
+            {/* Dropdown — visible below 900px */}
+            <div className="app-nav-wrapper" ref={navRef}>
+              <button
+                className={`app-nav-toggle${navOpen ? " open" : ""}`}
+                onClick={() => setNavOpen(o => !o)}
+                aria-haspopup="true"
+                aria-expanded={navOpen}
+              >
+                ◈ NAV ▾
+              </button>
+              {navOpen && (
+                <div className="app-nav-dropdown" role="menu">
+                  <Link to="/admin-mechanicus" role="menuitem" onClick={() => setNavOpen(false)}>⚙ ADMIN</Link>
+                  <hr className="app-nav-separator" />
+                  <Link to="/timeline" role="menuitem" onClick={() => setNavOpen(false)}>◈ TIMELINE</Link>
+                  <Link to="/wiki" role="menuitem" onClick={() => setNavOpen(false)}>◈ WIKI</Link>
+                  <Link to="/threat-matrix" role="menuitem" onClick={() => setNavOpen(false)}>◈ THREATS</Link>
+                  <Link to="/dead-drop" role="menuitem" onClick={() => setNavOpen(false)}>◈ DEAD DROP</Link>
+                  <Link to="/briefing" role="menuitem" onClick={() => setNavOpen(false)}>◈ BRIEFING</Link>
+                  <Link to="/vox-search" role="menuitem" onClick={() => setNavOpen(false)}>⌕ SEARCH</Link>
+                </div>
+              )}
+            </div>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />
               <span className="app-header-status-text">REC</span>
