@@ -135,6 +135,30 @@ export async function summariseEntity(name: string, type: string, transcripts: s
   return chat.choices[0]?.message?.content?.trim() ?? ""
 }
 
+export async function nameSession(transcripts: string[]): Promise<string> {
+  const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
+  const chat = await getGroq().chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a scribe for a Warhammer 40K tabletop RPG campaign. " +
+          "Given session recordings, generate a short evocative session name (4–7 words max) in the style of a 40K mission title. " +
+          "Examples: 'The Siege of Hive Tertius', 'Descent into the Underhive', 'Blood on the Manufactorum Floor'. " +
+          "IMPORTANT: Write the session name in the SAME language as the majority of the transcripts. " +
+          "Return ONLY the session name, no quotes, no explanation.",
+      },
+      {
+        role: "user",
+        content: `Name this session based on these recordings:\n\n${combined}`,
+      },
+    ],
+    max_tokens: 30,
+  })
+  return chat.choices[0]?.message?.content?.trim() ?? "Unnamed Session"
+}
+
 export type ClueSuggestion = {
   title: string
   description: string
