@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import type { EntityGraph } from "../shared"
 import { ThreatGraph } from "../components/ThreatGraph"
+import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./ThreatMatrix.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -15,15 +16,17 @@ const STATUS_COLORS: Record<string, string> = {
   INQUISITUS: "#5a3a7a",
 }
 const STATUS_LABELS: Record<string, string> = {
-  VIVENDE:    "I live",
-  MORTIS:     "Afdød",
-  IGNOTUS:    "Ukendt",
-  HOSTILIS:   "Fjendtlig",
-  FOEDERATUS: "Allieret",
-  INQUISITUS: "Efterforsket",
+  VIVENDE:    "Alive",
+  MORTIS:     "Deceased",
+  IGNOTUS:    "Unknown",
+  HOSTILIS:   "Hostile",
+  FOEDERATUS: "Allied",
+  INQUISITUS: "Investigated",
 }
 
 export default function ThreatMatrixPage() {
+  useScrollablePage()
+
   const [graph, setGraph] = useState<EntityGraph | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -46,7 +49,7 @@ export default function ThreatMatrixPage() {
         <div className="app-header-left">
           <span className="app-header-title">
             <span className="app-header-title-long">ADEPTUS MECHANICUS <span className="app-header-divider">//</span> </span>
-            TRUSSELSVURDERING
+            THREAT ASSESSMENT
           </span>
         </div>
         <div className="app-header-right">
@@ -54,13 +57,12 @@ export default function ThreatMatrixPage() {
           <Link to="/" className="app-export-btn">◄ LOG</Link>
           <span className="app-header-status">
             <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
-            <span className="app-header-status-text">{loading ? "KOMPILERER..." : "COGITATOR ONLINE"}</span>
+            <span className="app-header-status-text">{loading ? "COMPILING..." : "COGITATOR ONLINE"}</span>
           </span>
         </div>
       </header>
 
       <main className="tm-main">
-        {/* Legend */}
         <div className="tm-legend">
           {Object.entries(STATUS_COLORS).map(([status, color]) => (
             <span key={status} className="tm-legend-item">
@@ -70,31 +72,31 @@ export default function ThreatMatrixPage() {
           ))}
           <span className="tm-legend-sep">|</span>
           <span className="tm-legend-item"><span className="tm-shape-circle" /> NPC</span>
-          <span className="tm-legend-item"><span className="tm-shape-rect" /> LOKATION</span>
-          <span className="tm-legend-item"><span className="tm-shape-diamond" /> FRAKTION</span>
-          <span className="tm-legend-item"><span className="tm-shape-tri" /> GENSTAND</span>
+          <span className="tm-legend-item"><span className="tm-shape-rect" /> LOCATION</span>
+          <span className="tm-legend-item"><span className="tm-shape-diamond" /> FACTION</span>
+          <span className="tm-legend-item"><span className="tm-shape-tri" /> ITEM</span>
           <span className="tm-legend-sep">|</span>
-          <span className="tm-legend-tip">TRÆK for at flytte · KLIK for dossier · SCROLL for zoom</span>
+          <span className="tm-legend-tip">DRAG to reposition · CLICK for dossier · SCROLL to zoom</span>
         </div>
 
         {loading && (
           <div className="tm-state">
-            KOMPILERER TRUSSELSVURDERING<span className="blink-cursor">_</span>
+            COMPILING THREAT ASSESSMENT<span className="blink-cursor">_</span>
           </div>
         )}
 
         {error && (
-          <div className="tm-state tm-state--error">DATAFEJL: {error}</div>
+          <div className="tm-state tm-state--error">DATA ERROR: {error}</div>
         )}
 
         {graph && graph.nodes.length === 0 && (
-          <div className="tm-state">INGEN ENTITETER REGISTRERET</div>
+          <div className="tm-state">NO ENTITIES REGISTERED</div>
         )}
 
         {graph && graph.nodes.length > 0 && (
           <div className="tm-graph-wrap">
             <div className="tm-graph-label">
-              [ {graph.nodes.length} ENTITETER // {graph.edges.length} FORBINDELSER ]
+              [ {graph.nodes.length} ENTITIES // {graph.edges.length} CONNECTIONS ]
             </div>
             <ThreatGraph nodes={graph.nodes} edges={graph.edges} />
           </div>
@@ -104,7 +106,7 @@ export default function ThreatMatrixPage() {
       <footer className="app-footer">
         <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
         {graph && (
-          <span>ENTITETER: {graph.nodes.length} // RELATIONER: {graph.edges.length}</span>
+          <span>ENTITIES: {graph.nodes.length} // RELATIONS: {graph.edges.length}</span>
         )}
       </footer>
     </div>

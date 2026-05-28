@@ -237,5 +237,27 @@
 .dd-card-btn:hover { border-color: #ffb000; color: #c8a96e; }
 .dd-card-btn--advance { border-color: #2a4a2a; color: #4a7a4a; }
 .dd-card-btn--advance:hover { background: #0a1a0a; }
+.dd-card-btn--back { border-color: #2a2a3a; color: #4a4a7a; }
+.dd-card-btn--back:hover { background: #0a0a1a; }
 .dd-card-btn--delete { border-color: #2a1010; color: #5a2a2a; margin-left: auto; }
 .dd-card-btn--delete:hover { background: #1a0a0a; border-color: #8a2a2a; color: #8a2a2a; }
+
+.dd-edit-form {
+  margin-bottom: 0.5rem;
+}
+
+.dd-link-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid #1a1200;
+}
+
+.dd-link-select {
+  flex: 1;
+  font-size: 0.7rem;
+  margin-bottom: 0;
+}
+

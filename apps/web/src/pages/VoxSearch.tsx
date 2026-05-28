@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import type { SearchResult, Tag } from "../shared"
 import { ALL_TAGS } from "../shared"
 import { toImperialDate } from "../utils/imperialDate"
+import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./VoxSearch.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -18,6 +19,8 @@ function highlight(text: string, query: string): React.ReactNode {
 }
 
 export default function VoxSearch() {
+  useScrollablePage()
+
   const [query, setQuery] = useState("")
   const [activeTags, setActiveTags] = useState<Tag[]>([])
   const [results, setResults] = useState<SearchResult[] | null>(null)
@@ -43,15 +46,12 @@ export default function VoxSearch() {
     }
   }
 
-  // Auto-search when tags change if we've already searched
   function handleTagToggle(tag: Tag) {
     const next = activeTags.includes(tag)
       ? activeTags.filter((t) => t !== tag)
       : [...activeTags, tag]
     setActiveTags(next)
-    if (searched) {
-      setTimeout(() => handleSearch(), 0)
-    }
+    if (searched) setTimeout(() => handleSearch(), 0)
   }
 
   return (
@@ -61,37 +61,36 @@ export default function VoxSearch() {
         <div className="app-header-left">
           <span className="app-header-title">
             <span className="app-header-title-long">ADEPTUS MECHANICUS <span className="app-header-divider">//</span> </span>
-            VOX-LOG SØGNING
+            VOX-LOG SEARCH
           </span>
         </div>
         <div className="app-header-right">
           <Link to="/" className="app-export-btn">◄ LOG</Link>
           <span className="app-header-status">
             <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
-            <span className="app-header-status-text">{loading ? "SØGER..." : "COGITATOR ONLINE"}</span>
+            <span className="app-header-status-text">{loading ? "SEARCHING..." : "COGITATOR ONLINE"}</span>
           </span>
         </div>
       </header>
 
       <main className="vox-main">
-        <div className="panel-label">[ AUSPEX-SØGNING // VOX-LOG GENNEMGANG ]</div>
+        <div className="panel-label">[ AUSPEX SEARCH // VOX-LOG RETRIEVAL ]</div>
 
         <form className="vox-search-form" onSubmit={handleSearch}>
           <div className="vox-search-row">
-            <span className="vox-prompt">FORESPØRGSEL &gt;</span>
+            <span className="vox-prompt">QUERY &gt;</span>
             <input
               className="vox-search-input"
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="INDTAST SØGEORD..."
+              placeholder="ENTER SEARCH TERM..."
               autoFocus
             />
             <button className="vox-search-btn" type="submit" disabled={loading}>
-              {loading ? "SØGER_" : "EXECUTE"}
+              {loading ? "SEARCHING_" : "EXECUTE"}
             </button>
           </div>
-
           <div className="vox-tag-row">
             {ALL_TAGS.map((tag) => (
               <button
@@ -108,8 +107,8 @@ export default function VoxSearch() {
 
         {!searched && (
           <div className="vox-idle">
-            <div className="vox-idle-text">AUSPEX-SCANNER STAND-BY</div>
-            <div className="vox-idle-sub">Søg i alle vox-optagelser og transskripter</div>
+            <div className="vox-idle-text">AUSPEX SCANNER STAND-BY</div>
+            <div className="vox-idle-sub">Search across all vox recordings and transcripts</div>
           </div>
         )}
 
@@ -117,8 +116,8 @@ export default function VoxSearch() {
           <div className="vox-results">
             <div className="vox-results-header">
               {results.length === 0
-                ? "INGEN RESULTATER FUNDET"
-                : `${results.length} OPTEGNELSE${results.length !== 1 ? "R" : ""} FUNDET`}
+                ? "NO RECORDS FOUND"
+                : `${results.length} RECORD${results.length !== 1 ? "S" : ""} RETRIEVED`}
             </div>
             {results.map((r) => (
               <Link key={r.id} to={`/?note=${r.id}`} className="vox-result-card">
@@ -143,7 +142,7 @@ export default function VoxSearch() {
 
       <footer className="app-footer">
         <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
-        {results !== null && <span>RESULTATER: {results.length}</span>}
+        {results !== null && <span>RESULTS: {results.length}</span>}
       </footer>
     </div>
   )

@@ -134,6 +134,22 @@ function extractExcerpt(transcript: string, names: string[]): string {
   return prefix + transcript.slice(start, end).trim() + suffix
 }
 
+// GET /wiki/graph — entity relation graph for D3 visualisation
+// MUST be registered before /:id to avoid the catch-all swallowing "graph"
+wikiRouter.get("/graph", async (c) => {
+  await ensureTable()
+  const { rows: entities } = await db.execute(
+    "SELECT id, name, type, status FROM entities WHERE canonical_id IS NULL ORDER BY name"
+  )
+  const { rows: relations } = await db.execute(`
+    SELECT r.id, r.from_id, r.to_id, r.relation_type, r.source
+    FROM entity_relations r
+    JOIN entities f ON f.id = r.from_id AND f.canonical_id IS NULL
+    JOIN entities t ON t.id = r.to_id AND t.canonical_id IS NULL
+  `)
+  return c.json({ nodes: entities, edges: relations })
+})
+
 // GET /wiki/:id — entity detail with note excerpts
 wikiRouter.get("/:id", async (c) => {
   await ensureTable()
@@ -470,21 +486,6 @@ wikiRouter.post("/:id/image", async (c) => {
   })
 
   return c.json({ image_url })
-})
-
-// GET /wiki/graph — entity relation graph for D3 visualisation
-wikiRouter.get("/graph", async (c) => {
-  await ensureTable()
-  const { rows: entities } = await db.execute(
-    "SELECT id, name, type, status FROM entities WHERE canonical_id IS NULL ORDER BY name"
-  )
-  const { rows: relations } = await db.execute(`
-    SELECT r.id, r.from_id, r.to_id, r.relation_type, r.source
-    FROM entity_relations r
-    JOIN entities f ON f.id = r.from_id AND f.canonical_id IS NULL
-    JOIN entities t ON t.id = r.to_id AND t.canonical_id IS NULL
-  `)
-  return c.json({ nodes: entities, edges: relations })
 })
 
 // DELETE /wiki/:id/image — remove image

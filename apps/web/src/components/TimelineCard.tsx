@@ -245,6 +245,14 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
               <button className="tl-card-goto" onClick={handleGoToLog}>
                 GO TO LOG →
               </button>
+              {session.session_id && (
+                <button
+                  className="tl-card-goto tl-card-goto--dim"
+                  onClick={() => navigate(`/briefing/${session.session_id}`)}
+                >
+                  MISSION BRIEFING →
+                </button>
+              )}
               {/* feature 7: attach cover button */}
               {session.session_id && !hasCover && (
                 <>

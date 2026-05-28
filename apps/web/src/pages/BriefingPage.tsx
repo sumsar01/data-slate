@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
 import { toImperialDate } from "../utils/imperialDate"
+import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./Briefing.css"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -15,6 +16,8 @@ type BriefingData = {
 }
 
 export default function BriefingPage() {
+  useScrollablePage()
+
   const { sessionId } = useParams<{ sessionId?: string }>()
   const [data, setData] = useState<BriefingData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -46,7 +49,7 @@ export default function BriefingPage() {
         <div className="app-header-left">
           <span className="app-header-title">
             <span className="app-header-title-long">ADEPTUS MECHANICUS <span className="app-header-divider">//</span> </span>
-            MISSIONSBRIEFING
+            MISSION BRIEFING
           </span>
         </div>
         <div className="app-header-right">
@@ -54,7 +57,7 @@ export default function BriefingPage() {
           <Link to="/" className="app-export-btn">◄ LOG</Link>
           <span className="app-header-status">
             <span className={`status-dot ${loading ? "status-dot--amber" : ""}`} />
-            <span className="app-header-status-text">{loading ? "GENERERER..." : "COGITATOR ONLINE"}</span>
+            <span className="app-header-status-text">{loading ? "GENERATING..." : "COGITATOR ONLINE"}</span>
           </span>
         </div>
       </header>
@@ -62,34 +65,33 @@ export default function BriefingPage() {
       <main className="brief-main">
         {loading && (
           <div className="brief-loading">
-            <div className="brief-loading-text">INQUISITORIEL COGITATOR AKTIVERET<span className="blink-cursor">_</span></div>
-            <div className="brief-loading-sub">Kompilerer situationsrapport...</div>
+            <div className="brief-loading-text">INQUISITORIAL COGITATOR ACTIVATED<span className="blink-cursor">_</span></div>
+            <div className="brief-loading-sub">Compiling situation report...</div>
           </div>
         )}
 
         {error && (
           <div className="brief-error">
-            DATAFEJL: {error}<br />
-            <span style={{ opacity: 0.6 }}>Ingen sessioner registreret, eller cogitator utilgængelig.</span>
+            DATA ERROR: {error}<br />
+            <span style={{ opacity: 0.6 }}>No sessions recorded, or cogitator unreachable.</span>
           </div>
         )}
 
         {data && (
           <div className="brief-document">
-            {/* Document header — Imperial stamp */}
             <div className="brief-stamp">
               <div className="brief-stamp-top">INQUISITORIUM // ORDO HERETICUS</div>
               <div className="brief-stamp-seal">✦</div>
-              <div className="brief-stamp-bottom">KLASSIFICERET // AKOLYT-NIVEAU</div>
+              <div className="brief-stamp-bottom">CLASSIFIED // ACOLYTE CLEARANCE</div>
             </div>
 
             <div className="brief-title-block">
-              <div className="brief-doc-label">MISSIONSBRIEFING</div>
+              <div className="brief-doc-label">MISSION BRIEFING</div>
               <div className="brief-doc-title">
-                {data.session_name ?? "IGANGVÆRENDE OPERATION"}
+                {data.session_name ?? "ONGOING OPERATION"}
               </div>
               <div className="brief-doc-meta">
-                IMPERIEL DATO: {toImperialDate(today)}
+                IMPERIAL DATE: {toImperialDate(today)}
                 {data.dates && data.dates.length > 0 && (
                   <> // SESSION: {toImperialDate(data.dates[0])}</>
                 )}
@@ -114,8 +116,8 @@ export default function BriefingPage() {
             <div className="brief-divider" />
 
             <div className="brief-footer">
-              <div>OMNISSIAH PROTECTS // KLASSIFICERET DOKUMENT</div>
-              <div>DESTRUER EFTER LÆSNING // MACHINE-SPIRIT GODKENDT</div>
+              <div>OMNISSIAH PROTECTS // CLASSIFIED DOCUMENT</div>
+              <div>DESTROY AFTER READING // MACHINE-SPIRIT APPROVED</div>
             </div>
           </div>
         )}
@@ -123,7 +125,7 @@ export default function BriefingPage() {
 
       <footer className="app-footer">
         <span>OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</span>
-        <span>IMPERIEL DATO: {toImperialDate(today)}</span>
+        <span>IMPERIAL DATE: {toImperialDate(today)}</span>
       </footer>
     </div>
   )

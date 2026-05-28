@@ -17,6 +17,15 @@ html, body, #root {
   padding-right: env(safe-area-inset-right);
 }
 
+/* Pages that need vertical scroll (briefing, search, dead-drop, etc.)
+   set document.body.classList.add("page--scrollable") on mount */
+body.page--scrollable,
+body.page--scrollable #root {
+  overflow-y: auto;
+  height: auto;
+  min-height: 100%;
+}
+
 body {
   background: #0a0a0a;
   color: #ffb000;
