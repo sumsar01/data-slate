@@ -96,7 +96,7 @@ export function ThreatGraph({ nodes, edges }: Props) {
       .enter().append("marker")
       .attr("id", (d) => `arrow-${d}`)
       .attr("viewBox", "0 -4 8 8")
-      .attr("refX", 18)
+      .attr("refX", 8)
       .attr("refY", 0)
       .attr("markerWidth", 6)
       .attr("markerHeight", 6)
@@ -233,8 +233,18 @@ export function ThreatGraph({ nodes, edges }: Props) {
       link
         .attr("x1", (d) => (d.source as SimNode).x!)
         .attr("y1", (d) => (d.source as SimNode).y!)
-        .attr("x2", (d) => (d.target as SimNode).x!)
-        .attr("y2", (d) => (d.target as SimNode).y!)
+        .attr("x2", (d) => {
+          const t = d.target as SimNode, s = d.source as SimNode
+          const dx = t.x! - s.x!, dy = t.y! - s.y!
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1
+          return t.x! - (dx / dist) * t.r
+        })
+        .attr("y2", (d) => {
+          const t = d.target as SimNode, s = d.source as SimNode
+          const dx = t.x! - s.x!, dy = t.y! - s.y!
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1
+          return t.y! - (dy / dist) * t.r
+        })
 
       linkLabel
         .attr("x", (d) => ((d.source as SimNode).x! + (d.target as SimNode).x!) / 2)
