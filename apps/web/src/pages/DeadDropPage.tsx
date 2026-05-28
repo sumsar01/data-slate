@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { authFetch } from "../data/api"
 import type { Clue, ClueStatus } from '@data-slate/shared'
@@ -16,6 +16,9 @@ const STATUS_LABELS: Record<ClueStatus, string> = {
   COLD: "COLD",
   RESOLVED: "RESOLVED",
 }
+const PRIORITY_COLORS = ["#8a2a2a", "#8a5a00", "#4a7a4a", "#2a5a7a", "#3a2a4a"]
+const DRAG_THRESHOLD = 8 // px movement before drag starts
+
 const PRIORITY_LABELS: Record<number, string> = {
   0: "CRITICAL",
   1: "HIGH",
@@ -25,11 +28,10 @@ const PRIORITY_LABELS: Record<number, string> = {
 }
 
 function PriorityDot({ priority }: { priority: number }) {
-  const colors = ["#8a2a2a", "#8a5a00", "#4a7a4a", "#2a5a7a", "#3a2a4a"]
   return (
     <span
       className="dd-priority-dot"
-      style={{ background: colors[Math.min(priority, 4)] }}
+      style={{ background: PRIORITY_COLORS[Math.min(priority, 4)] }}
       title={PRIORITY_LABELS[priority] ?? "UNKNOWN"}
     />
   )
@@ -114,14 +116,17 @@ function ClueCard({
   onStatusChange,
   onDelete,
   onUpdated,
+  onDragStart,
+  draggingId,
 }: {
   clue: Clue
   notes: NoteOption[]
   onStatusChange: (id: string, status: ClueStatus) => void
   onDelete: (id: string) => void
   onUpdated: (clue: Clue) => void
+  onDragStart: (id: string, title: string, priority: number, e: React.PointerEvent) => void
+  draggingId: string | null
 }) {
-  const [dragging, setDragging] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(clue.title)
@@ -188,15 +193,14 @@ function ClueCard({
 
   return (
     <div
-      className={`dd-card dd-card--${clue.status.toLowerCase()}${dragging ? " dd-card--dragging" : ""}`}
-      draggable
-      onDragStart={(e) => {
-        e.dataTransfer.setData("clue-id", clue.id)
-        setDragging(true)
+      className={`dd-card dd-card--${clue.status.toLowerCase()}${draggingId === clue.id ? " dd-card--dragging" : ""}`}
+      onPointerDown={(e) => {
+        // Don't initiate drag from buttons/inputs/selects
+        if ((e.target as HTMLElement).closest("button,input,textarea,select")) return
+        onDragStart(clue.id, clue.title, clue.priority, e)
       }}
-      onDragEnd={() => setDragging(false)}
     >
-      <div className="dd-card-header" onClick={() => { if (!editing) setExpanded((v) => !v) }}>
+      <div className="dd-card-header" onClick={() => { if (!editing && draggingId !== clue.id) setExpanded((v) => !v) }}>
         <PriorityDot priority={clue.priority} />
         <span className="dd-card-title">{clue.title}</span>
         <span className="dd-card-chevron">{expanded ? "▲" : "▼"}</span>
@@ -317,7 +321,131 @@ export default function DeadDropPage() {
   const [notes, setNotes] = useState<NoteOption[]>([])
   const [loading, setLoading] = useState(true)
   const [dragOverStatus, setDragOverStatus] = useState<ClueStatus | null>(null)
+  const [draggingId, setDraggingId] = useState<string | null>(null)
   const admin = isAdmin()
+
+  // Pointer drag state refs (not React state — updated every pointermove)
+  const ghostRef = useRef<HTMLDivElement | null>(null)
+  const dragState = useRef<{
+    id: string
+    startX: number
+    startY: number
+    started: boolean
+  } | null>(null)
+
+  const colRefs = useRef<Partial<Record<ClueStatus, HTMLDivElement | null>>>({})
+
+  const getStatusFromPoint = useCallback((x: number, y: number): ClueStatus | null => {
+    for (const status of STATUS_ORDER) {
+      const el = colRefs.current[status]
+      if (!el) continue
+      const rect = el.getBoundingClientRect()
+      if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+        return status
+      }
+    }
+    return null
+  }, [])
+
+  const removeGhost = useCallback(() => {
+    if (ghostRef.current) {
+      ghostRef.current.remove()
+      ghostRef.current = null
+    }
+  }, [])
+
+  const handlePointerMove = useCallback((e: PointerEvent) => {
+    const ds = dragState.current
+    if (!ds) return
+
+    if (!ds.started) {
+      const dx = e.clientX - ds.startX
+      const dy = e.clientY - ds.startY
+      if (Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) return
+      ds.started = true
+      setDraggingId(ds.id)
+    }
+
+    // Move ghost
+    if (ghostRef.current) {
+      ghostRef.current.style.left = `${e.clientX + 12}px`
+      ghostRef.current.style.top = `${e.clientY + 12}px`
+    }
+
+    // Highlight column
+    const status = getStatusFromPoint(e.clientX, e.clientY)
+    setDragOverStatus(status)
+  }, [getStatusFromPoint])
+
+  const handlePointerUp = useCallback((e: PointerEvent) => {
+    const ds = dragState.current
+    if (!ds) return
+
+    if (ds.started) {
+      const status = getStatusFromPoint(e.clientX, e.clientY)
+      if (status) {
+        const clue = clues.find((c) => c.id === ds.id)
+        if (clue && clue.status !== status) {
+          // Optimistic update
+          setClues((prev) => prev.map((c) => c.id === ds.id ? { ...c, status } : c))
+          authFetch(`${import.meta.env.VITE_API_URL ?? ""}/clues/${ds.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          }).then((res) => {
+            if (!res.ok) {
+              // Revert on failure
+              setClues((prev) => prev.map((c) => c.id === ds.id ? { ...c, status: clue.status } : c))
+            } else {
+              res.json().then((updated) => {
+                setClues((prev) => prev.map((c) => c.id === ds.id ? { ...c, ...updated } : c))
+              })
+            }
+          }).catch(() => {
+            setClues((prev) => prev.map((c) => c.id === ds.id ? { ...c, status: clue.status } : c))
+          })
+        }
+      }
+    }
+
+    removeGhost()
+    setDraggingId(null)
+    setDragOverStatus(null)
+    dragState.current = null
+    document.body.style.touchAction = ""
+    document.body.style.userSelect = ""
+
+    window.removeEventListener("pointermove", handlePointerMove)
+    window.removeEventListener("pointerup", handlePointerUp)
+    window.removeEventListener("pointercancel", handlePointerUp)
+  }, [clues, getStatusFromPoint, handlePointerMove, removeGhost])
+
+  const handleCardDragStart = useCallback((
+    id: string,
+    title: string,
+    priority: number,
+    e: React.PointerEvent
+  ) => {
+    dragState.current = { id, startX: e.clientX, startY: e.clientY, started: false }
+
+    // Create ghost element
+    const ghost = document.createElement("div")
+    ghost.className = "dd-drag-ghost"
+    ghost.innerHTML = `
+      <span class="dd-priority-dot" style="background:${PRIORITY_COLORS[Math.min(priority, 4)]};display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0"></span>
+      <span class="dd-drag-ghost-title">${title}</span>
+    `
+    ghost.style.left = `${e.clientX + 12}px`
+    ghost.style.top = `${e.clientY + 12}px`
+    document.body.appendChild(ghost)
+    ghostRef.current = ghost
+    document.body.style.touchAction = "none"
+    document.body.style.userSelect = "none"
+
+    window.addEventListener("pointermove", handlePointerMove)
+    window.addEventListener("pointerup", handlePointerUp)
+    window.addEventListener("pointercancel", handlePointerUp)
+  }, [handlePointerMove, handlePointerUp])
 
   useEffect(() => {
     Promise.all([
@@ -325,7 +453,6 @@ export default function DeadDropPage() {
       fetch(`${API_URL}/dates`).then((r) => r.json()).catch(() => []),
     ]).then(([clueData, dateGroups]) => {
       setClues(clueData)
-      // Flatten all notes from date groups for the link selector
       const allNotes: NoteOption[] = (dateGroups as { notes?: { id: string; title: string; date: string }[] }[]).flatMap((g) =>
         (g.notes ?? []).map((n) => ({ id: n.id, title: n.title, date: n.date }))
       )
@@ -343,14 +470,14 @@ export default function DeadDropPage() {
       if (!res.ok) return
       const updated = await res.json()
       setClues((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)))
-    } catch { /* ignore status update failure */ }
+    } catch { /* ignore */ }
   }
 
   async function handleDelete(id: string) {
     try {
       await authFetch(`${API_URL}/clues/${id}`, { method: "DELETE" })
       setClues((prev) => prev.filter((c) => c.id !== id))
-    } catch { /* ignore delete failure */ }
+    } catch { /* ignore */ }
   }
 
   function handleCreated(clue: Clue) {
@@ -399,17 +526,8 @@ export default function DeadDropPage() {
                   <span className="dd-col-count">[{col.length}]</span>
                 </div>
                 <div
+                  ref={(el) => { colRefs.current[status] = el }}
                   className={`dd-col-body${dragOverStatus === status ? " dd-col-body--drag-over" : ""}`}
-                  onDragOver={(e) => { e.preventDefault(); setDragOverStatus(status) }}
-                  onDragEnter={(e) => { e.preventDefault(); setDragOverStatus(status) }}
-                  onDragLeave={() => setDragOverStatus(null)}
-                  onDrop={(e) => {
-                    e.preventDefault()
-                    setDragOverStatus(null)
-                    const id = e.dataTransfer.getData("clue-id")
-                    const clue = clues.find((c) => c.id === id)
-                    if (clue && clue.status !== status) handleStatusChange(id, status)
-                  }}
                 >
                   {col.length === 0 && (
                     <div className="dd-col-empty">NO ACTIVE LEADS</div>
@@ -422,6 +540,8 @@ export default function DeadDropPage() {
                       onStatusChange={handleStatusChange}
                       onDelete={handleDelete}
                       onUpdated={handleUpdated}
+                      onDragStart={handleCardDragStart}
+                      draggingId={draggingId}
                     />
                   ))}
                 </div>
