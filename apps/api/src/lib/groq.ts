@@ -141,37 +141,49 @@ export type ClueSuggestion = {
   priority: number // 0=critical, 1=high, 2=normal, 3=low, 4=background
 }
 
-// Scans session transcripts and returns suggested Dead Drop leads
+// Scans session transcripts and returns suggested Dead Drop leads.
+// Truncates each transcript to 1500 chars and caps total input at 18000 chars
+// to avoid silent context-overflow failures with many recordings.
 export async function extractClues(transcripts: string[]): Promise<ClueSuggestion[]> {
   if (!transcripts.length) return []
-  const combined = transcripts.map((t, i) => `[OPTAGELSE ${i + 1}]\n${t}`).join("\n\n---\n\n")
+
+  const PER_TRANSCRIPT_LIMIT = 1500
+  const TOTAL_LIMIT = 18000
+
+  let total = 0
+  const parts: string[] = []
+  for (let i = 0; i < transcripts.length; i++) {
+    const chunk = transcripts[i].slice(0, PER_TRANSCRIPT_LIMIT)
+    if (total + chunk.length > TOTAL_LIMIT) break
+    parts.push(`[OPTAGELSE ${i + 1}]\n${chunk}`)
+    total += chunk.length
+  }
+  const combined = parts.join("\n\n---\n\n")
+
   const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
-        content: `Du er en inquisitoriel analytiker i Warhammer 40K-universet. Din opgave er at gennemlæse sessionstransskripter og identificere uafklarede efterretninger, mistænkelige personer, uforklarede hændelser eller åbne tråde, der kræver yderligere efterforskning.
-
-Returner JSON med følgende struktur:
-{"clues": [{"title": "Kort betegnelse (max 8 ord)", "description": "Hvad der er observeret eller mistænkt (2-4 sætninger, faktabaseret)", "priority": 0-4}]}
-
-Prioritetsskala: 0=KRITISK, 1=HØJ, 2=NORMAL, 3=LAV, 4=BAGGRUND
-
-Regler:
-- Medtag KUN ting der eksplicit er nævnt i transskripterne
-- Opfind ikke detaljer
-- Fokuser på: uidentificerede personer, mistænkelig adfærd, uforklarede hændelser, steder der kræver opfølgning, genstande med ukendt oprindelse
-- Ignorer allerede løste hændelser
-- Skriv på dansk
-- Returner 0-8 forslag`,
+        content:
+          "Du er en inquisitoriel analytiker for Ordo Hereticus i Warhammer 40K-universet. " +
+          "Læs sessionstransskripterne og udpeg 3-8 konkrete efterretningsemner der fortjener opfølgning. " +
+          "Vær generøs — hellere for mange end for få. Selv delvist uklare emner er relevante. " +
+          "\n\nKig efter: navngivne personer hvis loyalitet er ukendt, organisationer der omtales mystisk, " +
+          "steder der ikke er undersøgt, genstande med ukendt formål, hændelser der ikke er forklaret, " +
+          "planer eller møder der er nævnt, mistænkelige sammenhænge mellem entiteter. " +
+          "\n\nReturner KUN dette JSON-format:\n" +
+          '{"clues":[{"title":"Kort betegnelse max 8 ord","description":"Hvad der er observeret (2-3 sætninger)","priority":0}]}' +
+          "\n\nPrioritet: 0=KRITISK, 1=HØJ, 2=NORMAL, 3=LAV, 4=BAGGRUND. " +
+          "Skriv på dansk. Brug kun oplysninger fra transskripterne.",
       },
       {
         role: "user",
         content: combined,
       },
     ],
-    max_tokens: 1200,
+    max_tokens: 1500,
   })
   try {
     const raw = chat.choices[0]?.message?.content ?? "{}"

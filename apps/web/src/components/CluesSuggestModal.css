@@ -202,3 +202,11 @@
   color: #c8a96e;
   letter-spacing: 0.15em;
 }
+
+.csm-done-sub {
+  font-size: 0.7rem;
+  color: #5a4a30;
+  text-align: center;
+  max-width: 380px;
+  line-height: 1.6;
+}

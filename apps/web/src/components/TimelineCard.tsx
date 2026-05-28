@@ -86,6 +86,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const [coverLoading, setCoverLoading] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [suggestions, setSuggestions] = useState<ClueSuggestion[] | null>(null)
+  const [transcriptCount, setTranscriptCount] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
 
@@ -146,6 +147,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
       if (!res.ok) throw new Error("Failed")
       const data = await res.json()
       setSuggestions(data.suggestions ?? [])
+      setTranscriptCount(data.transcript_count ?? 0)
     } catch {
       setSuggestions([])
     } finally {
@@ -310,6 +312,7 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
           sessionId={session.session_id!}
           sessionName={session.session_name ?? null}
           suggestions={suggestions}
+          transcriptCount={transcriptCount}
           onClose={() => setSuggestions(null)}
           onSaved={() => setSuggestions(null)}
         />

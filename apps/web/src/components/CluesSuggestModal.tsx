@@ -32,11 +32,12 @@ interface Props {
   sessionId: string
   sessionName: string | null
   suggestions: ClueSuggestion[]
+  transcriptCount: number
   onClose: () => void
   onSaved: (count: number) => void
 }
 
-export function CluesSuggestModal({ sessionName, suggestions, onClose, onSaved }: Props) {
+export function CluesSuggestModal({ sessionName, suggestions, transcriptCount, onClose, onSaved }: Props) {
   const [states, setStates] = useState<SuggestionState[]>(() => suggestions.map(() => "pending"))
   const [saving, setSaving] = useState(false)
   const [done, setDone] = useState(false)
@@ -90,7 +91,9 @@ export function CluesSuggestModal({ sessionName, suggestions, onClose, onSaved }
             <div className="csm-session-label">SESSION: {sessionName}</div>
           )}
           <div className="csm-sub">
-            {suggestions.length} LEAD{suggestions.length !== 1 ? "S" : ""} DETECTED — CONFIRM OR REJECT EACH
+            {suggestions.length > 0
+              ? `${suggestions.length} LEAD${suggestions.length !== 1 ? "S" : ""} DETECTED — CONFIRM OR REJECT EACH`
+              : `SCANNED ${transcriptCount} RECORDING${transcriptCount !== 1 ? "S" : ""} — NO LEADS DETECTED`}
           </div>
         </div>
 
@@ -98,6 +101,13 @@ export function CluesSuggestModal({ sessionName, suggestions, onClose, onSaved }
           <div className="csm-done">
             <div className="csm-done-icon">✦</div>
             <div className="csm-done-text">{savedCount} LEAD{savedCount !== 1 ? "S" : ""} LOGGED TO DEAD DROP</div>
+            <button className="csm-btn csm-btn--confirm" onClick={onClose}>CLOSE</button>
+          </div>
+        ) : suggestions.length === 0 ? (
+          <div className="csm-done">
+            <div className="csm-done-icon" style={{ color: "#5a4a30" }}>◈</div>
+            <div className="csm-done-text" style={{ color: "#7a6040" }}>NO UNRESOLVED LEADS IDENTIFIED</div>
+            <div className="csm-done-sub">The cogitator found no open threads in {transcriptCount} recording{transcriptCount !== 1 ? "s" : ""}. Try scanning after more sessions are logged.</div>
             <button className="csm-btn csm-btn--confirm" onClick={onClose}>CLOSE</button>
           </div>
         ) : (

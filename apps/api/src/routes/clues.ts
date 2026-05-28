@@ -55,7 +55,7 @@ cluesRouter.post("/suggest/:sessionId", async (c) => {
   if (!transcripts.length) return c.json({ suggestions: [] })
 
   const suggestions = await extractClues(transcripts)
-  return c.json({ suggestions })
+  return c.json({ suggestions, transcript_count: transcripts.length })
 })
 
 // GET /clues — list all clues with linked note count
