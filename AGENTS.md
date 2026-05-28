@@ -94,11 +94,23 @@ Environment variables are in `apps/api/.env` (see `apps/api/.env.example`).
 - `apps/web` → Vercel (auto-deploys from `main` branch)
 - `apps/api` → Railway (also has `Dockerfile` and `nixpacks.toml`)
 
-**Railway is NOT connected to GitHub.** It must be deployed manually via the CLI after every API change:
+**Railway is NOT connected to GitHub.** It must be deployed manually via the CLI after every API change.
+
+**IMPORTANT:** The Dockerfile requires the monorepo root as build context (needs `packages/shared`).
+Before deploying, copy the required files into `apps/api/`, deploy, then clean up:
 
 ```bash
+# Prepare build context
+cp -rf packages/shared apps/api/packages/shared
+cp -f package.json apps/api/root-package.json
+cp -f bun.lock apps/api/bun.lock
+
+# Deploy
 cd apps/api
-railway up --detach --service serene-analysis
+railway up --detach --service data-slate
+
+# Clean up
+rm -rf apps/api/packages apps/api/root-package.json apps/api/bun.lock
 ```
 
 The deploy is asynchronous (`--detach`). Poll the health endpoint to confirm it's live:
@@ -106,8 +118,6 @@ The deploy is asynchronous (`--detach`). Poll the health endpoint to confirm it'
 ```bash
 curl https://serene-analysis-production-145c.up.railway.app/health
 ```
-
-No CI/CD workflows configured (no `.github/workflows/`).
 
 ## Non-Interactive Shell Commands
 
