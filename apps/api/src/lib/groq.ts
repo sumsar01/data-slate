@@ -141,24 +141,31 @@ export type ClueSuggestion = {
   priority: number // 0=critical, 1=high, 2=normal, 3=low, 4=background
 }
 
-// Scans session transcripts and returns suggested Dead Drop leads.
-// Truncates each transcript to 1500 chars and caps total input at 18000 chars
+// Scans session snippets (title + transcript) and returns suggested Dead Drop leads.
+// Truncates each snippet to 1500 chars and caps total input at 18000 chars
 // to avoid silent context-overflow failures with many recordings.
-export async function extractClues(transcripts: string[]): Promise<ClueSuggestion[]> {
-  if (!transcripts.length) return []
+export async function extractClues(snippets: string[], sessionName?: string, sessionSummary?: string): Promise<ClueSuggestion[]> {
+  if (!snippets.length) return []
 
-  const PER_TRANSCRIPT_LIMIT = 1500
+  const PER_SNIPPET_LIMIT = 1500
   const TOTAL_LIMIT = 18000
 
   let total = 0
   const parts: string[] = []
-  for (let i = 0; i < transcripts.length; i++) {
-    const chunk = transcripts[i].slice(0, PER_TRANSCRIPT_LIMIT)
+  for (let i = 0; i < snippets.length; i++) {
+    const chunk = snippets[i].slice(0, PER_SNIPPET_LIMIT)
     if (total + chunk.length > TOTAL_LIMIT) break
-    parts.push(`[OPTAGELSE ${i + 1}]\n${chunk}`)
+    parts.push(`[NOTE ${i + 1}] ${chunk}`)
     total += chunk.length
   }
-  const combined = parts.join("\n\n---\n\n")
+  const combined = parts.join("\n")
+
+  const contextHeader = [
+    sessionName ? `SESSION: ${sessionName}` : null,
+    sessionSummary ? `SAMMENDRAG: ${sessionSummary.slice(0, 800)}` : null,
+  ].filter(Boolean).join("\n")
+
+  const userContent = contextHeader ? `${contextHeader}\n\n---\n\n${combined}` : combined
 
   const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
@@ -168,19 +175,20 @@ export async function extractClues(transcripts: string[]): Promise<ClueSuggestio
         role: "system",
         content:
           "Du er en inquisitoriel analytiker for Ordo Hereticus i Warhammer 40K-universet. " +
-          "Læs sessionstransskripterne og udpeg 3-8 konkrete efterretningsemner der fortjener opfølgning. " +
+          "Læs sessionens noter og udpeg 3-8 konkrete efterretningsemner der fortjener opfølgning. " +
           "Vær generøs — hellere for mange end for få. Selv delvist uklare emner er relevante. " +
           "\n\nKig efter: navngivne personer hvis loyalitet er ukendt, organisationer der omtales mystisk, " +
           "steder der ikke er undersøgt, genstande med ukendt formål, hændelser der ikke er forklaret, " +
-          "planer eller møder der er nævnt, mistænkelige sammenhænge mellem entiteter. " +
+          "planlagte møder der ikke er bekræftet afholdt, mistænkelige sammenhænge mellem entiteter, " +
+          "handlinger som gruppen endnu ikke har foretaget sig. " +
           "\n\nReturner KUN dette JSON-format:\n" +
-          '{"clues":[{"title":"Kort betegnelse max 8 ord","description":"Hvad der er observeret (2-3 sætninger)","priority":0}]}' +
+          '{"clues":[{"title":"Kort betegnelse max 8 ord","description":"Hvad der er observeret og hvorfor det er relevant (2-3 sætninger)","priority":0}]}' +
           "\n\nPrioritet: 0=KRITISK, 1=HØJ, 2=NORMAL, 3=LAV, 4=BAGGRUND. " +
-          "Skriv på dansk. Brug kun oplysninger fra transskripterne.",
+          "Skriv på dansk. Brug kun oplysninger fra noterne.",
       },
       {
         role: "user",
-        content: combined,
+        content: userContent,
       },
     ],
     max_tokens: 1500,

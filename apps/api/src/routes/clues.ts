@@ -30,9 +30,9 @@ cluesRouter.post("/suggest/:sessionId", async (c) => {
   await ensureTable()
   const sessionId = c.req.param("sessionId")
 
-  // Resolve session dates
+  // Resolve session dates + summary
   const { rows: sessionRows } = await db.execute({
-    sql: "SELECT dates FROM session_overrides WHERE id = ?1",
+    sql: "SELECT dates, summary, name FROM session_overrides WHERE id = ?1",
     args: [sessionId],
   })
   if (!sessionRows.length) return c.json({ error: "Session not found" }, 404)
@@ -42,20 +42,28 @@ cluesRouter.post("/suggest/:sessionId", async (c) => {
   dates = dates.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(String(d)))
   if (!dates.length) return c.json({ suggestions: [] })
 
-  // Fetch transcripts for this session
+  // Fetch notes (title + transcript) for this session
   // placeholders are positional (?1, ?2...) — values passed separately via args, not interpolated
   const placeholders = dates.map((_, i) => `?${i + 1}`).join(",")
   const safePlaceholders = placeholders.replace(/[^?,\d]/g, "") // strip anything not ?, digit, or comma
   const { rows: notes } = await db.execute({
-    sql: `SELECT transcript FROM notes WHERE date IN (${safePlaceholders}) AND transcript IS NOT NULL ORDER BY created_at ASC`,
+    sql: `SELECT title, transcript FROM notes WHERE date IN (${safePlaceholders}) ORDER BY created_at ASC`,
     args: dates,
   })
 
-  const transcripts = notes.map((n) => n.transcript as string).filter(Boolean)
-  if (!transcripts.length) return c.json({ suggestions: [] })
+  if (!notes.length) return c.json({ suggestions: [] })
 
-  const suggestions = await extractClues(transcripts)
-  return c.json({ suggestions, transcript_count: transcripts.length })
+  // Build rich snippets: "TITLE: ... | INDHOLD: ..." so model has both dimensions
+  const sessionName = sessionRows[0].name as string | null
+  const sessionSummary = sessionRows[0].summary as string | null
+  const snippets = notes.map((n) => {
+    const title = (n.title as string | null) ?? ""
+    const transcript = (n.transcript as string | null) ?? ""
+    return `TITEL: ${title}${transcript ? ` | INDHOLD: ${transcript}` : ""}`
+  })
+
+  const suggestions = await extractClues(snippets, sessionName ?? undefined, sessionSummary ?? undefined)
+  return c.json({ suggestions, transcript_count: notes.length })
 })
 
 // GET /clues — list all clues with linked note count
