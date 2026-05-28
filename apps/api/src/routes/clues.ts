@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
+import { extractClues } from "../lib/groq"
 
 export const cluesRouter = new Hono()
 
@@ -23,6 +24,39 @@ async function ensureTable() {
     )
   `)
 }
+
+// POST /clues/suggest/:sessionId — scan session transcripts and return lead suggestions (does not save)
+cluesRouter.post("/suggest/:sessionId", async (c) => {
+  await ensureTable()
+  const sessionId = c.req.param("sessionId")
+
+  // Resolve session dates
+  const { rows: sessionRows } = await db.execute({
+    sql: "SELECT dates FROM session_overrides WHERE id = ?1",
+    args: [sessionId],
+  })
+  if (!sessionRows.length) return c.json({ error: "Session not found" }, 404)
+
+  let dates: string[] = []
+  try { dates = JSON.parse(sessionRows[0].dates as string) } catch {}
+  dates = dates.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(String(d)))
+  if (!dates.length) return c.json({ suggestions: [] })
+
+  // Fetch transcripts for this session
+  // placeholders are positional (?1, ?2...) — values passed separately via args, not interpolated
+  const placeholders = dates.map((_, i) => `?${i + 1}`).join(",")
+  const safePlaceholders = placeholders.replace(/[^?,\d]/g, "") // strip anything not ?, digit, or comma
+  const { rows: notes } = await db.execute({
+    sql: `SELECT transcript FROM notes WHERE date IN (${safePlaceholders}) AND transcript IS NOT NULL ORDER BY created_at ASC`,
+    args: dates,
+  })
+
+  const transcripts = notes.map((n) => n.transcript as string).filter(Boolean)
+  if (!transcripts.length) return c.json({ suggestions: [] })
+
+  const suggestions = await extractClues(transcripts)
+  return c.json({ suggestions })
+})
 
 // GET /clues — list all clues with linked note count
 cluesRouter.get("/", async (c) => {

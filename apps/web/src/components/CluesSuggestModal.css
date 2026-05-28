@@ -1,0 +1,204 @@
+.csm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.csm-modal {
+  background: #0d0c08;
+  border: 1px solid #4a3a10;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 60px rgba(255, 176, 0, 0.08);
+  font-family: var(--font-mono, monospace);
+}
+
+.csm-header {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid #2a1800;
+  flex-shrink: 0;
+}
+
+.csm-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.csm-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: #ffb000;
+}
+
+.csm-session-label {
+  font-size: 0.65rem;
+  color: #7a6040;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.csm-sub {
+  font-size: 0.65rem;
+  color: #5a4a30;
+  letter-spacing: 0.08em;
+}
+
+.csm-close {
+  background: none;
+  border: none;
+  color: #5a4a30;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.1rem 0.3rem;
+  font-family: inherit;
+}
+.csm-close:hover { color: #ffb000; }
+
+.csm-bulk-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #1a1200;
+  flex-shrink: 0;
+}
+
+.csm-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.csm-card {
+  border: 1px solid #2a1800;
+  padding: 0.85rem 1rem;
+  transition: border-color 0.15s;
+}
+.csm-card--approved { border-color: #2a4a2a; background: #080e08; }
+.csm-card--rejected { border-color: #1a1010; opacity: 0.5; }
+.csm-card--pending { border-color: #2a1800; }
+
+.csm-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.csm-priority-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.csm-card-title {
+  font-size: 0.8rem;
+  color: #c8a96e;
+  flex: 1;
+  letter-spacing: 0.04em;
+}
+
+.csm-priority-label {
+  font-size: 0.6rem;
+  color: #5a4a30;
+  letter-spacing: 0.1em;
+}
+
+.csm-card-desc {
+  font-size: 0.75rem;
+  color: #7a6a50;
+  line-height: 1.6;
+  margin-bottom: 0.65rem;
+}
+
+.csm-card-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Buttons */
+.csm-btn {
+  background: transparent;
+  border: 1px solid #3a2a10;
+  color: #7a6040;
+  font-family: inherit;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+}
+.csm-btn:hover:not(:disabled) { border-color: #ffb000; color: #c8a96e; }
+.csm-btn:disabled { opacity: 0.4; cursor: default; }
+
+.csm-btn--approve { border-color: #1a2a1a; color: #4a6a4a; }
+.csm-btn--approve:hover:not(:disabled) { background: #0a140a; border-color: #4a7a4a; color: #6a9a6a; }
+.csm-btn--approve.csm-btn--active { border-color: #4a7a4a; color: #6a9a6a; background: #0a140a; }
+
+.csm-btn--reject { border-color: #2a1a1a; color: #5a3a3a; }
+.csm-btn--reject:hover:not(:disabled) { background: #140a0a; border-color: #8a2a2a; color: #8a2a2a; }
+.csm-btn--reject.csm-btn--active-reject { border-color: #5a2a2a; color: #8a2a2a; background: #100808; }
+
+.csm-btn--approve-all { border-color: #1a2a1a; color: #4a6a4a; }
+.csm-btn--approve-all:hover { background: #0a140a; }
+
+.csm-btn--reject-all { border-color: #2a1a1a; color: #5a3a3a; }
+.csm-btn--reject-all:hover { background: #140a0a; }
+
+.csm-btn--confirm {
+  border-color: #4a3a10;
+  color: #c8a96e;
+  padding: 0.35rem 1rem;
+}
+.csm-btn--confirm:hover:not(:disabled) { background: #1a1200; border-color: #ffb000; }
+
+.csm-btn--cancel { color: #4a3a20; }
+
+.csm-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid #1a1200;
+  flex-shrink: 0;
+}
+
+.csm-footer-note {
+  font-size: 0.65rem;
+  color: #4a3a20;
+  margin-right: auto;
+  letter-spacing: 0.06em;
+}
+
+/* Done state */
+.csm-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+}
+
+.csm-done-icon {
+  font-size: 2rem;
+  color: #4a7a4a;
+}
+
+.csm-done-text {
+  font-size: 0.8rem;
+  color: #c8a96e;
+  letter-spacing: 0.15em;
+}

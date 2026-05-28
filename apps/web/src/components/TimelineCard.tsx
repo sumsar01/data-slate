@@ -1,9 +1,10 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
-import type { Entity, TimelineSession } from '@data-slate/shared'
-import { generateSummary, uploadSessionCover, removeSessionCover } from "../data/api"
+import type { Entity, TimelineSession } from "@data-slate/shared"
+import { generateSummary, uploadSessionCover, removeSessionCover, authFetch } from "../data/api"
 import { toImperialDate } from "../utils/imperialDate"
+import { CluesSuggestModal, type ClueSuggestion } from "./CluesSuggestModal"
 
 interface TimelineCardProps {
   session: TimelineSession
@@ -83,6 +84,8 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
   const [summaryLoading, setSummaryLoading] = useState(false)
   const [coverUrl, setCoverUrl] = useState<string | null | undefined>(session.session_cover_image_url)
   const [coverLoading, setCoverLoading] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const [suggestions, setSuggestions] = useState<ClueSuggestion[] | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
 
@@ -132,6 +135,22 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
     if (!session.session_id) return
     await removeSessionCover(session.session_id)
     setCoverUrl(null)
+  }
+
+  async function handleScanLeads() {
+    if (!session.session_id) return
+    setScanning(true)
+    try {
+      const API_URL = import.meta.env.VITE_API_URL ?? ""
+      const res = await authFetch(`${API_URL}/clues/suggest/${session.session_id}`, { method: "POST" })
+      if (!res.ok) throw new Error("Failed")
+      const data = await res.json()
+      setSuggestions(data.suggestions ?? [])
+    } catch {
+      setSuggestions([])
+    } finally {
+      setScanning(false)
+    }
   }
 
   const hasCover = !!coverUrl
@@ -253,6 +272,15 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
                   MISSION BRIEFING →
                 </button>
               )}
+              {session.session_id && (
+                <button
+                  className="tl-card-goto tl-card-goto--dim"
+                  onClick={handleScanLeads}
+                  disabled={scanning}
+                >
+                  {scanning ? "SCANNING VOX-LOGS..." : "⊕ SCAN FOR LEADS"}
+                </button>
+              )}
               {/* feature 7: attach cover button */}
               {session.session_id && !hasCover && (
                 <>
@@ -276,6 +304,16 @@ export function TimelineCard({ session, isLast }: TimelineCardProps) {
           </div>
         )}
       </div>
+
+      {suggestions !== null && (
+        <CluesSuggestModal
+          sessionId={session.session_id!}
+          sessionName={session.session_name ?? null}
+          suggestions={suggestions}
+          onClose={() => setSuggestions(null)}
+          onSaved={() => setSuggestions(null)}
+        />
+      )}
     </div>
   )
 }

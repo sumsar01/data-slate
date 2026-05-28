@@ -135,28 +135,56 @@ export async function summariseEntity(name: string, type: string, transcripts: s
   return chat.choices[0]?.message?.content?.trim() ?? ""
 }
 
-export async function nameSession(transcripts: string[]): Promise<string> {
-  const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
+export type ClueSuggestion = {
+  title: string
+  description: string
+  priority: number // 0=critical, 1=high, 2=normal, 3=low, 4=background
+}
+
+// Scans session transcripts and returns suggested Dead Drop leads
+export async function extractClues(transcripts: string[]): Promise<ClueSuggestion[]> {
+  if (!transcripts.length) return []
+  const combined = transcripts.map((t, i) => `[OPTAGELSE ${i + 1}]\n${t}`).join("\n\n---\n\n")
   const chat = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
+    response_format: { type: "json_object" },
     messages: [
       {
         role: "system",
-        content:
-          "You are a scribe for a Warhammer 40K tabletop RPG campaign. " +
-          "Given session recordings, generate a short evocative session name (4–7 words max) in the style of a 40K mission title. " +
-          "Examples: 'The Siege of Hive Tertius', 'Descent into the Underhive', 'Blood on the Manufactorum Floor'. " +
-          "IMPORTANT: Write the session name in the SAME language as the majority of the transcripts. " +
-          "Return ONLY the session name, no quotes, no explanation.",
+        content: `Du er en inquisitoriel analytiker i Warhammer 40K-universet. Din opgave er at gennemlæse sessionstransskripter og identificere uafklarede efterretninger, mistænkelige personer, uforklarede hændelser eller åbne tråde, der kræver yderligere efterforskning.
+
+Returner JSON med følgende struktur:
+{"clues": [{"title": "Kort betegnelse (max 8 ord)", "description": "Hvad der er observeret eller mistænkt (2-4 sætninger, faktabaseret)", "priority": 0-4}]}
+
+Prioritetsskala: 0=KRITISK, 1=HØJ, 2=NORMAL, 3=LAV, 4=BAGGRUND
+
+Regler:
+- Medtag KUN ting der eksplicit er nævnt i transskripterne
+- Opfind ikke detaljer
+- Fokuser på: uidentificerede personer, mistænkelig adfærd, uforklarede hændelser, steder der kræver opfølgning, genstande med ukendt oprindelse
+- Ignorer allerede løste hændelser
+- Skriv på dansk
+- Returner 0-8 forslag`,
       },
       {
         role: "user",
-        content: `Name this session based on these recordings:\n\n${combined}`,
+        content: combined,
       },
     ],
-    max_tokens: 30,
+    max_tokens: 1200,
   })
-  return chat.choices[0]?.message?.content?.trim() ?? "Unnamed Session"
+  try {
+    const raw = chat.choices[0]?.message?.content ?? "{}"
+    const parsed = JSON.parse(raw)
+    const clues: ClueSuggestion[] = (parsed.clues ?? []).map((c: any) => ({
+      title: String(c.title ?? "").slice(0, 120),
+      description: String(c.description ?? "").slice(0, 500),
+      priority: Math.min(4, Math.max(0, parseInt(c.priority ?? "2", 10) || 2)),
+    }))
+    return clues
+  } catch {
+    return []
+  }
 }
 
 export type Relation = {
