@@ -261,3 +261,23 @@
   margin-bottom: 0;
 }
 
+/* Drag and drop */
+.dd-card--dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.dd-card[draggable="true"] {
+  cursor: grab;
+}
+
+.dd-col-body--drag-over {
+  background: #0f0e06;
+  outline: 1px solid #ffb000;
+  outline-offset: -2px;
+}
+
+.dd-col--active .dd-col-body--drag-over { outline-color: #4a7a4a; }
+.dd-col--cold .dd-col-body--drag-over { outline-color: #7a6040; }
+.dd-col--resolved .dd-col-body--drag-over { outline-color: #3a5a7a; }
+

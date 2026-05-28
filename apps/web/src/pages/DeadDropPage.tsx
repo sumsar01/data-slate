@@ -121,6 +121,7 @@ function ClueCard({
   onDelete: (id: string) => void
   onUpdated: (clue: Clue) => void
 }) {
+  const [dragging, setDragging] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(clue.title)
@@ -186,7 +187,15 @@ function ClueCard({
   }
 
   return (
-    <div className={`dd-card dd-card--${clue.status.toLowerCase()}`}>
+    <div
+      className={`dd-card dd-card--${clue.status.toLowerCase()}${dragging ? " dd-card--dragging" : ""}`}
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData("clue-id", clue.id)
+        setDragging(true)
+      }}
+      onDragEnd={() => setDragging(false)}
+    >
       <div className="dd-card-header" onClick={() => { if (!editing) setExpanded((v) => !v) }}>
         <PriorityDot priority={clue.priority} />
         <span className="dd-card-title">{clue.title}</span>
@@ -307,6 +316,7 @@ export default function DeadDropPage() {
   const [clues, setClues] = useState<Clue[]>([])
   const [notes, setNotes] = useState<NoteOption[]>([])
   const [loading, setLoading] = useState(true)
+  const [dragOverStatus, setDragOverStatus] = useState<ClueStatus | null>(null)
   const admin = isAdmin()
 
   useEffect(() => {
@@ -388,7 +398,19 @@ export default function DeadDropPage() {
                   <span className="dd-col-status">{STATUS_LABELS[status]}</span>
                   <span className="dd-col-count">[{col.length}]</span>
                 </div>
-                <div className="dd-col-body">
+                <div
+                  className={`dd-col-body${dragOverStatus === status ? " dd-col-body--drag-over" : ""}`}
+                  onDragOver={(e) => { e.preventDefault(); setDragOverStatus(status) }}
+                  onDragEnter={(e) => { e.preventDefault(); setDragOverStatus(status) }}
+                  onDragLeave={() => setDragOverStatus(null)}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    setDragOverStatus(null)
+                    const id = e.dataTransfer.getData("clue-id")
+                    const clue = clues.find((c) => c.id === id)
+                    if (clue && clue.status !== status) handleStatusChange(id, status)
+                  }}
+                >
                   {col.length === 0 && (
                     <div className="dd-col-empty">NO ACTIVE LEADS</div>
                   )}
