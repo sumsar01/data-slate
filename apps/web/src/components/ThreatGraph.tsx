@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import * as d3 from "d3"
-import type { GraphNode, GraphEdge } from "../shared"
+import type { GraphNode, GraphEdge } from '@data-slate/shared'
 
 interface Props {
   nodes: GraphNode[]
@@ -48,6 +48,7 @@ export function ThreatGraph({ nodes, edges }: Props) {
       .on("zoom", (event) => {
         g.attr("transform", event.transform)
       })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- D3 zoom type generic mismatch
     svg.call(zoom as any)
 
     const g = svg.append("g")
@@ -144,6 +145,7 @@ export function ThreatGraph({ nodes, edges }: Props) {
           .on("end", (event, d) => {
             if (!event.active) simulation.alphaTarget(0)
             d.fx = null; d.fy = null
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- D3 drag handler type generic mismatch
           }) as any
       )
 

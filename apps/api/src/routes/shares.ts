@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
 import { randomUUID } from "crypto"
+import { rowToNote } from "../lib/mappers"
 
 // Shared handler for public read-only share view
 async function getSharedSession(c: any) {
@@ -54,17 +55,7 @@ async function getSharedSession(c: any) {
   for (const row of notesResult.rows) {
     const date = row.date as string
     if (dateMap.has(date)) {
-      dateMap.get(date).notes.push({
-        id: row.id,
-        date: row.date,
-        title: row.title,
-        transcript: row.transcript,
-        audio_url: row.audio_url,
-        duration_s: row.duration_s,
-        tags: JSON.parse(row.tags as string),
-        entities: row.entities ? JSON.parse(row.entities as string) : [],
-        created_at: row.created_at,
-      })
+      dateMap.get(date).notes.push(rowToNote(row))
     }
   }
 

@@ -3,7 +3,8 @@ import { db } from "../lib/db"
 import { uploadToR2, deleteFromR2 } from "../lib/r2"
 import { transcribeAudio, flavourTranscript, generateTitle, extractEntities } from "../lib/groq"
 import { randomUUID } from "crypto"
-import type { Tag } from "../lib/types"
+import type { Tag } from '@data-slate/shared'
+import { rowToNote } from "../lib/mappers"
 
 export const notesRouter = new Hono()
 
@@ -254,17 +255,4 @@ notesRouter.delete("/:id", async (c) => {
   return c.json({ deleted: id })
 })
 
-function rowToNote(row: any) {
-  return {
-    id: row.id,
-    date: row.date,
-    title: row.title,
-    transcript: row.transcript,
-    audio_url: row.audio_url,
-    duration_s: row.duration_s,
-    tags: JSON.parse(row.tags as string),
-    entities: row.entities ? JSON.parse(row.entities as string) : [],
-    reference: row.reference === 1,
-    created_at: row.created_at,
-  }
-}
+

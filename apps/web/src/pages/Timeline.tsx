@@ -5,7 +5,7 @@ import { TimelineCard } from "../components/TimelineCard"
 import { EntityThreadView } from "../components/EntityThreadView"
 import { ArcManager } from "../components/ArcManager"
 import { fetchArcs } from "../data/api"
-import type { DateGroup, TimelineSession, Arc } from "../shared"
+import type { DateGroup, TimelineSession, Arc } from '@data-slate/shared'
 
 interface ArcGroup {
   arc_id: string | null

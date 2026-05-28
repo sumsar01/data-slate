@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Arc, TimelineSession } from "../shared"
+import type { Arc, TimelineSession } from '@data-slate/shared'
 import { createArc, updateArc, deleteArc } from "../data/api"
 import "./ArcManager.css"
 

@@ -1,12 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom"
-
-export function getToken(): string | null {
-  return localStorage.getItem("auth_token")
-}
-
-export function clearToken() {
-  localStorage.removeItem("auth_token")
-}
+import { getToken } from "../lib/auth"
 
 export default function RequireAuth({ children }: { children: React.ReactNode }) {
   const location = useLocation()

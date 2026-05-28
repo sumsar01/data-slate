@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import type { SearchResult, Tag } from "../shared"
-import { ALL_TAGS } from "../shared"
+import type { SearchResult, Tag } from '@data-slate/shared'
+import { ALL_TAGS } from '@data-slate/shared'
 import { toImperialDate } from "../utils/imperialDate"
 import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./VoxSearch.css"

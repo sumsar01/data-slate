@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../lib/db"
-import type { DateGroup } from "../lib/types"
+import type { DateGroup } from '@data-slate/shared'
+import { rowToNote } from "../lib/mappers"
 
 export const datesRouter = new Hono()
 
@@ -59,18 +60,7 @@ datesRouter.get("/", async (c) => {
         notes: [],
       })
     }
-    groups.get(date)!.notes.push({
-      id: row.id as string,
-      date: row.date as string,
-      title: row.title as string,
-      transcript: row.transcript as string,
-      audio_url: row.audio_url as string | null,
-      duration_s: row.duration_s as number,
-      tags: JSON.parse(row.tags as string),
-      entities: row.entities ? JSON.parse(row.entities as string) : [],
-      reference: row.reference === 1 || row.reference === true,
-      created_at: row.created_at as string,
-    })
+    groups.get(date)!.notes.push(rowToNote(row))
   }
 
   return c.json(Array.from(groups.values()))

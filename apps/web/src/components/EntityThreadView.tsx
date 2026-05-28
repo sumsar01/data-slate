@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import type { TimelineSession, EntityType } from "../shared"
+import type { TimelineSession, EntityType } from '@data-slate/shared'
 
 interface EntityThreadViewProps {
   sessions: TimelineSession[]

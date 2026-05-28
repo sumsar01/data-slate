@@ -90,6 +90,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
   const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: async fetch pattern, most setState calls happen in .then() callbacks
     setLoading(true)
     setNotFound(false)
     setDetail(null)
@@ -119,7 +120,7 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
       .then((data) => { if (data) setDetail(data) })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false))
-  }, [id, name, byName])
+  }, [id, name, byName, navigate])
 
   if (loading) {
     return (

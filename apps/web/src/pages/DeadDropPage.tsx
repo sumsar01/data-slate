@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { authFetch } from "../data/api"
-import type { Clue, ClueStatus } from "../shared"
+import type { Clue, ClueStatus } from '@data-slate/shared'
 import { toImperialDate } from "../utils/imperialDate"
 import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./DeadDrop.css"
@@ -316,8 +316,8 @@ export default function DeadDropPage() {
     ]).then(([clueData, dateGroups]) => {
       setClues(clueData)
       // Flatten all notes from date groups for the link selector
-      const allNotes: NoteOption[] = (dateGroups as any[]).flatMap((g: any) =>
-        (g.notes ?? []).map((n: any) => ({ id: n.id, title: n.title, date: n.date }))
+      const allNotes: NoteOption[] = (dateGroups as { notes?: { id: string; title: string; date: string }[] }[]).flatMap((g) =>
+        (g.notes ?? []).map((n) => ({ id: n.id, title: n.title, date: n.date }))
       )
       setNotes(allNotes)
     }).finally(() => setLoading(false))
@@ -333,14 +333,14 @@ export default function DeadDropPage() {
       if (!res.ok) return
       const updated = await res.json()
       setClues((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)))
-    } catch {}
+    } catch { /* ignore status update failure */ }
   }
 
   async function handleDelete(id: string) {
     try {
       await authFetch(`${API_URL}/clues/${id}`, { method: "DELETE" })
       setClues((prev) => prev.filter((c) => c.id !== id))
-    } catch {}
+    } catch { /* ignore delete failure */ }
   }
 
   function handleCreated(clue: Clue) {

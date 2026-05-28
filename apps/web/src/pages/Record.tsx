@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
-import { ALL_TAGS, type Tag } from "../shared"
+import { ALL_TAGS, type Tag } from '@data-slate/shared'
 import { authFetch } from "../data/api"
 import "./Record.css"
 
@@ -46,6 +46,7 @@ export default function Record() {
     let sum = 0
     for (const v of data) sum += Math.abs(v - 128)
     setLevel(Math.min(100, (sum / data.length) * 4))
+    // eslint-disable-next-line react-hooks/immutability -- pollLevel self-reference is intentional: RAF animation loop that re-schedules itself
     animFrameRef.current = requestAnimationFrame(pollLevel)
   }, [])
 
@@ -132,8 +133,9 @@ export default function Record() {
       setAudioBlob(null)
       setElapsed(0)
       setTags([])
-    } catch (err: any) {
-      const msg = err.name === "AbortError" ? "TRANSMISSION TIMEOUT — COGITATOR OVERLOADED" : `TRANSMISSION FAILED: ${err.message}`
+    } catch (err: unknown) {
+      const error = err as { name?: string; message?: string }
+      const msg = error.name === "AbortError" ? "TRANSMISSION TIMEOUT — COGITATOR OVERLOADED" : `TRANSMISSION FAILED: ${error.message ?? "unknown error"}`
       setStatus({ type: "err", msg })
     }
   }

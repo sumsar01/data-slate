@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import type { DateGroup } from "../shared"
+import type { DateGroup } from '@data-slate/shared'
 import { MOCK_DATA } from "../data/mockData"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
@@ -26,16 +26,18 @@ export function useDateGroups(paused = false) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data: DateGroup[] = await res.json()
       setGroups(data)
-    } catch (e: any) {
-      console.warn("API unavailable, falling back to mock data:", e.message)
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e)
+      console.warn("API unavailable, falling back to mock data:", msg)
       setGroups(MOCK_DATA)
-      setError(e.message)
+      setError(msg)
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: load() is async and sets state after await; not a synchronous render cascade
     load()
     const id = setInterval(() => {
       if (!pausedRef.current) load(true)

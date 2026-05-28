@@ -1,4 +1,4 @@
-import type { Note } from "../shared"
+import type { Note } from '@data-slate/shared'
 import { useTypewriter } from "../hooks/useTypewriter"
 import { AudioPlayer } from "./AudioPlayer"
 import { linkEntities } from "../lib/linkEntities"

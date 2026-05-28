@@ -16,12 +16,12 @@ function play(fn: (ctx: AudioContext) => void) {
     } else {
       fn(c)
     }
-  } catch (_) {}
+  } catch { /* AudioContext unavailable — silently ignore */ }
 }
 
 export function preloadSounds() {
   // Ensure AudioContext is created on first user gesture
-  try { getCtx() } catch (_) {}
+  try { getCtx() } catch { /* preload only — ignore if context unavailable */ }
 }
 
 // ─── Core synth primitives ─────────────────────────────────────────────────
@@ -129,7 +129,7 @@ export function soundClick() {
 let bootHumNode: OscillatorNode | null = null
 export function soundBootHum() {
   play((ctx) => {
-    if (bootHumNode) { try { bootHumNode.stop() } catch (_) {} }
+    if (bootHumNode) { try { bootHumNode.stop() } catch { /* already stopped */ } }
 
     const osc = ctx.createOscillator()
     osc.type = "sawtooth"

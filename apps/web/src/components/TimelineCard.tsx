@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
-import type { Entity, TimelineSession } from "../shared"
+import type { Entity, TimelineSession } from '@data-slate/shared'
 import { generateSummary, uploadSessionCover, removeSessionCover } from "../data/api"
 import { toImperialDate } from "../utils/imperialDate"
 

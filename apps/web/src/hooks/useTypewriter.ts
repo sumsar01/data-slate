@@ -16,6 +16,7 @@ export function useTypewriter(text: string, active: boolean, speed = 12) {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: setDisplayed/setDone are called after async timer callbacks, not synchronously in the effect body
     setDisplayed("")
     setDone(false)
     indexRef.current = 0

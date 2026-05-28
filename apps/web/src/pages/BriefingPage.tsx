@@ -26,6 +26,7 @@ export default function BriefingPage() {
   const today = new Date().toISOString().slice(0, 10)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: async fetch pattern, setState called in .then() callbacks not synchronously
     setLoading(true)
     setError(null)
     setData(null)

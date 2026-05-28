@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import type { EntityGraph } from "../shared"
+import type { EntityGraph } from '@data-slate/shared'
 import { ThreatGraph } from "../components/ThreatGraph"
 import { useScrollablePage } from "../hooks/useScrollablePage"
 import "./ThreatMatrix.css"

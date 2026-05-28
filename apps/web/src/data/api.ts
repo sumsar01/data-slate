@@ -1,4 +1,4 @@
-import type { Tag, Arc } from "../shared"
+import type { Tag, Arc } from '@data-slate/shared'
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
 

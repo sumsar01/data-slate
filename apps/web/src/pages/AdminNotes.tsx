@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import type { Note, Tag, Entity, EntityType } from "../shared"
-import { ALL_TAGS } from "../shared"
+import type { Note, Tag, Entity, EntityType } from '@data-slate/shared'
+import { ALL_TAGS } from '@data-slate/shared'
 import { authFetch } from "../data/api"
 import "./AdminNotes.css"
 

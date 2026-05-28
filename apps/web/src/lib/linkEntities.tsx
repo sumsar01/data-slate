@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import type { Entity } from "../shared"
+import type { Entity } from '@data-slate/shared'
 
 /**
  * Splits `text` into an array of plain strings and React <Link> elements

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import type { DateGroup, Tag } from "../shared"
-import { ALL_TAGS } from "../shared"
+import type { DateGroup, Tag } from '@data-slate/shared'
+import { ALL_TAGS } from '@data-slate/shared'
 import { exportGroupsToMarkdown, exportSessionToMarkdown, downloadMarkdown } from "../data/export"
 import { createTextNote, authFetch } from "../data/api"
 import "./Admin.css"
@@ -527,7 +527,7 @@ export default function Admin() {
                     onBlur={(e) => {
                       const val = e.target.value.trim()
                       if (val !== (entity.description ?? "")) {
-                        patchEntity(entity.id, { description: val || null as any })
+                        patchEntity(entity.id, { description: val || null as unknown as string })
                       }
                     }}
                   />

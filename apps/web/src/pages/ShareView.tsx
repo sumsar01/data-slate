@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import type { DateGroup, Note } from "../shared"
+import type { DateGroup, Note } from '@data-slate/shared'
 import { NoteReader } from "../components/NoteReader"
 import "../App.css"
 import "./ShareView.css"

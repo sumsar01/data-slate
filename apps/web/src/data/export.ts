@@ -1,4 +1,4 @@
-import type { DateGroup } from "../shared"
+import type { DateGroup } from '@data-slate/shared'
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr + "T00:00:00")
