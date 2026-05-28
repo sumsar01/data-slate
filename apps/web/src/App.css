@@ -20,7 +20,8 @@ html, body, #root {
 /* Pages that need vertical scroll (briefing, search, dead-drop, etc.)
    set document.body.classList.add("page--scrollable") on mount */
 body.page--scrollable,
-body.page--scrollable #root {
+body.page--scrollable #root,
+html:has(body.page--scrollable) {
   overflow-y: auto;
   height: auto;
   min-height: 100%;
