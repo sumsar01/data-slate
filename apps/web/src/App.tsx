@@ -106,17 +106,17 @@ export default function App() {
             <Link to="/wiki" className="app-export-btn" title="Entity wiki">
               ◈ WIKI
             </Link>
-            <Link to="/threat-matrix" className="app-export-btn" title="Trusselsvurdering">
-              ◈ TRUSLER
+            <Link to="/threat-matrix" className="app-export-btn" title="Threat assessment">
+              ◈ THREATS
             </Link>
             <Link to="/dead-drop" className="app-export-btn" title="Dead Drop — lead tracker">
               ◈ DEAD DROP
             </Link>
-            <Link to="/briefing" className="app-export-btn" title="Missionsbriefing">
+            <Link to="/briefing" className="app-export-btn" title="Mission briefing">
               ◈ BRIEFING
             </Link>
-            <Link to="/vox-search" className="app-export-btn" title="Søg i vox-log">
-              ⌕ SØG
+            <Link to="/vox-search" className="app-export-btn" title="Search vox-log">
+              ⌕ SEARCH
             </Link>
             <Link to="/record" className="app-rec-link">
               <span className="status-dot status-dot--red" />

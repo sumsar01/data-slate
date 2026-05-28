@@ -26,12 +26,12 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  VIVENDE:    "I live",
-  MORTIS:     "Afdød",
-  IGNOTUS:    "Ukendt",
-  HOSTILIS:   "Fjendtlig",
-  FOEDERATUS: "Allieret",
-  INQUISITUS: "Under efterforskning",
+  VIVENDE:    "Alive",
+  MORTIS:     "Deceased",
+  IGNOTUS:    "Unknown",
+  HOSTILIS:   "Hostile",
+  FOEDERATUS: "Allied",
+  INQUISITUS: "Under investigation",
 }
 
 const TYPE_ORDER = ["NPC", "Location", "Faction", "Item", "Other"]

@@ -129,7 +129,7 @@ export function EntityThreadView({ sessions }: EntityThreadViewProps) {
                       to={`/wiki/name/${encodeURIComponent(row.name)}`}
                       className="tl-thread-entity-name"
                       style={{ color: colors.label }}
-                      title={`Åbn ${row.name} i wiki`}
+                      title={`Open ${row.name} in wiki`}
                     >
                       {row.name}
                     </Link>

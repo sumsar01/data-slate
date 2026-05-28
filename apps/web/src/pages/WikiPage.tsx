@@ -28,12 +28,12 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  VIVENDE:    "I live",
-  MORTIS:     "Afdød",
-  IGNOTUS:    "Ukendt",
-  HOSTILIS:   "Fjendtlig",
-  FOEDERATUS: "Allieret",
-  INQUISITUS: "Under efterforskning",
+  VIVENDE:    "Alive",
+  MORTIS:     "Deceased",
+  IGNOTUS:    "Unknown",
+  HOSTILIS:   "Hostile",
+  FOEDERATUS: "Allied",
+  INQUISITUS: "Under investigation",
 }
 
 type Mention = {
@@ -258,8 +258,8 @@ export default function WikiPage({ byName }: { byName?: boolean }) {
               <>
                 <div className="admin-divider" />
                 <div className="wiki-timeline-meta">
-                  <span>FØRSTE SET: <span className="wiki-timeline-val">{firstSeen}</span></span>
-                  <span>SIDST AKTIV: <span className="wiki-timeline-val">{lastActive}</span></span>
+                  <span>FIRST SEEN: <span className="wiki-timeline-val">{firstSeen}</span></span>
+                  <span>LAST ACTIVE: <span className="wiki-timeline-val">{lastActive}</span></span>
                   <span>PEAK: <span className="wiki-timeline-val">{peakLabel} ({peak.items.length})</span></span>
                 </div>
                 <div className="wiki-timeline-chart" aria-label="Session activity chart">

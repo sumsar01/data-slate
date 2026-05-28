@@ -140,7 +140,7 @@ export function ArcManager({ arcs, sessions, onClose, onChanged }: Props) {
                     onClick={() => handleDelete(arc.id)}
                     disabled={deletingId === arc.id}
                   >
-                    {deletingId === arc.id ? "…" : confirmDeleteId === arc.id ? "BEKRÆFT" : "SLET"}
+                    {deletingId === arc.id ? "…" : confirmDeleteId === arc.id ? "CONFIRM" : "DELETE"}
                   </button>
                 </div>
               </div>

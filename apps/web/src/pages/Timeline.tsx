@@ -133,7 +133,7 @@ export default function Timeline() {
             <button
               className={`tl-view-toggle-btn ${viewMode === "threads" ? "tl-view-toggle-btn--active" : ""}`}
               onClick={() => setViewMode("threads")}
-            >ENTITETS-TRÅDE</button>
+            >ENTITY THREADS</button>
           </div>
         </div>
 
