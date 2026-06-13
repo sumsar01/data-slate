@@ -16,13 +16,107 @@ function todayISO() {
 
 type Status = { type: "idle" | "sending" | "ok" | "err"; msg: string }
 
+function getToken() {
+  return localStorage.getItem("auth_token")
+}
+
+function LoginScreen({ onLogin }: { onLogin: () => void }) {
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error ?? "AUTHENTICATION FAILED")
+      }
+      const { token } = await res.json()
+      localStorage.setItem("auth_token", token)
+      onLogin()
+    } catch (err: any) {
+      setError(err.message.toUpperCase())
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="app">
+      <div className="scanlines" aria-hidden />
+      <header className="header">
+        <div>
+          <div className="header-title">DATA-SLATE // AUSPEX REC</div>
+          <div className="header-sub">ADEPTUS MECHANICUS FIELD UNIT</div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <span className="dot dot--red" />
+          <span style={{ fontSize: "0.55rem", letterSpacing: "0.08em", color: "#ff2200" }}>LOCKED</span>
+        </div>
+      </header>
+      <main className="main">
+        <div>
+          <div className="section-label">[ AUTHENTICATION REQUIRED ]</div>
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="ENTER ACCESS CODE"
+              autoFocus
+              style={{
+                background: "#0a0a00",
+                border: "1px solid #7a5500",
+                color: "#c8a227",
+                fontFamily: "inherit",
+                fontSize: "0.75rem",
+                letterSpacing: "0.1em",
+                padding: "0.6rem 0.75rem",
+                outline: "none",
+                width: "100%",
+                boxSizing: "border-box",
+              }}
+            />
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={loading || !password}
+            >
+              {loading ? "AUTHENTICATING..." : "▶ AUTHENTICATE"}
+            </button>
+          </form>
+          {error && (
+            <div className="status-msg status-msg--err" style={{ marginTop: "0.5rem" }}>
+              {error}
+            </div>
+          )}
+        </div>
+      </main>
+      <footer className="footer">OMNISSIAH PROTECTS // MACHINE-SPIRIT INTEGRITY: NOMINAL</footer>
+    </div>
+  )
+}
+
 export default function App() {
+  const [token, setToken] = useState<string | null>(getToken)
   const [tags, setTags] = useState<Tag[]>([])
   const [recording, setRecording] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
   const [level, setLevel] = useState(0)
   const [status, setStatus] = useState<Status>({ type: "idle", msg: "" })
+
+  if (!token) {
+    return <LoginScreen onLogin={() => setToken(getToken())} />
+  }
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<BlobPart[]>([])
@@ -100,7 +194,16 @@ export default function App() {
     for (const t of tags) form.append("tags", t)
 
     try {
-      const res = await fetch(`${API_URL}/notes`, { method: "POST", body: form })
+      const res = await fetch(`${API_URL}/notes`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: form,
+      })
+      if (res.status === 401) {
+        localStorage.removeItem("auth_token")
+        setToken(null)
+        return
+      }
       if (!res.ok) throw new Error(await res.text())
       setStatus({ type: "ok", msg: "RECORD COMMITTED // OMNISSIAH APPROVES" })
       setAudioBlob(null)
