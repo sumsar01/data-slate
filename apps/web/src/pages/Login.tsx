@@ -12,7 +12,8 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? "/"
+  const fromQuery = new URLSearchParams(location.search).get("from")
+  const from = fromQuery ?? (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? "/"
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

@@ -10,14 +10,19 @@ export function getAuthHeaders(extra?: Record<string, string>): Record<string, s
   }
 }
 
-export function authFetch(input: string, init: RequestInit = {}): Promise<Response> {
-  return fetch(input, {
+export async function authFetch(input: string, init: RequestInit = {}): Promise<Response> {
+  const res = await fetch(input, {
     ...init,
     headers: {
       ...getAuthHeaders(),
       ...(init.headers as Record<string, string> | undefined),
     },
   })
+  if (res.status === 401) {
+    localStorage.removeItem("auth_token")
+    window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`
+  }
+  return res
 }
 
 export async function upsertSession(date: string, name: string, existingId?: string): Promise<void> {
