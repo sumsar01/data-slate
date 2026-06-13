@@ -8,3 +8,14 @@ export function getToken(): string | null {
 export function clearToken() {
   localStorage.removeItem("auth_token")
 }
+
+export function isTokenValid(): boolean {
+  const token = getToken()
+  if (!token) return false
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]))
+    return typeof payload.exp === "number" && payload.exp > Date.now() / 1000
+  } catch {
+    return false
+  }
+}
