@@ -1,0 +1,260 @@
+/* ── Codex.css — Imperial rules-reference page ───────────────────────────── */
+
+/* Tab navigation */
+.codex-tabs {
+  display: flex;
+  border-bottom: 1px solid #1a0e00;
+  background: #0d0d0d;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.codex-tab {
+  background: transparent;
+  border: none;
+  border-right: 1px solid #1a0e00;
+  color: #7a5500;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.codex-tab:hover {
+  background: #1a0e00;
+  color: #c88800;
+}
+
+.codex-tab--active {
+  color: #ffb000;
+  border-bottom: 2px solid #ffb000;
+  background: #0a0a0a;
+}
+
+/* Search bar */
+.codex-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #1a0e00;
+  background: #0d0d0d;
+  flex-shrink: 0;
+}
+
+.codex-search-icon {
+  color: #7a5500;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.codex-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #3a2800;
+  color: #ffb000;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.25rem;
+  outline: none;
+  min-width: 0;
+}
+
+.codex-search-input::placeholder {
+  color: #3a2800;
+  letter-spacing: 0.06em;
+}
+
+.codex-search-input:focus {
+  border-bottom-color: #ffb000;
+}
+
+.codex-search-clear {
+  background: transparent;
+  border: none;
+  color: #7a5500;
+  font-size: 0.6rem;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+  flex-shrink: 0;
+}
+
+.codex-search-clear:hover {
+  color: #c88800;
+}
+
+.codex-result-count {
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: #3a2800;
+  flex-shrink: 0;
+}
+
+/* Main content area */
+.codex-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.codex-main::-webkit-scrollbar { width: 4px; }
+.codex-main::-webkit-scrollbar-track { background: #0a0a0a; }
+.codex-main::-webkit-scrollbar-thumb { background: #3a2800; }
+
+/* Empty state */
+.codex-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 0.5rem;
+  padding: 3rem;
+}
+
+.codex-empty-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #7a5500;
+}
+
+.codex-empty-sub {
+  font-size: 0.55rem;
+  color: #3a2800;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+/* Group headers (weapon categories, disciplines) */
+.codex-weapon-group,
+.codex-power-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.codex-group-header {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: #ffb000;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #1a0e00;
+}
+
+/* Tables */
+.codex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+}
+
+.codex-table th {
+  text-align: left;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  color: #7a5500;
+  padding: 0.25rem 0.5rem 0.3rem;
+  border-bottom: 1px solid #1a0e00;
+  white-space: nowrap;
+}
+
+.codex-table td {
+  padding: 0.3rem 0.5rem;
+  color: #c88800;
+  border-bottom: 1px solid #0f0900;
+  vertical-align: top;
+}
+
+.codex-table tr:hover td {
+  background: rgba(255, 176, 0, 0.03);
+}
+
+.codex-name {
+  color: #ffb000 !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.codex-highlight {
+  color: #ffb000 !important;
+}
+
+.codex-muted {
+  color: #7a5500 !important;
+}
+
+.codex-desc {
+  color: #7a5500 !important;
+  font-size: 0.52rem;
+  line-height: 1.5;
+  max-width: 340px;
+}
+
+.codex-prereq {
+  white-space: nowrap;
+  font-size: 0.52rem;
+}
+
+.codex-special {
+  font-size: 0.52rem;
+}
+
+.codex-threshold {
+  font-size: 0.7rem !important;
+  font-weight: 700;
+}
+
+.codex-yes {
+  color: #4a7a4a !important;
+  letter-spacing: 0.08em;
+}
+
+.codex-no {
+  color: #3a2800 !important;
+  letter-spacing: 0.08em;
+}
+
+/* Type badge (Basic/Advanced) */
+.codex-badge {
+  font-size: 0.45rem !important;
+  letter-spacing: 0.1em;
+  border: 1px solid currentColor;
+  padding: 0.05rem 0.3rem;
+  white-space: nowrap;
+}
+
+.codex-badge--basic {
+  color: #3a5a3a !important;
+}
+
+.codex-badge--advanced {
+  color: #7a3a00 !important;
+}
+
+/* Weapons table: shrink numeric columns */
+.codex-table--weapons th,
+.codex-table--weapons td {
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+}
+
+/* Powers table: keep threshold prominent */
+.codex-table--powers .codex-threshold {
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .codex-table--weapons .codex-special { display: none; }
+  .codex-search-bar { gap: 0.25rem; }
+}

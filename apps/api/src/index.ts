@@ -11,6 +11,7 @@ import { authRouter } from "./routes/auth"
 import { searchRouter } from "./routes/search"
 import { briefingRouter } from "./routes/briefing"
 import { cluesRouter } from "./routes/clues"
+import { codexRouter } from "./routes/codex"
 
 const app = new Hono()
 
@@ -81,6 +82,8 @@ app.use("/briefing", requireAuthForWrites)
 app.use("/clues/*", requireAuthForWrites)
 app.use("/clues", requireAuthForWrites)
 
+// /codex — fully public, read-only static data
+
 // ── Routers ────────────────────────────────────────────────────────────────
 app.route("/notes", notesRouter)
 app.route("/dates", datesRouter)
@@ -90,6 +93,7 @@ app.route("/wiki", wikiRouter)
 app.route("/search", searchRouter)
 app.route("/briefing", briefingRouter)
 app.route("/clues", cluesRouter)
+app.route("/codex", codexRouter)
 
 export default {
   port: parseInt(process.env.PORT ?? "3001"),

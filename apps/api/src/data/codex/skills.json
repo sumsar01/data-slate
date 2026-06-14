@@ -1,0 +1,378 @@
+[
+  {
+    "id": "acrobatics",
+    "name": "Acrobatics",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": "Movement",
+    "description": ""
+  },
+  {
+    "id": "awareness",
+    "name": "Awareness",
+    "characteristic": "Perception",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "barter",
+    "name": "Barter",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "blather",
+    "name": "Blather",
+    "characteristic": "Fellowship",
+    "type": "Advanced",
+    "descriptor": "Interaction",
+    "description": ""
+  },
+  {
+    "id": "carouse",
+    "name": "Carouse",
+    "characteristic": "Toughness",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "charm",
+    "name": "Charm",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": "Interaction",
+    "description": ""
+  },
+  {
+    "id": "chem-use",
+    "name": "Chem-Use",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": "Crafting,Investigation",
+    "description": ""
+  },
+  {
+    "id": "ciphers",
+    "name": "Ciphers",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "climb",
+    "name": "Climb",
+    "characteristic": "Strength",
+    "type": "Basic",
+    "descriptor": "Movement",
+    "description": ""
+  },
+  {
+    "id": "command",
+    "name": "Command",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": "Interaction",
+    "description": ""
+  },
+  {
+    "id": "common-lore",
+    "name": "Common Lore",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "concealment",
+    "name": "Concealment",
+    "characteristic": "Agility",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "contortionist",
+    "name": "Contortionist",
+    "characteristic": "Agility",
+    "type": "Basic",
+    "descriptor": "Movement",
+    "description": ""
+  },
+  {
+    "id": "deceive",
+    "name": "Deceive",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": "Interaction",
+    "description": ""
+  },
+  {
+    "id": "demolition",
+    "name": "Demolition",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": "Crafting",
+    "description": ""
+  },
+  {
+    "id": "disguise",
+    "name": "Disguise",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "dodge",
+    "name": "Dodge",
+    "characteristic": "Agility",
+    "type": "Basic",
+    "descriptor": "Movement",
+    "description": ""
+  },
+  {
+    "id": "drive",
+    "name": "Drive",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": "Operator",
+    "description": ""
+  },
+  {
+    "id": "evaluate",
+    "name": "Evaluate",
+    "characteristic": "Intelligence",
+    "type": "Basic",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "gamble",
+    "name": "Gamble",
+    "characteristic": "Intelligence",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "inquiry",
+    "name": "Inquiry",
+    "characteristic": "Fellowship",
+    "type": "Basic",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "interrogation",
+    "name": "Interrogation",
+    "characteristic": "Willpower",
+    "type": "Advanced",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "intimidate",
+    "name": "Intimidate",
+    "characteristic": "Strength",
+    "type": "Basic",
+    "descriptor": "Interaction",
+    "description": ""
+  },
+  {
+    "id": "invocation",
+    "name": "Invocation",
+    "characteristic": "Willpower",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "lip-reading",
+    "name": "Lip Reading",
+    "characteristic": "Perception",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "literacy",
+    "name": "Literacy",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "logic",
+    "name": "Logic",
+    "characteristic": "Intelligence",
+    "type": "Basic",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "medicae",
+    "name": "Medicae",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "navigation",
+    "name": "Navigation",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "performer",
+    "name": "Performer",
+    "characteristic": "Fellowship",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "pilot",
+    "name": "Pilot",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": "Operator",
+    "description": ""
+  },
+  {
+    "id": "psyniscience",
+    "name": "Psyniscience",
+    "characteristic": "Perception",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "scholastic-lore",
+    "name": "Scholastic Lore",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": "Investigation",
+    "description": ""
+  },
+  {
+    "id": "scrutiny",
+    "name": "Scrutiny",
+    "characteristic": "Perception",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "search",
+    "name": "Search",
+    "characteristic": "Perception",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "secret-tongue",
+    "name": "Secret Tongue",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "security",
+    "name": "Security",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "shadowing",
+    "name": "Shadowing",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "silent-move",
+    "name": "Silent Move",
+    "characteristic": "Agility",
+    "type": "Basic",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "sleightof-hand",
+    "name": "Sleightof Hand",
+    "characteristic": "Agility",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "speak-language",
+    "name": "Speak Language",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "survival",
+    "name": "Survival",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "swim",
+    "name": "Swim",
+    "characteristic": "Strength",
+    "type": "Basic",
+    "descriptor": "Movement",
+    "description": ""
+  },
+  {
+    "id": "tech-use",
+    "name": "Tech-Use",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "tracking",
+    "name": "Tracking",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  },
+  {
+    "id": "trade",
+    "name": "Trade",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": "Crafting",
+    "description": ""
+  },
+  {
+    "id": "wrangling",
+    "name": "Wrangling",
+    "characteristic": "Intelligence",
+    "type": "Advanced",
+    "descriptor": null,
+    "description": ""
+  }
+]

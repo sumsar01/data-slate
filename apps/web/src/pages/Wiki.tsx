@@ -79,6 +79,7 @@ export default function Wiki() {
         </div>
         <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
           <Link to="/admin-mechanicus" className="admin-back-link">⚙ ADMIN</Link>
+          <Link to="/codex" className="admin-back-link">KODEX</Link>
           <Link to="/" className="admin-back-link">◄ LOG</Link>
         </div>
       </header>

@@ -1,0 +1,822 @@
+[
+  {
+    "id": "call-creatures",
+    "name": "Call Creatures",
+    "discipline": "Minor",
+    "threshold": "9",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "call-item",
+    "name": "Call Item",
+    "discipline": "Minor",
+    "threshold": "5",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "chameleon",
+    "name": "Chameleon",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "d-j-vu",
+    "name": "Déjà Vu",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "distort-vision",
+    "name": "Distort Vision",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Free Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "dull-pain",
+    "name": "Dull Pain",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "fearful-aura",
+    "name": "Fearful Aura",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "flash-bang",
+    "name": "Flash Bang",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "float",
+    "name": "Float",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "forget-me",
+    "name": "Forget Me",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "healer",
+    "name": "Healer",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "inflict-pain",
+    "name": "Inflict Pain",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "inspiring-aura",
+    "name": "Inspiring Aura",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "knack",
+    "name": "Knack",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "lucky",
+    "name": "Lucky",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "precognition",
+    "name": "Precognition",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "psychic-stench",
+    "name": "Psychic Stench",
+    "discipline": "Minor",
+    "threshold": "5",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "resist-possession",
+    "name": "Resist Possession",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Reaction",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "sense-presence",
+    "name": "Sense Presence",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "spasm",
+    "name": "Spasm",
+    "discipline": "Minor",
+    "threshold": "7",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "spectral-hands",
+    "name": "Spectral Hands",
+    "discipline": "Minor",
+    "threshold": "10",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "staunch-bleeding",
+    "name": "Staunch Bleeding",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "torch",
+    "name": "Torch",
+    "discipline": "Minor",
+    "threshold": "5",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "touch-of-madness",
+    "name": "Touch of Madness",
+    "discipline": "Minor",
+    "threshold": "11",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "trick",
+    "name": "Trick",
+    "discipline": "Minor",
+    "threshold": "5",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "unnatural-aim",
+    "name": "Unnatural Aim",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "wall-walk",
+    "name": "Wall Walk",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "warp-howl",
+    "name": "Warp Howl",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "weaken-veil",
+    "name": "Weaken Veil",
+    "discipline": "Minor",
+    "threshold": "9",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "weapon-jinx",
+    "name": "Weapon Jinx",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "white-noise",
+    "name": "White Noise",
+    "discipline": "Minor",
+    "threshold": "8",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "wither",
+    "name": "Wither",
+    "discipline": "Minor",
+    "threshold": "6",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "bio-lightning",
+    "name": "Bio-lightning",
+    "discipline": "Biomancy",
+    "threshold": "14",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "blood-boil",
+    "name": "Blood Boil",
+    "discipline": "Biomancy",
+    "threshold": "19",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "cellular-control",
+    "name": "Cellular Control",
+    "discipline": "Biomancy",
+    "threshold": "16",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "constrict",
+    "name": "Constrict",
+    "discipline": "Biomancy",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "enhance-senses",
+    "name": "Enhance Senses",
+    "discipline": "Biomancy",
+    "threshold": "10",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "hammerhand",
+    "name": "Hammerhand",
+    "discipline": "Biomancy",
+    "threshold": "15",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "regenerate",
+    "name": "Regenerate",
+    "discipline": "Biomancy",
+    "threshold": "23",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "seal-wounds",
+    "name": "Seal Wounds",
+    "discipline": "Biomancy",
+    "threshold": "10",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "shape-flesh",
+    "name": "Shape Flesh",
+    "discipline": "Biomancy",
+    "threshold": "19",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "toxic-siphon",
+    "name": "Toxic Siphon",
+    "discipline": "Biomancy",
+    "threshold": "11",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "divine-shot",
+    "name": "Divine Shot",
+    "discipline": "Divination",
+    "threshold": "15",
+    "focus_time": "Free Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "dowsing",
+    "name": "Dowsing",
+    "discipline": "Divination",
+    "threshold": "11",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "far-sight",
+    "name": "Far Sight",
+    "discipline": "Divination",
+    "threshold": "17",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "glimpse",
+    "name": "Glimpse",
+    "discipline": "Divination",
+    "threshold": "18",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "precognitive-dodge",
+    "name": "Precognitive Dodge",
+    "discipline": "Divination",
+    "threshold": "11",
+    "focus_time": "Free Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "precognitive-strike",
+    "name": "Precognitive Strike",
+    "discipline": "Divination",
+    "threshold": "17",
+    "focus_time": "Free Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "preternatural-awareness",
+    "name": "Preternatural Awareness",
+    "discipline": "Divination",
+    "threshold": "9",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "psychometry",
+    "name": "Psychometry",
+    "discipline": "Divination",
+    "threshold": "16",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "personal-augury",
+    "name": "Personal Augury",
+    "discipline": "Divination",
+    "threshold": "14",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "soul-sight",
+    "name": "Soul Sight",
+    "discipline": "Divination",
+    "threshold": "23",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "blinding-flash",
+    "name": "Blinding Flash",
+    "discipline": "Pyromancy",
+    "threshold": "11",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "burning-fist",
+    "name": "Burning Fist",
+    "discipline": "Pyromancy",
+    "threshold": "10",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "call-flame",
+    "name": "Call Flame",
+    "discipline": "Pyromancy",
+    "threshold": "8",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "douse-flames",
+    "name": "Douse Flames",
+    "discipline": "Pyromancy",
+    "threshold": "16",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "fire-bolt",
+    "name": "Fire Bolt",
+    "discipline": "Pyromancy",
+    "threshold": "11",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "fire-storm",
+    "name": "Fire Storm",
+    "discipline": "Pyromancy",
+    "threshold": "16",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "holocaust",
+    "name": "Holocaust",
+    "discipline": "Pyromancy",
+    "threshold": "23",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "incinerate",
+    "name": "Incinerate",
+    "discipline": "Pyromancy",
+    "threshold": "19",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "sculpt-flame",
+    "name": "Sculpt Flame",
+    "discipline": "Pyromancy",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "wall-of-fire",
+    "name": "Wall of Fire",
+    "discipline": "Pyromancy",
+    "threshold": "17",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "catch-projectiles",
+    "name": "Catch Projectiles",
+    "discipline": "Telekinetics",
+    "threshold": "16",
+    "focus_time": "Reaction",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "fling",
+    "name": "Fling",
+    "discipline": "Telekinetics",
+    "threshold": "14",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "force-barrage",
+    "name": "Force Barrage",
+    "discipline": "Telekinetics",
+    "threshold": "21",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "force-bolt",
+    "name": "Force Bolt",
+    "discipline": "Telekinetics",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "precision-telekinesis",
+    "name": "Precision Telekinesis",
+    "discipline": "Telekinetics",
+    "threshold": "23",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "psychic-blade",
+    "name": "Psychic Blade",
+    "discipline": "Telekinetics",
+    "threshold": "19",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "psychic-crush",
+    "name": "Psychic Crush",
+    "discipline": "Telekinetics",
+    "threshold": "17",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "push",
+    "name": "Push",
+    "discipline": "Telekinetics",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "telekinesis",
+    "name": "Telekinesis",
+    "discipline": "Telekinetics",
+    "threshold": "11",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "telekinetic-shield",
+    "name": "Telekinetic Shield",
+    "discipline": "Telekinetics",
+    "threshold": "17",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "beastmaster",
+    "name": "Beastmaster",
+    "discipline": "Telepathy",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "compel",
+    "name": "Compel",
+    "discipline": "Telepathy",
+    "threshold": "17",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "dominate",
+    "name": "Dominate",
+    "discipline": "Telepathy",
+    "threshold": "24",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "inspire",
+    "name": "Inspire",
+    "discipline": "Telepathy",
+    "threshold": "9",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "mind-scan",
+    "name": "Mind Scan",
+    "discipline": "Telepathy",
+    "threshold": "23",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "projection",
+    "name": "Projection",
+    "discipline": "Telepathy",
+    "threshold": "21",
+    "focus_time": "Full Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "psychic-shriek",
+    "name": "Psychic Shriek",
+    "discipline": "Telepathy",
+    "threshold": "18",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  },
+  {
+    "id": "see-me-not",
+    "name": "See Me Not",
+    "discipline": "Telepathy",
+    "threshold": "14",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "telepathy",
+    "name": "Telepathy",
+    "discipline": "Telepathy",
+    "threshold": "11",
+    "focus_time": "Free Action",
+    "range": "—",
+    "sustained": true,
+    "description": ""
+  },
+  {
+    "id": "terrify",
+    "name": "Terrify",
+    "discipline": "Telepathy",
+    "threshold": "13",
+    "focus_time": "Half Action",
+    "range": "—",
+    "sustained": false,
+    "description": ""
+  }
+]

@@ -6,3 +6,5 @@ dist/
 .turbo/
 .vercel/
 .vercel
+# PDF source files — too large for GitHub (>100MB)
+docs/*.pdf
