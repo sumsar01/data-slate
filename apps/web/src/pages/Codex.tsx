@@ -7,10 +7,10 @@ import type { Skill, Talent, Weapon, PsychicPower, CodexSection } from "@data-sl
 const API_URL = import.meta.env.VITE_API_URL ?? ""
 
 const SECTIONS: { key: CodexSection; label: string }[] = [
-  { key: "skills",  label: "FÆRDIGHEDER" },
-  { key: "talents", label: "TALENTER" },
-  { key: "weapons", label: "VÅBEN" },
-  { key: "powers",  label: "PSY-KRÆFTER" },
+  { key: "skills",  label: "SKILLS" },
+  { key: "talents", label: "TALENTS" },
+  { key: "weapons", label: "WEAPONS" },
+  { key: "powers",  label: "PSYCHIC POWERS" },
 ]
 
 // ── Section renderers ─────────────────────────────────────────────────────────
@@ -20,10 +20,10 @@ function SkillsTable({ items }: { items: Skill[] }) {
     <table className="codex-table">
       <thead>
         <tr>
-          <th>NAVN</th>
+          <th>NAME</th>
           <th>TYPE</th>
-          <th>EGENSKAB</th>
-          <th>DESKRIPTOR</th>
+          <th>CHARACTERISTIC</th>
+          <th>DESCRIPTOR</th>
         </tr>
       </thead>
       <tbody>
@@ -45,9 +45,9 @@ function TalentsTable({ items }: { items: Talent[] }) {
     <table className="codex-table">
       <thead>
         <tr>
-          <th>NAVN</th>
-          <th>FORUDSÆTNINGER</th>
-          <th>BESKRIVELSE</th>
+          <th>NAME</th>
+          <th>PREREQUISITES</th>
+          <th>DESCRIPTION</th>
         </tr>
       </thead>
       <tbody>
@@ -79,15 +79,15 @@ function WeaponsTable({ items }: { items: Weapon[] }) {
           <table className="codex-table codex-table--weapons">
             <thead>
               <tr>
-                <th>NAVN</th>
-                <th>KLASSE</th>
-                <th>RÆKKEVIDDE</th>
+                <th>NAME</th>
+                <th>CLASS</th>
+                <th>RANGE</th>
                 <th>ROF</th>
-                <th>SKADE</th>
+                <th>DAMAGE</th>
                 <th>PEN</th>
-                <th>KLIP</th>
+                <th>CLIP</th>
                 <th>RELOAD</th>
-                <th>SÆRLIG</th>
+                <th>SPECIAL</th>
               </tr>
             </thead>
             <tbody>
@@ -134,10 +134,10 @@ function PowersTable({ items }: { items: PsychicPower[] }) {
           <table className="codex-table codex-table--powers">
             <thead>
               <tr>
-                <th>NAVN</th>
-                <th>TÆRSKEL</th>
-                <th>FOKUSTID</th>
-                <th>OPRETHOLDT</th>
+                <th>NAME</th>
+                <th>THRESHOLD</th>
+                <th>FOCUS TIME</th>
+                <th>SUSTAINED</th>
               </tr>
             </thead>
             <tbody>
@@ -147,7 +147,7 @@ function PowersTable({ items }: { items: PsychicPower[] }) {
                   <td className="codex-highlight codex-threshold">{p.threshold}</td>
                   <td className="codex-muted">{p.focus_time}</td>
                   <td className={p.sustained ? "codex-yes" : "codex-no"}>
-                    {p.sustained ? "JA" : "NEJ"}
+                    {p.sustained ? "YES" : "NO"}
                   </td>
                 </tr>
               ))}
@@ -215,7 +215,7 @@ export default function Codex() {
         <div>
           <div className="admin-header-title">DATA-SLATE MK.IV // CODEX IMPERIALIS</div>
           <div className="admin-header-sub">
-            ADEPTUS MECHANICUS // REGLER &amp; REFERENCE // DARK HERESY I
+            ADEPTUS MECHANICUS // RULES &amp; REFERENCE // DARK HERESY 1ST ED
           </div>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
@@ -243,7 +243,7 @@ export default function Codex() {
         <input
           className="codex-search-input"
           type="text"
-          placeholder="SØGNING I KODEX..."
+          placeholder="SEARCH CODEX..."
           value={query}
           onChange={(e) => { setLoading(true); setQuery(e.target.value) }}
           spellCheck={false}
@@ -254,19 +254,19 @@ export default function Codex() {
           <button className="codex-search-clear" onClick={() => setQuery("")}>✕</button>
         )}
         <span className="codex-result-count">
-          {loading ? "..." : `${count} POSTER`}
+          {loading ? "..." : `${count} ENTRIES`}
         </span>
       </div>
 
       <main className="codex-main">
         {loading ? (
-          <div className="admin-loading">TILGÅR KODEX-DATA...</div>
+          <div className="admin-loading">ACCESSING CODEX DATA...</div>
         ) : items.length === 0 ? (
           <div className="codex-empty">
-            <div className="codex-empty-text">INGEN POSTER FUNDET</div>
+            <div className="codex-empty-text">NO ENTRIES FOUND</div>
             {query && (
               <div className="codex-empty-sub">
-                Søgning: &quot;{query}&quot; gav intet resultat
+                No results for &quot;{query}&quot;
               </div>
             )}
           </div>
@@ -281,7 +281,7 @@ export default function Codex() {
       </main>
 
       <footer className="admin-footer">
-        OMNISSIAH PROTECTS // CODEX IMPERIALIS // MØRK KÆTTERI I. UDGAVE // {count} POSTER
+        OMNISSIAH PROTECTS // CODEX IMPERIALIS // DARK HERESY 1ST ED // {count} ENTRIES
       </footer>
     </div>
   )
