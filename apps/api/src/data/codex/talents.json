@@ -2,326 +2,326 @@
   {
     "id": "combat-master",
     "name": "Combat Master",
-    "prerequisites": "WS30",
-    "description": "Opponentsgetnobonusforoutnumberingyou."
+    "prerequisites": "WS 30",
+    "description": "Opponents get no bonus for outnumbering you."
   },
   {
     "id": "concealed-cavity",
     "name": "Concealed Cavity",
     "prerequisites": null,
-    "description": "Youhaveasecretcompartmentonyou."
+    "description": "You have a secret compartment on you."
   },
   {
     "id": "corpus-conversion",
     "name": "Corpus Conversion",
-    "prerequisites": "Psy Rating2",
-    "description": "Take Damagetoimprove Power Roll."
+    "prerequisites": "Psy Rating 2",
+    "description": "Take Damage to improve Power Roll."
   },
   {
     "id": "counter-attack",
     "name": "Counter-attack",
-    "prerequisites": "WS40",
-    "description": "Gainfreeattack withasuccessful Parry."
+    "prerequisites": "WS 40",
+    "description": "Gain free attack with a successful Parry."
   },
   {
     "id": "crack-shot",
     "name": "Crack Shot",
-    "prerequisites": "BS40",
-    "description": "Deal +2 Critical Damage witharanged weapon."
+    "prerequisites": "BS 40",
+    "description": "Deal +2 Critical Damage with a ranged weapon."
   },
   {
     "id": "crippling-strike",
     "name": "Crippling Strike",
-    "prerequisites": "WS50",
-    "description": "Deal +1d5–1 Critical Damage witha melee weapon."
+    "prerequisites": "WS 50",
+    "description": "Deal +1d5–1 Critical Damage with a melee weapon."
   },
   {
     "id": "crushing-blow",
     "name": "Crushing Blow",
-    "prerequisites": "S40",
-    "description": "Deal +2 Damage witha melee weapon."
+    "prerequisites": "S 40",
+    "description": "Deal +2 Damage with a melee weapon."
   },
   {
     "id": "dark-soul",
     "name": "Dark Soul",
     "prerequisites": null,
-    "description": "Takehalfthepenaltyon Malignancy Tests."
+    "description": "Take half the penalty on Malignancy Tests."
   },
   {
     "id": "deadeye-shot",
     "name": "Deadeye Shot",
-    "prerequisites": "BS30",
-    "description": "Called Shotsareat–10penalty."
+    "prerequisites": "BS 30",
+    "description": "Called Shots are at –10 penalty."
   },
   {
     "id": "decadence",
     "name": "Decadence",
-    "prerequisites": "T30",
-    "description": "Gainuncannyresistancetodrugsandalcohol."
+    "prerequisites": "T 30",
+    "description": "Gain uncanny resistance to drugs and alcohol."
   },
   {
-    "id": "deflect-shot",
-    "name": "Deflect Shot",
-    "prerequisites": "Ag50",
-    "description": "Youcan Parry Primitiverangedattacks."
+    "id": "de-ect-shot",
+    "name": "Deﬂect Shot",
+    "prerequisites": "Ag 50",
+    "description": "You can Parry Primitive ranged attacks."
   },
   {
     "id": "die-hard",
     "name": "Die Hard",
-    "prerequisites": "WP40",
-    "description": "Re-rolldeathchanceincurredby Blood Loss."
+    "prerequisites": "WP 40",
+    "description": "Re-roll death chance incurred by Blood Loss."
   },
   {
     "id": "disarm",
     "name": "Disarm",
-    "prerequisites": "Ag30",
-    "description": "Forceopponenttodrophis weapon."
+    "prerequisites": "Ag 30",
+    "description": "Force opponent to drop his weapon."
   },
   {
     "id": "discipline-focus",
     "name": "Discipline Focus",
-    "prerequisites": "Psy Rating3",
-    "description": "Gain+2on Power Rollsto manifestdisciplinepowers."
+    "prerequisites": "Psy Rating 3",
+    "description": "Gain +2 on Power Rolls to manifest discipline powers."
   },
   {
     "id": "disturbing-voice",
     "name": "Disturbing Voice",
     "prerequisites": null,
-    "description": "+10bonusto Intimidateand Interrogation,–10penaltyto Fel."
+    "description": "+10 bonus to Intimidate and Interrogation, –10 penalty to Fel."
   },
   {
     "id": "double-team",
     "name": "Double Team",
     "prerequisites": null,
-    "description": "Gainadditional +10bonusforgangingup."
+    "description": "Gain additional +10 bonus for ganging up."
   },
   {
     "id": "dual-shot",
     "name": "Dual Shot",
-    "prerequisites": "Ag40,Two-Weapon Wielder",
-    "description": "One Ballistic Skill Testhitstargettwice."
+    "prerequisites": "Ag 40, Two-Weapon Wielder",
+    "description": "One Ballistic Skill Test hits target twice."
   },
   {
     "id": "dual-strike",
     "name": "Dual Strike",
-    "prerequisites": "Ag40,Two-Weapon Wielder",
-    "description": "One Weapon Skill Testhitstargettwice."
+    "prerequisites": "Ag 40, Two-Weapon Wielder",
+    "description": "One Weapon Skill Test hits target twice."
   },
   {
     "id": "electrical-succour",
     "name": "Electrical Succour",
     "prerequisites": "Tech-Priest",
-    "description": "+10bonusto Toughness Teststoremove Fatigue."
+    "description": "+10 bonus to Toughness Tests to remove Fatigue."
   },
   {
     "id": "electro-graft-use",
     "name": "Electro Graft Use",
     "prerequisites": null,
-    "description": "+10bonusto Inquiry ,Tech Use,Common Knowledge."
+    "description": "+10 bonus to Inquiry, Tech Use, Common Knowledge."
   },
   {
     "id": "energy-cache",
     "name": "Energy Cache",
     "prerequisites": "Tech-Priest",
-    "description": "Luminen Blast, Chargeand Shockare Fatiguefree."
+    "description": "Luminen Blast, Charge and Shock are Fatigue free."
   },
   {
     "id": "exotic-weapon-training",
     "name": "Exotic Weapon Training",
     "prerequisites": null,
-    "description": "Useanexotic weapon withoutpenalty."
+    "description": "Use an exotic weapon without penalty."
   },
   {
-    "id": "favouredbythe-warp",
-    "name": "Favouredbythe Warp",
-    "prerequisites": "WP35",
-    "description": "Rolltwicefor Psychic Phenomena(see page162) andtakethebetterresult."
+    "id": "favoured-by-the-warp",
+    "name": "Favoured by the Warp",
+    "prerequisites": "WP 35",
+    "description": "Roll twice for Psychic Phenomena (see page 162 ) and take the better result."
   },
   {
     "id": "fearless",
     "name": "Fearless",
     "prerequisites": null,
-    "description": "Immuneto Fearand Pinning."
+    "description": "Immune to Fear and Pinning."
   },
   {
     "id": "feedback-screech",
     "name": "Feedback Screech",
     "prerequisites": "Tech-Priest",
-    "description": "30mradius,Test Willpowerorlose Half Action."
+    "description": "30m radius, Test Willpower or lose Half Action."
   },
   {
     "id": "ferric-lure",
     "name": "Ferric Lure",
     "prerequisites": "Tech-Priest",
-    "description": "WPTesttocall1kg/WPBonusof metalobjects."
+    "description": "WP Test to call 1kg/WP Bonus of metal objects."
   },
   {
     "id": "ferric-summons",
     "name": "Ferric Summons",
-    "prerequisites": "Tech-Priest,Ferric Lure",
-    "description": "WPTesttocall2kg/WPBonusof metalobjects."
+    "prerequisites": "Tech-Priest, Ferric Lure",
+    "description": "WP Test to call 2kg/WP Bonus of metal objects."
   },
   {
     "id": "flagellant",
     "name": "Flagellant",
     "prerequisites": null,
-    "description": "Injureselftogain mentalfortitude."
+    "description": "Injure self to gain mental fortitude."
   },
   {
     "id": "foresight",
     "name": "Foresight",
-    "prerequisites": "Int30",
-    "description": "Contemplatetogain +10bonusonnext Test."
+    "prerequisites": "Int 30",
+    "description": "Contemplate to gain +10 bonus on next Test."
   },
   {
     "id": "frenzy",
     "name": "Frenzy",
     "prerequisites": null,
-    "description": "Enterpsychoticragetogaincombatbonuses."
+    "description": "Enter psychotic rage to gain combat bonuses."
   },
   {
     "id": "furious-assault",
     "name": "Furious Assault",
-    "prerequisites": "WS35",
-    "description": "Onasuccessful WSTest,gainafreesecondattack."
+    "prerequisites": "WS 35",
+    "description": "On a successful WS Test, gain a free second attack."
   },
   {
     "id": "good-reputation",
     "name": "Good Reputation",
-    "prerequisites": "Fel50,Peer",
-    "description": "Youhaveagoodreputationamongstacertaingroup."
+    "prerequisites": "Fel 50, Peer",
+    "description": "You have a good reputation amongst a certain group."
   },
   {
     "id": "gun-blessing",
     "name": "Gun Blessing",
     "prerequisites": "Tech-Priest",
-    "description": "Unjamanumberofgunsequalto Intbonusina10mradius."
+    "description": "Unjam a number of guns equal to Int bonus in a 10m radius."
   },
   {
     "id": "gunslinger",
     "name": "Gunslinger",
-    "prerequisites": "BS40,Two-Weapon Wielder",
-    "description": "Fighting withtwopistolsincursonlya–10penalty."
+    "prerequisites": "BS 40, Two-Weapon Wielder",
+    "description": "Fighting with two pistols incurs only a –10 penalty."
   },
   {
     "id": "hard-target",
     "name": "Hard Target",
-    "prerequisites": "Ag40",
-    "description": "Opponentstake–20to BSTestswhenyou Chargeor Run."
+    "prerequisites": "Ag 40",
+    "description": "Opponents take –20 to BS Tests when you Charge or Run."
   },
   {
     "id": "hardy",
     "name": "Hardy",
-    "prerequisites": "T40",
-    "description": "Youalwayshealasif Lightly Wounded."
+    "prerequisites": "T 40",
+    "description": "You always heal as if Lightly Wounded."
   },
   {
     "id": "hatred",
     "name": "Hatred",
     "prerequisites": null,
-    "description": "Gain +10bonustoattackhatedcreatures."
+    "description": "Gain +10 bonus to attack hated creatures."
   },
   {
     "id": "heavy-weapon-training",
     "name": "Heavy Weapon Training",
     "prerequisites": null,
-    "description": "Gainproficiency withaheavy weapongroup."
+    "description": "Gain proﬁciency with a heavy weapon group."
   },
   {
     "id": "heightened-senses",
     "name": "Heightened Senses",
     "prerequisites": null,
-    "description": "Gain +10bonustoaparticularsense."
+    "description": "Gain +10 bonus to a particular sense."
   },
   {
     "id": "hip-shooting",
     "name": "Hip Shooting",
-    "prerequisites": "BS40,Ag40",
-    "description": "Gainafreeattack whenyou makea Full Move."
+    "prerequisites": "BS 40, Ag 40",
+    "description": "Gain a free attack when you make a Full Move."
   },
   {
     "id": "independent-targeting",
     "name": "Independent Targeting",
-    "prerequisites": "BS40",
-    "description": "Fireattwoor moretargetsfurtherthan10mapart."
+    "prerequisites": "BS 40",
+    "description": "Fire at two or more targets further than 10m apart."
   },
   {
     "id": "insanely-faithful",
     "name": "Insanely Faithful",
     "prerequisites": null,
-    "description": "Re-rolltheeffectsof Shock."
+    "description": "Re-roll the effects of Shock."
   },
   {
-    "id": "intothe-jawsof-hell",
-    "name": "Intothe Jawsof Hell",
+    "id": "into-the-jaws-of-hell",
+    "name": "Into the Jaws of Hell",
     "prerequisites": "Iron Discipline",
-    "description": "Minionsgainimmunityto Pinningand Fear whilst inyourpresence."
+    "description": "Minions gain immunity to Pinning and Fear whilst in your presence."
   },
   {
     "id": "iron-discipline",
     "name": "Iron Discipline",
-    "prerequisites": "WP30, Command",
-    "description": "Minionscanre-roll Fearand Pinning Tests."
+    "prerequisites": "WP 30, Command",
+    "description": "Minions can re-roll Fear and Pinning Tests."
   },
   {
     "id": "iron-jaw",
     "name": "Iron Jaw",
-    "prerequisites": "T40",
-    "description": "Toughness Testtoovercome Stunning."
+    "prerequisites": "T 40",
+    "description": "Toughness Test to overcome Stunning."
   },
   {
     "id": "jaded",
     "name": "Jaded",
-    "prerequisites": "WP30",
-    "description": "Nevergain Insanity Pointsfromordinaryhorrors."
+    "prerequisites": "WP 30",
+    "description": "Never gain Insanity Points from ordinary horrors."
   },
   {
     "id": "leap-up",
     "name": "Leap Up",
-    "prerequisites": "Ag30",
-    "description": "Standupasa Free Action."
+    "prerequisites": "Ag 30",
+    "description": "Stand up as a Free Action."
   },
   {
     "id": "light-sleeper",
     "name": "Light Sleeper",
-    "prerequisites": "Per30",
-    "description": "Countasawake,even whenasleep."
+    "prerequisites": "Per 30",
+    "description": "Count as awake, even when asleep."
   },
   {
     "id": "lightning-attack",
     "name": "Lightning Attack",
     "prerequisites": "Swift Attack",
-    "description": "Attackthreetimes witha Full Action."
+    "description": "Attack three times with a Full Action."
   },
   {
-    "id": "lightning-reflexes",
-    "name": "Lightning Reflexes",
+    "id": "lightning-re-exes",
+    "name": "Lightning Reﬂexes",
     "prerequisites": null,
-    "description": "Addtwice ABto Initiativerolls."
+    "description": "Add twice AB to Initiative rolls."
   },
   {
-    "id": "litanyof-hate",
-    "name": "Litanyof Hate",
+    "id": "litany-of-hate",
+    "name": "Litany of Hate",
     "prerequisites": "Hatred",
-    "description": "Extendbenefitsofhatredtoallies."
+    "description": "Extend beneﬁts of hatred to allies."
   },
   {
     "id": "logis-implant",
     "name": "Logis Implant",
     "prerequisites": null,
-    "description": "+10bonuson WSand BSonsuccessful Tech-Use Test."
+    "description": "+10 bonus on WS and BS on successful Tech-Use Test."
   },
   {
     "id": "luminen-blast",
     "name": "Luminen Blast",
     "prerequisites": "Tech-Priest",
-    "description": "1d10+WPBonus Energy Damage Bolt. Causes Fatigue."
+    "description": "1d10+WP Bonus Energy Damage Bolt. Causes Fatigue."
   },
   {
     "id": "luminen-charge",
     "name": "Luminen Charge",
     "prerequisites": "Tech-Priest",
-    "description": "Toughness Testtopower/chargetech. Causes Fatigue."
+    "description": "Toughness Test to power/charge tech. Causes Fatigue."
   },
   {
     "id": "luminen-shock",
@@ -333,318 +333,318 @@
     "id": "maglev-grace",
     "name": "Maglev Grace",
     "prerequisites": "Tech-Priest",
-    "description": "Hover1d10+TB minutesonceperday."
+    "description": "Hover 1d10+TB minutes once per day."
   },
   {
     "id": "maglev-transcendence",
     "name": "Maglev Transcendence",
     "prerequisites": "Tech-Priest, Maglev Grace",
-    "description": "Hover2d10+TB minutestwiceperday."
+    "description": "Hover 2d10+TB minutes twice per day."
   },
   {
     "id": "marksman",
     "name": "Marksman",
-    "prerequisites": "BS35",
-    "description": "Nopenaltiesforfiringat Longor Extremerange."
+    "prerequisites": "BS 35",
+    "description": "No penalties for ﬁring at Long or Extreme range."
   },
   {
     "id": "master-chirurgeon",
     "name": "Master Chirurgeon",
     "prerequisites": "Medicae +10",
-    "description": "Performadvanced medicalprocedures."
+    "description": "Perform advanced medical procedures."
   },
   {
     "id": "master-orator",
     "name": "Master Orator",
-    "prerequisites": "Fel30",
-    "description": "Affect10timesthenormalnumbers witha Fellowship Test."
+    "prerequisites": "Fel 30",
+    "description": "Affect 10 times the normal numbers with a Fellowship Test."
   },
   {
     "id": "mechadendrite-use",
     "name": "Mechadendrite Use",
     "prerequisites": "Tech-Priest",
-    "description": "Youcanuseatypeof mechadendrite."
+    "description": "You can use a type of mechadendrite."
   },
   {
     "id": "meditation",
     "name": "Meditation",
     "prerequisites": null,
-    "description": "You mayenteratrancetoremove Fatigue."
+    "description": "You may enter a trance to remove Fatigue."
   },
   {
     "id": "melee-weapon-training",
     "name": "Melee Weapon Training",
     "prerequisites": null,
-    "description": "Gainproficiency withagroupof melee weapons."
+    "description": "Gain proﬁciency with a group of melee weapons."
   },
   {
     "id": "mental-fortress",
     "name": "Mental Fortress",
-    "prerequisites": "WP50,Strong-Minded",
-    "description": "Gainprotectionagainstpsychicattacks."
+    "prerequisites": "WP 50, Strong-Minded",
+    "description": "Gain protection against psychic attacks."
   },
   {
     "id": "mental-rage",
     "name": "Mental Rage",
     "prerequisites": "Frenzy",
-    "description": "Youmayuse Psychic Powerswhileinthethroesof Frenzy ."
+    "description": "You may use Psychic Powers while in the throes of Frenzy."
   },
   {
     "id": "mighty-shot",
     "name": "Mighty Shot",
-    "prerequisites": "BS40",
-    "description": "Deal +2 Damage withrangedattacks."
+    "prerequisites": "BS 40",
+    "description": "Deal +2 Damage with ranged attacks."
   },
   {
     "id": "mimic",
     "name": "Mimic",
     "prerequisites": null,
-    "description": "Youcancopyvoices."
+    "description": "You can copy voices."
   },
   {
     "id": "minor-psychic-power",
     "name": "Minor Psychic Power",
     "prerequisites": null,
-    "description": "Yougaina Minor Psychic Power."
+    "description": "You gain a Minor Psychic Power."
   },
   {
-    "id": "nervesof-steel",
-    "name": "Nervesof Steel",
+    "id": "nerves-of-steel",
+    "name": "Nerves of Steel",
     "prerequisites": null,
-    "description": "Re-rollfailed Teststoavoid Pinning."
+    "description": "Re-roll failed Tests to avoid Pinning."
   },
   {
     "id": "orthoproxy",
     "name": "Orthoproxy",
     "prerequisites": null,
-    "description": "+20bonustoresist mindcontrolorinterrogation."
+    "description": "+20 bonus to resist mind control or interrogation."
   },
   {
     "id": "paranoia",
     "name": "Paranoia",
     "prerequisites": null,
-    "description": "Youarealertfordanger."
+    "description": "You are alert for danger."
   },
   {
     "id": "peer",
     "name": "Peer",
-    "prerequisites": "Fel30",
-    "description": "Gain +10bonuson Fel Teststointeract with organisation."
+    "prerequisites": "Fel 30",
+    "description": "Gain +10 bonus on Fel Tests to interact with organisation."
   },
   {
     "id": "pistol-training",
     "name": "Pistol Training",
     "prerequisites": null,
-    "description": "Gainproficiency withagroupofpistol weapons."
+    "description": "Gain proﬁciency with a group of pistol weapons."
   },
   {
     "id": "power-well",
     "name": "Power Well",
-    "prerequisites": "Psy Rating2",
-    "description": "Gainbonusto Power Rolls."
+    "prerequisites": "Psy Rating 2",
+    "description": "Gain bonus to Power Rolls."
   },
   {
     "id": "precise-blow",
     "name": "Precise Blow",
-    "prerequisites": "WS40,Sure Strike",
-    "description": "Nopenaltyforattacksagainstspecific Hit Locations."
+    "prerequisites": "WS 40, Sure Strike",
+    "description": "No penalty for attacks against speciﬁc Hit Locations."
   },
   {
     "id": "prosanguine",
     "name": "Prosanguine",
     "prerequisites": null,
-    "description": "Heal1d5 Damageonceperday."
+    "description": "Heal 1d5 Damage once per day."
   },
   {
-    "id": "psy-rating1",
-    "name": "Psy Rating1",
+    "id": "psy-rating-1",
+    "name": "Psy Rating 1",
     "prerequisites": null,
-    "description": "Gainpowers,roll1d10+WPbonusfor Power Rolls."
+    "description": "Gain powers, roll 1d10+WP bonus for Power Rolls."
   },
   {
-    "id": "psy-rating2",
-    "name": "Psy Rating2",
-    "prerequisites": "Psy Rating1",
-    "description": "Gainpowers,roll2d10+WPbonusfor Power Rolls."
+    "id": "psy-rating-2",
+    "name": "Psy Rating 2",
+    "prerequisites": "Psy Rating 1",
+    "description": "Gain powers, roll 2d10+WP bonus for Power Rolls."
   },
   {
-    "id": "psy-rating3",
-    "name": "Psy Rating3",
-    "prerequisites": "Psy Rating2",
-    "description": "Gainpowers,roll3d10+WPbonusfor Power Rolls."
+    "id": "psy-rating-3",
+    "name": "Psy Rating 3",
+    "prerequisites": "Psy Rating 2",
+    "description": "Gain powers, roll 3d10+WP bonus for Power Rolls."
   },
   {
-    "id": "psy-rating4",
-    "name": "Psy Rating4",
-    "prerequisites": "Psy Rating3",
-    "description": "Gainpowers,roll4d10+WPbonusfor Power Rolls."
+    "id": "psy-rating-4",
+    "name": "Psy Rating 4",
+    "prerequisites": "Psy Rating 3",
+    "description": "Gain powers, roll 4d10+WP bonus for Power Rolls."
   },
   {
-    "id": "psy-rating5",
-    "name": "Psy Rating5",
-    "prerequisites": "Psy Rating4",
-    "description": "Gainpowers,roll5d10+WPbonusfor Power Rolls."
+    "id": "psy-rating-5",
+    "name": "Psy Rating 5",
+    "prerequisites": "Psy Rating 4",
+    "description": "Gain powers, roll 5d10+WP bonus for Power Rolls."
   },
   {
-    "id": "psy-rating6",
-    "name": "Psy Rating6",
-    "prerequisites": "Psy Rating5",
-    "description": "Gainpowers,roll6d10+WPbonusfor Power Rolls."
+    "id": "psy-rating-6",
+    "name": "Psy Rating 6",
+    "prerequisites": "Psy Rating 5",
+    "description": "Gain powers, roll 6d10+WP bonus for Power Rolls."
   },
   {
     "id": "psychic-power",
     "name": "Psychic Power",
     "prerequisites": null,
-    "description": "Gainanextra Psychic Power."
+    "description": "Gain an extra Psychic Power."
   },
   {
     "id": "quick-draw",
     "name": "Quick Draw",
     "prerequisites": null,
-    "description": "Readyasa Free Action."
+    "description": "Ready as a Free Action."
   },
   {
     "id": "rapid-reaction",
     "name": "Rapid Reaction",
-    "prerequisites": "Ag40",
-    "description": "Test Agtonegate Surprise."
+    "prerequisites": "Ag 40",
+    "description": "Test Ag to negate Surprise."
   },
   {
     "id": "rapid-reload",
     "name": "Rapid Reload",
     "prerequisites": null,
-    "description": "Reducereloadtime."
+    "description": "Reduce reload time."
   },
   {
     "id": "resistance",
     "name": "Resistance",
     "prerequisites": null,
-    "description": "Gain +10bonusto Resistance Tests."
+    "description": "Gain +10 bonus to Resistance Tests."
   },
   {
-    "id": "riteof-awe",
-    "name": "Riteof Awe",
+    "id": "rite-of-awe",
+    "name": "Rite of Awe",
     "prerequisites": "Tech-Priest",
-    "description": "50mradius,–10toall Testsdueto Fear."
+    "description": "50m radius, –10 to all Tests due to Fear."
   },
   {
-    "id": "riteof-fear",
-    "name": "Riteof Fear",
+    "id": "rite-of-fear",
+    "name": "Rite of Fear",
     "prerequisites": "Tech-Priest",
-    "description": "Fearrating1fortwo minutes.50mradius."
+    "description": "Fear rating 1 for two minutes. 50m radius."
   },
   {
-    "id": "riteof-pure-thought",
-    "name": "Riteof Pure Thought",
+    "id": "rite-of-pure-thought",
+    "name": "Rite of Pure Thought",
     "prerequisites": "Tech-Priest",
-    "description": "Youareimmunetoemotion."
+    "description": "You are immune to emotion."
   },
   {
     "id": "sharpshooter",
     "name": "Sharpshooter",
-    "prerequisites": "BS40, Deadeye Shot",
-    "description": "Nopenaltiesfor Called Shots."
+    "prerequisites": "BS 40, Deadeye Shot",
+    "description": "No penalties for Called Shots."
   },
   {
     "id": "sound-constitution",
     "name": "Sound Constitution",
     "prerequisites": null,
-    "description": "Gainanadditional Wound."
+    "description": "Gain an additional Wound."
   },
   {
     "id": "sprint",
     "name": "Sprint",
     "prerequisites": null,
-    "description": "Move morequicklyincombat."
+    "description": "Move more quickly in combat."
   },
   {
     "id": "step-aside",
     "name": "Step Aside",
-    "prerequisites": "Ag40, Dodge",
-    "description": "Gainextra Dodgeina Round."
+    "prerequisites": "Ag 40, Dodge",
+    "description": "Gain extra Dodge in a Round."
   },
   {
     "id": "street-fighting",
     "name": "Street Fighting",
     "prerequisites": null,
-    "description": "Deal+2 Critical Damagewithknivesorunarmedattacks."
+    "description": "Deal +2 Critical Damage with knives or unarmed attacks."
   },
   {
     "id": "strong-minded",
     "name": "Strong Minded",
-    "prerequisites": "WP30, Resistance(Psychic Powers)",
-    "description": "Re-rollfailed WPTests madetoresist Psychic Powers."
+    "prerequisites": "WP 30, Resistance (Psychic Powers)",
+    "description": "Re-roll failed WP Tests made to resist Psychic Powers."
   },
   {
     "id": "sure-strike",
     "name": "Sure Strike",
-    "prerequisites": "WS30",
-    "description": "Choose Hit Locationonasuccessfulattack."
+    "prerequisites": "WS 30",
+    "description": "Choose Hit Location on a successful attack."
   },
   {
     "id": "swift-attack",
     "name": "Swift Attack",
-    "prerequisites": "WS35",
-    "description": "Attacktwice witha Full Action."
+    "prerequisites": "WS 35",
+    "description": "Attack twice with a Full Action."
   },
   {
     "id": "takedown",
     "name": "Takedown",
     "prerequisites": null,
-    "description": "Makeaspecialattackto Stunyouropponent."
+    "description": "Make a special attack to Stun your opponent."
   },
   {
     "id": "talented",
     "name": "Talented",
     "prerequisites": null,
-    "description": "Gain +10bonustocorresponding Skill Test."
+    "description": "Gain +10 bonus to corresponding Skill Test."
   },
   {
     "id": "technical-knock",
     "name": "Technical Knock",
-    "prerequisites": "Int30",
-    "description": "Unjamagunasa Half Action."
+    "prerequisites": "Int 30",
+    "description": "Unjam a gun as a Half Action."
   },
   {
     "id": "thrown-weapon-training",
     "name": "Thrown Weapon Training",
     "prerequisites": null,
-    "description": "Gainproficiency withagroupofthrown weapons."
+    "description": "Gain proﬁciency with a group of thrown weapons."
   },
   {
     "id": "total-recall",
     "name": "Total Recall",
-    "prerequisites": "Int30",
-    "description": "Remembertrivialfactsand minordetails."
+    "prerequisites": "Int 30",
+    "description": "Remember trivial facts and minor details."
   },
   {
     "id": "true-grit",
     "name": "True Grit",
-    "prerequisites": "T40",
-    "description": "Reduce Critical Damageyoutake."
+    "prerequisites": "T 40",
+    "description": "Reduce Critical Damage you take."
   },
   {
     "id": "two-weapon-wielder",
     "name": "Two-Weapon Wielder",
-    "prerequisites": "WS35or BS35,Ag35",
-    "description": "Attacktwice when wieldingtwo weapons."
+    "prerequisites": "WS 35 or BS35, Ag 35",
+    "description": "Attack twice when wielding two weapons."
   },
   {
     "id": "unremarkable",
     "name": "Unremarkable",
     "prerequisites": null,
-    "description": "Youareeasilyforgettable."
+    "description": "You are easily forgettable."
   },
   {
     "id": "unshakeable-faith",
     "name": "Unshakeable Faith",
     "prerequisites": null,
-    "description": "You mayre-rollfailed Fear Tests."
+    "description": "You may re-roll failed Fear Tests."
   },
   {
-    "id": "wallof-steel",
-    "name": "Wallof Steel",
-    "prerequisites": "Ag35",
-    "description": "Gainanextra Parryeach Round."
+    "id": "wall-of-steel",
+    "name": "Wall of Steel",
+    "prerequisites": "Ag 35",
+    "description": "Gain an extra Parry each Round."
   }
 ]

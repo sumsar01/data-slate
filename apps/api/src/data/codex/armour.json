@@ -1,0 +1,282 @@
+[
+  {
+    "id": "gang-leathers",
+    "name": "Gang Leathers",
+    "category": "Primitive Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "1",
+    "weight": "5 kg",
+    "cost": "25",
+    "availability": "Average"
+  },
+  {
+    "id": "heavy-leathers",
+    "name": "Heavy Leathers",
+    "category": "Primitive Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "2",
+    "weight": "7 kg",
+    "cost": "100",
+    "availability": "Common"
+  },
+  {
+    "id": "quilted-vest",
+    "name": "Quilted Vest",
+    "category": "Primitive Armour",
+    "locations": "Body",
+    "ap": "2",
+    "weight": "2 kg",
+    "cost": "10",
+    "availability": "Common"
+  },
+  {
+    "id": "beast-furs",
+    "name": "Beast Furs",
+    "category": "Primitive Armour",
+    "locations": "Body",
+    "ap": "2",
+    "weight": "10 kg",
+    "cost": "5",
+    "availability": "Average"
+  },
+  {
+    "id": "grox-hides",
+    "name": "Grox Hides",
+    "category": "Primitive Armour",
+    "locations": "Body",
+    "ap": "3",
+    "weight": "14 kg",
+    "cost": "60",
+    "availability": "Common"
+  },
+  {
+    "id": "chain-coat",
+    "name": "Chain Coat",
+    "category": "Primitive Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "3",
+    "weight": "18 kg",
+    "cost": "50",
+    "availability": "Average"
+  },
+  {
+    "id": "feudal-plate",
+    "name": "Feudal Plate",
+    "category": "Primitive Armour",
+    "locations": "All",
+    "ap": "5",
+    "weight": "30 kg",
+    "cost": "120",
+    "availability": "Scarce"
+  },
+  {
+    "id": "xeno-hides",
+    "name": "Xeno Hides",
+    "category": "Primitive Armour",
+    "locations": "Body",
+    "ap": "6",
+    "weight": "22 kg",
+    "cost": "5,000",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "flak-helmet",
+    "name": "Flak Helmet",
+    "category": "Flak Armour",
+    "locations": "Head",
+    "ap": "2",
+    "weight": "2 kg",
+    "cost": "25",
+    "availability": "Average"
+  },
+  {
+    "id": "flak-gauntlets",
+    "name": "Flak Gauntlets",
+    "category": "Flak Armour",
+    "locations": "Arms",
+    "ap": "2",
+    "weight": "1 kg",
+    "cost": "50",
+    "availability": "Average"
+  },
+  {
+    "id": "light-flak-coat",
+    "name": "Light Flak Coat",
+    "category": "Flak Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "2",
+    "weight": "4 kg",
+    "cost": "80",
+    "availability": "Scarce"
+  },
+  {
+    "id": "flak-vest",
+    "name": "Flak Vest",
+    "category": "Flak Armour",
+    "locations": "Body",
+    "ap": "3",
+    "weight": "5 kg",
+    "cost": "50",
+    "availability": "Average"
+  },
+  {
+    "id": "flak-jacket",
+    "name": "Flak Jacket",
+    "category": "Flak Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "3",
+    "weight": "6 kg",
+    "cost": "100",
+    "availability": "Average"
+  },
+  {
+    "id": "flak-cloak",
+    "name": "Flak Cloak",
+    "category": "Flak Armour",
+    "locations": "Body",
+    "ap": "3",
+    "weight": "8 kg",
+    "cost": "80",
+    "availability": "Scarce"
+  },
+  {
+    "id": "guard-flak-armour",
+    "name": "Guard Flak Armour",
+    "category": "Flak Armour",
+    "locations": "All",
+    "ap": "4",
+    "weight": "11 kg",
+    "cost": "300",
+    "availability": "Scarce"
+  },
+  {
+    "id": "mesh-cowl",
+    "name": "Mesh Cowl",
+    "category": "Mesh Armour",
+    "locations": "Head",
+    "ap": "3",
+    "weight": "0.5 kg",
+    "cost": "100",
+    "availability": "Rare"
+  },
+  {
+    "id": "mesh-gloves",
+    "name": "Mesh Gloves",
+    "category": "Mesh Armour",
+    "locations": "Arms",
+    "ap": "3",
+    "weight": "0.5 kg",
+    "cost": "120",
+    "availability": "Rare"
+  },
+  {
+    "id": "xeno-mesh",
+    "name": "Xeno Mesh",
+    "category": "Mesh Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "4",
+    "weight": "2 kg",
+    "cost": "375",
+    "availability": "Rare"
+  },
+  {
+    "id": "mesh-vest",
+    "name": "Mesh Vest",
+    "category": "Mesh Armour",
+    "locations": "Body",
+    "ap": "4",
+    "weight": "1 kg",
+    "cost": "150",
+    "availability": "Rare"
+  },
+  {
+    "id": "mesh-combat-cloak",
+    "name": "Mesh Combat Cloak",
+    "category": "Mesh Armour",
+    "locations": "Arms, Body",
+    "ap": "4",
+    "weight": "1.5 kg",
+    "cost": "350",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "carapace-helm",
+    "name": "Carapace Helm",
+    "category": "Carapace Armour",
+    "locations": "Head",
+    "ap": "4",
+    "weight": "2 kg",
+    "cost": "250",
+    "availability": "Rare"
+  },
+  {
+    "id": "carapace-vambraces",
+    "name": "Carapace Vambraces",
+    "category": "Carapace Armour",
+    "locations": "Arms",
+    "ap": "5",
+    "weight": "2 kg",
+    "cost": "300",
+    "availability": "Rare"
+  },
+  {
+    "id": "carapace-greaves",
+    "name": "Carapace Greaves",
+    "category": "Carapace Armour",
+    "locations": "Legs",
+    "ap": "5",
+    "weight": "3 kg",
+    "cost": "375",
+    "availability": "Rare"
+  },
+  {
+    "id": "enforcer-light-carapace",
+    "name": "Enforcer Light Carapace",
+    "category": "Carapace Armour",
+    "locations": "Arms, Body, Legs",
+    "ap": "5",
+    "weight": "15 kg",
+    "cost": "575",
+    "availability": "Rare"
+  },
+  {
+    "id": "carapace-chest-plate",
+    "name": "Carapace Chest Plate",
+    "category": "Carapace Armour",
+    "locations": "Body",
+    "ap": "6",
+    "weight": "7 kg",
+    "cost": "600",
+    "availability": "Rare"
+  },
+  {
+    "id": "storm-trooper-carapace",
+    "name": "Storm Trooper Carapace",
+    "category": "Carapace Armour",
+    "locations": "All",
+    "ap": "6",
+    "weight": "17 kg",
+    "cost": "3,750",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "light-power-armour",
+    "name": "Light Power Armour",
+    "category": "Power Armour",
+    "locations": "All",
+    "ap": "7",
+    "weight": "40 kg",
+    "cost": "8,500",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "power-armour",
+    "name": "Power Armour",
+    "category": "Power Armour",
+    "locations": "All",
+    "ap": "8",
+    "weight": "65 kg",
+    "cost": "15,000",
+    "availability": "Very Rare"
+  }
+]

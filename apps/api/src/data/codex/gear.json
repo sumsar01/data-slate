@@ -1,1 +1,594 @@
-[]
+[
+  {
+    "id": "arrows-quarrels",
+    "name": "Arrows/Quarrels",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "1/20",
+    "availability": "Common"
+  },
+  {
+    "id": "shot",
+    "name": "Shot",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "1/20",
+    "availability": "Common"
+  },
+  {
+    "id": "bullets",
+    "name": "Bullets",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "1/20",
+    "availability": "Plentiful"
+  },
+  {
+    "id": "shells",
+    "name": "Shells",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "1/20",
+    "availability": "Common"
+  },
+  {
+    "id": "charge-pack-pistol",
+    "name": "Charge Pack (pistol)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "10/full clip",
+    "availability": "Common"
+  },
+  {
+    "id": "charge-pack-basic",
+    "name": "Charge Pack (basic)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "15/full clip",
+    "availability": "Common"
+  },
+  {
+    "id": "charge-pack-heavy",
+    "name": "Charge Pack (heavy)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "30/full clip",
+    "availability": "Rare"
+  },
+  {
+    "id": "fuel-pistol",
+    "name": "Fuel (pistol)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "8/full clip",
+    "availability": "Scarce"
+  },
+  {
+    "id": "fuel-basic",
+    "name": "Fuel (basic)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "10/full clip",
+    "availability": "Scarce"
+  },
+  {
+    "id": "bolt-shells",
+    "name": "Bolt Shells",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "16/1",
+    "availability": "Rare"
+  },
+  {
+    "id": "melta-canister-pistol",
+    "name": "Melta Canister (pistol)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "20/full clip",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "melta-canister-basic",
+    "name": "Melta Canister (basic)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "15/full clip",
+    "availability": "Rare"
+  },
+  {
+    "id": "plasma-flask-pistol",
+    "name": "Plasma Flask (pistol)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "24/full clip",
+    "availability": "Rare"
+  },
+  {
+    "id": "plasma-flask-basic",
+    "name": "Plasma Flask (basic)",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "18/full clip",
+    "availability": "Rare"
+  },
+  {
+    "id": "exotic",
+    "name": "Exotic",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "20/1",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "dumdum-bullets",
+    "name": "Dumdum Bullets",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "5/6",
+    "availability": "Scarce"
+  },
+  {
+    "id": "hot-shot-charge",
+    "name": "Hot-Shot Charge",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "15/1",
+    "availability": "Scarce"
+  },
+  {
+    "id": "inferno-shells",
+    "name": "Inferno Shells",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "18/1",
+    "availability": "Rare"
+  },
+  {
+    "id": "man-stopper-bullets",
+    "name": "Man-Stopper Bullets",
+    "category": "Ammo",
+    "weight": "—",
+    "cost": "5/6",
+    "availability": "Scarce"
+  },
+  {
+    "id": "backpack",
+    "name": "Backpack",
+    "category": "Clothing & Personal Items",
+    "weight": "1 kg",
+    "cost": "10",
+    "availability": "Plentiful"
+  },
+  {
+    "id": "cameleoline-cloak",
+    "name": "Cameleoline Cloak",
+    "category": "Clothing & Personal Items",
+    "weight": "0.5 kg",
+    "cost": "500",
+    "availability": "Rare"
+  },
+  {
+    "id": "charm",
+    "name": "Charm",
+    "category": "Clothing & Personal Items",
+    "weight": "—",
+    "cost": "Var",
+    "availability": "Average"
+  },
+  {
+    "id": "chrono",
+    "name": "Chrono",
+    "category": "Clothing & Personal Items",
+    "weight": "—",
+    "cost": "40",
+    "availability": "Abundant"
+  },
+  {
+    "id": "clip-drop-harness",
+    "name": "Clip/Drop Harness",
+    "category": "Clothing & Personal Items",
+    "weight": "2 kg",
+    "cost": "25",
+    "availability": "Common"
+  },
+  {
+    "id": "clothing",
+    "name": "Clothing",
+    "category": "Clothing & Personal Items",
+    "weight": "—",
+    "cost": "Var",
+    "availability": "Abundant"
+  },
+  {
+    "id": "explosive-collar",
+    "name": "Explosive collar",
+    "category": "Clothing & Personal Items",
+    "weight": "1 kg",
+    "cost": "55",
+    "availability": "Rare"
+  },
+  {
+    "id": "filtration-plugs",
+    "name": "Filtration Plugs",
+    "category": "Clothing & Personal Items",
+    "weight": "—",
+    "cost": "15",
+    "availability": "Common"
+  },
+  {
+    "id": "infra-red-goggles",
+    "name": "Infra-Red Goggles",
+    "category": "Clothing & Personal Items",
+    "weight": "0.5 kg",
+    "cost": "275",
+    "availability": "Rare"
+  },
+  {
+    "id": "photo-visors-contacts",
+    "name": "Photo-Visors/Contacts",
+    "category": "Clothing & Personal Items",
+    "weight": "0.5 kg",
+    "cost": "100",
+    "availability": "Scarce"
+  },
+  {
+    "id": "re-breather",
+    "name": "Re-Breather",
+    "category": "Clothing & Personal Items",
+    "weight": "1 kg",
+    "cost": "50",
+    "availability": "Scarce"
+  },
+  {
+    "id": "recoil-glove",
+    "name": "Recoil Glove",
+    "category": "Clothing & Personal Items",
+    "weight": "0.5 kg",
+    "cost": "85",
+    "availability": "Common"
+  },
+  {
+    "id": "respirator-gas-mask",
+    "name": "Respirator/Gas-Mask",
+    "category": "Clothing & Personal Items",
+    "weight": "0.5 kg",
+    "cost": "25",
+    "availability": "Average"
+  },
+  {
+    "id": "void-suit",
+    "name": "Void Suit",
+    "category": "Clothing & Personal Items",
+    "weight": "8 kg",
+    "cost": "100",
+    "availability": "Plentiful"
+  },
+  {
+    "id": "synskin",
+    "name": "Synskin",
+    "category": "Clothing & Personal Items",
+    "weight": "2 kg",
+    "cost": "2,500",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "amasec",
+    "name": "Amasec",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "50",
+    "availability": "Scarce"
+  },
+  {
+    "id": "de-tox",
+    "name": "De-Tox",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "65",
+    "availability": "Rare"
+  },
+  {
+    "id": "frenzon",
+    "name": "Frenzon",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "95",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "injector",
+    "name": "Injector",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "5",
+    "availability": "Abundant"
+  },
+  {
+    "id": "lho-sticks",
+    "name": "Lho-sticks",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "10",
+    "availability": "Common"
+  },
+  {
+    "id": "medikit",
+    "name": "Medikit",
+    "category": "Drugs & Consumables",
+    "weight": "2 kg",
+    "cost": "150",
+    "availability": "Common"
+  },
+  {
+    "id": "obscura",
+    "name": "Obscura",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "285",
+    "availability": "Rare"
+  },
+  {
+    "id": "ration-packs",
+    "name": "Ration Packs",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "10",
+    "availability": "Plentiful"
+  },
+  {
+    "id": "recaf",
+    "name": "Recaf",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "5",
+    "availability": "Abundant"
+  },
+  {
+    "id": "rotgut-booze",
+    "name": "Rotgut Booze",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "10",
+    "availability": "Abundant"
+  },
+  {
+    "id": "sacred-machine-oil",
+    "name": "Sacred Machine Oil",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "150",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "slaught",
+    "name": "Slaught",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "75",
+    "availability": "Scarce"
+  },
+  {
+    "id": "spook",
+    "name": "Spook",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "395",
+    "availability": "Rare"
+  },
+  {
+    "id": "stimm",
+    "name": "Stimm",
+    "category": "Drugs & Consumables",
+    "weight": "—",
+    "cost": "20",
+    "availability": "Average"
+  },
+  {
+    "id": "auspex-scanner",
+    "name": "Auspex/Scanner",
+    "category": "Tools",
+    "weight": "0.5 kg",
+    "cost": "145",
+    "availability": "Scarce"
+  },
+  {
+    "id": "auto-quill",
+    "name": "Auto Quill",
+    "category": "Tools",
+    "weight": "—",
+    "cost": "55",
+    "availability": "Scarce"
+  },
+  {
+    "id": "combi-tool",
+    "name": "Combi-tool",
+    "category": "Tools",
+    "weight": "1 kg",
+    "cost": "200",
+    "availability": "Rare"
+  },
+  {
+    "id": "data-slate",
+    "name": "Data-slate",
+    "category": "Tools",
+    "weight": "0.5 kg",
+    "cost": "25",
+    "availability": "Common"
+  },
+  {
+    "id": "demolition-charge",
+    "name": "Demolition Charge",
+    "category": "Tools",
+    "weight": "1 kg",
+    "cost": "250",
+    "availability": "Scarce"
+  },
+  {
+    "id": "excruciator-kit",
+    "name": "Excruciator Kit",
+    "category": "Tools",
+    "weight": "1 kg",
+    "cost": "375",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "glow-globe-lamp-pack",
+    "name": "Glow-globe/Lamp pack",
+    "category": "Tools",
+    "weight": "0.5 kg",
+    "cost": "15",
+    "availability": "Abundant"
+  },
+  {
+    "id": "grapnel",
+    "name": "Grapnel",
+    "category": "Tools",
+    "weight": "2 kg",
+    "cost": "30",
+    "availability": "Common"
+  },
+  {
+    "id": "lascutter",
+    "name": "Lascutter",
+    "category": "Tools",
+    "weight": "4 kg",
+    "cost": "65",
+    "availability": "Average"
+  },
+  {
+    "id": "magnoculars",
+    "name": "Magnoculars",
+    "category": "Tools",
+    "weight": "0.5 kg",
+    "cost": "55",
+    "availability": "Average"
+  },
+  {
+    "id": "manacles",
+    "name": "Manacles",
+    "category": "Tools",
+    "weight": "1 kg",
+    "cost": "35",
+    "availability": "Plentiful"
+  },
+  {
+    "id": "micro-bead",
+    "name": "Micro-bead",
+    "category": "Tools",
+    "weight": "—",
+    "cost": "20",
+    "availability": "Average"
+  },
+  {
+    "id": "multikey",
+    "name": "Multikey",
+    "category": "Tools",
+    "weight": "—",
+    "cost": "150",
+    "availability": "Scarce"
+  },
+  {
+    "id": "pict-recorder",
+    "name": "Pict Recorder",
+    "category": "Tools",
+    "weight": "1 kg",
+    "cost": "100",
+    "availability": "Average"
+  },
+  {
+    "id": "psy-focus",
+    "name": "Psy-focus",
+    "category": "Tools",
+    "weight": "—",
+    "cost": "100",
+    "availability": "Rare"
+  },
+  {
+    "id": "screamers",
+    "name": "Screamers",
+    "category": "Tools",
+    "weight": "2 kg",
+    "cost": "140",
+    "availability": "Scarce"
+  },
+  {
+    "id": "stummers",
+    "name": "Stummers",
+    "category": "Tools",
+    "weight": "2 kg",
+    "cost": "25",
+    "availability": "Average"
+  },
+  {
+    "id": "vox-caster",
+    "name": "Vox-caster",
+    "category": "Tools",
+    "weight": "4 kg",
+    "cost": "300",
+    "availability": "Scarce"
+  },
+  {
+    "id": "writing-kit",
+    "name": "Writing Kit",
+    "category": "Tools",
+    "weight": "2 kg",
+    "cost": "20",
+    "availability": "Common"
+  },
+  {
+    "id": "bionic-arm",
+    "name": "Bionic Arm",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "1,000",
+    "availability": "Scarce"
+  },
+  {
+    "id": "bionic-locomotion",
+    "name": "Bionic Locomotion",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "1,500",
+    "availability": "Scarce"
+  },
+  {
+    "id": "bionic-respiratory-system",
+    "name": "Bionic Respiratory System",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "800",
+    "availability": "Rare"
+  },
+  {
+    "id": "auger-arrays",
+    "name": "Auger Arrays",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "1,000",
+    "availability": "Rare"
+  },
+  {
+    "id": "cortex-implants",
+    "name": "Cortex Implants",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "5,000",
+    "availability": "Very Rare"
+  },
+  {
+    "id": "cybernetic-senses",
+    "name": "Cybernetic Senses",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "2,250",
+    "availability": "Rare"
+  },
+  {
+    "id": "mind-impulse-unit",
+    "name": "Mind Impulse Unit",
+    "category": "Cybernetics",
+    "weight": "—",
+    "cost": "1,750",
+    "availability": "Rare"
+  }
+]

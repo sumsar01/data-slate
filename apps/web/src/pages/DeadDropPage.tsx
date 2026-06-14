@@ -335,6 +335,13 @@ export default function DeadDropPage() {
 
   const colRefs = useRef<Partial<Record<ClueStatus, HTMLDivElement | null>>>({})
 
+  // Stable refs to active pointer listeners so handlePointerUp can remove them
+  // without capturing itself (avoids react-hooks/immutability violation)
+  const listenersRef = useRef<{
+    move: ((e: PointerEvent) => void) | null
+    up: ((e: PointerEvent) => void) | null
+  }>({ move: null, up: null })
+
   const getStatusFromPoint = useCallback((x: number, y: number): ClueStatus | null => {
     for (const status of STATUS_ORDER) {
       const el = colRefs.current[status]
@@ -415,10 +422,11 @@ export default function DeadDropPage() {
     document.body.style.touchAction = ""
     document.body.style.userSelect = ""
 
-    window.removeEventListener("pointermove", handlePointerMove)
-    window.removeEventListener("pointerup", handlePointerUp)
-    window.removeEventListener("pointercancel", handlePointerUp)
-  }, [clues, getStatusFromPoint, handlePointerMove, removeGhost])
+    window.removeEventListener("pointermove", listenersRef.current.move!)
+    window.removeEventListener("pointerup", listenersRef.current.up!)
+    window.removeEventListener("pointercancel", listenersRef.current.up!)
+    listenersRef.current = { move: null, up: null }
+  }, [clues, getStatusFromPoint, removeGhost])
 
   const handleCardDragStart = useCallback((
     id: string,
@@ -442,6 +450,7 @@ export default function DeadDropPage() {
     document.body.style.touchAction = "none"
     document.body.style.userSelect = "none"
 
+    listenersRef.current = { move: handlePointerMove, up: handlePointerUp }
     window.addEventListener("pointermove", handlePointerMove)
     window.addEventListener("pointerup", handlePointerUp)
     window.addEventListener("pointercancel", handlePointerUp)

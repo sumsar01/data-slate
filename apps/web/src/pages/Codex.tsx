@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import "./Admin.css"
 import "./Codex.css"
-import type { Skill, Talent, Weapon, PsychicPower, CodexSection } from "@data-slate/shared"
+import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, CodexSection } from "@data-slate/shared"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
 
@@ -10,6 +10,8 @@ const SECTIONS: { key: CodexSection; label: string }[] = [
   { key: "skills",  label: "SKILLS" },
   { key: "talents", label: "TALENTS" },
   { key: "weapons", label: "WEAPONS" },
+  { key: "armour",  label: "ARMOUR" },
+  { key: "gear",    label: "GEAR" },
   { key: "powers",  label: "PSYCHIC POWERS" },
 ]
 
@@ -112,6 +114,99 @@ function WeaponsTable({ items }: { items: Weapon[] }) {
   )
 }
 
+function ArmourTable({ items }: { items: ArmourItem[] }) {
+  const groups = new Map<string, ArmourItem[]>()
+  for (const a of items) {
+    if (!groups.has(a.category)) groups.set(a.category, [])
+    groups.get(a.category)!.push(a)
+  }
+
+  return (
+    <>
+      {[...groups.entries()].map(([cat, armours]) => (
+        <section key={cat} className="codex-weapon-group">
+          <div className="codex-group-header">[ {cat.toUpperCase()} ]</div>
+          <table className="codex-table codex-table--armour">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>LOCATIONS</th>
+                <th>AP</th>
+                <th>WT</th>
+                <th>COST</th>
+                <th>AVAILABILITY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {armours.map((a) => (
+                <tr key={a.id}>
+                  <td className="codex-name">{a.name}</td>
+                  <td className="codex-muted">{a.locations}</td>
+                  <td className="codex-highlight codex-threshold">{a.ap}</td>
+                  <td>{a.weight}</td>
+                  <td>{a.cost}</td>
+                  <td className="codex-muted">{a.availability}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ))}
+    </>
+  )
+}
+
+const GEAR_CATEGORY_ORDER = [
+  "Ammo",
+  "Clothing & Personal Items",
+  "Drugs & Consumables",
+  "Tools",
+  "Cybernetics",
+]
+
+function GearTable({ items }: { items: GearItem[] }) {
+  const groups = new Map<string, GearItem[]>()
+  for (const g of items) {
+    if (!groups.has(g.category)) groups.set(g.category, [])
+    groups.get(g.category)!.push(g)
+  }
+
+  const orderedGroups = [
+    ...GEAR_CATEGORY_ORDER.filter((c) => groups.has(c)).map((c) => [c, groups.get(c)!] as [string, GearItem[]]),
+    ...[...groups.entries()].filter(([c]) => !GEAR_CATEGORY_ORDER.includes(c)),
+  ]
+
+  return (
+    <>
+      {orderedGroups.map(([cat, gears]) => (
+        <section key={cat} className="codex-weapon-group">
+          <div className="codex-group-header">[ {cat.toUpperCase()} ]</div>
+          <table className="codex-table codex-table--gear">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>WT</th>
+                <th>COST</th>
+                <th>AVAILABILITY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {gears.map((g) => (
+                <tr key={g.id}>
+                  <td className="codex-name">{g.name}</td>
+                  <td>{g.weight}</td>
+                  <td>{g.cost}</td>
+                  <td className="codex-muted">{g.availability}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ))}
+    </>
+  )
+}
+
 const DISCIPLINE_ORDER = ["Minor", "Biomancy", "Divination", "Pyromancy", "Telekinetics", "Telepathy"]
 
 function PowersTable({ items }: { items: PsychicPower[] }) {
@@ -161,7 +256,7 @@ function PowersTable({ items }: { items: PsychicPower[] }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-type AnyItem = Skill | Talent | Weapon | PsychicPower
+type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem
 
 export default function Codex() {
   const [activeSection, setActiveSection] = useState<CodexSection>("skills")
@@ -272,10 +367,12 @@ export default function Codex() {
           </div>
         ) : (
           <>
-            {activeSection === "skills"  && <SkillsTable  items={items as Skill[]}       />}
-            {activeSection === "talents" && <TalentsTable items={items as Talent[]}      />}
-            {activeSection === "weapons" && <WeaponsTable items={items as Weapon[]}      />}
-            {activeSection === "powers"  && <PowersTable  items={items as PsychicPower[]}/>}
+            {activeSection === "skills"  && <SkillsTable  items={items as Skill[]}        />}
+            {activeSection === "talents" && <TalentsTable items={items as Talent[]}       />}
+            {activeSection === "weapons" && <WeaponsTable items={items as Weapon[]}       />}
+            {activeSection === "armour"  && <ArmourTable  items={items as ArmourItem[]}   />}
+            {activeSection === "gear"    && <GearTable    items={items as GearItem[]}     />}
+            {activeSection === "powers"  && <PowersTable  items={items as PsychicPower[]} />}
           </>
         )}
       </main>
@@ -286,3 +383,4 @@ export default function Codex() {
     </div>
   )
 }
+

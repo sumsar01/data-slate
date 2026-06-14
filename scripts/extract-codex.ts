@@ -77,9 +77,12 @@ export type PsychicPower = {
 
 // ─── PDF extraction ───────────────────────────────────────────────────────────
 
-async function extractPages(path: string): Promise<PageData[]> {
+async function loadDoc(path: string): Promise<any> {
   const data = new Uint8Array(readFileSync(path))
-  const doc = await pdfjsLib.getDocument({ data, disableWorker: true }).promise
+  return pdfjsLib.getDocument({ data, disableWorker: true }).promise
+}
+
+async function extractPages(doc: any): Promise<PageData[]> {
   const total = doc.numPages
   const pages: PageData[] = []
 
@@ -110,6 +113,54 @@ async function extractPages(path: string): Promise<PageData[]> {
   return pages
 }
 
+/**
+ * Extract a single page using the operator list, which gives the correct
+ * unicode text directly (bypassing pdfjs font-tracking garbling).
+ *
+ * The PDF exclusively uses setTextMatrix (Tm) for absolute positioning —
+ * no moveText/nextLine ops — so we only need to track setTextMatrix.
+ *
+ * pageNum is 1-indexed (pdfjs convention).
+ */
+async function extractPageOp(doc: any, pageNum: number): Promise<PageData> {
+  const page = await doc.getPage(pageNum)
+  const ops = await page.getOperatorList()
+  const OPS = pdfjsLib.OPS
+
+  const items: Item[] = []
+  const rows = new Map<number, Item[]>()
+
+  let currentX = 0
+  let currentY = 0
+
+  for (let i = 0; i < ops.fnArray.length; i++) {
+    const fn = ops.fnArray[i]
+    if (fn === OPS.setTextMatrix) {
+      const m = ops.argsArray[i][0]
+      currentX = m[4]
+      currentY = m[5]
+    } else if (fn === OPS.showText) {
+      const glyphArr = ops.argsArray[i][0] as any[]
+      let text = ""
+      for (const g of glyphArr) {
+        if (typeof g !== "number" && g?.unicode) text += g.unicode
+      }
+      text = text.replace(/\s+/g, " ").trim()
+      if (!text) continue
+
+      const x = Math.round(currentX)
+      const y = Math.round(currentY)
+      const item: Item = { x, y, w: 0, str: text }
+      items.push(item)
+      if (!rows.has(y)) rows.set(y, [])
+      rows.get(y)!.push(item)
+    }
+  }
+
+  for (const rowItems of rows.values()) rowItems.sort((a, b) => a.x - b.x)
+  return { items, rows }
+}
+
 /** Get rows sorted top-to-bottom (highest Y first) */
 function getRows(page: PageData): Array<{ y: number; items: Item[] }> {
   return [...page.rows.entries()]
@@ -132,11 +183,10 @@ function normItem(s: string): string {
   const tokens = s.trim().split(/\s+/).filter(Boolean)
   if (tokens.length === 0) return ""
 
-  // Pure letter-tracking: every token is ≤ 6 chars
+  // Letter-tracking detection:
+  //   allShort  = every token is ≤ 6 chars (handles "C o m b at", "Bas ic", etc.)
+  //   singleCharRatio = ≥50% tokens ≤ 2 chars with ≥2 total (handles "M ast er")
   const allShort = tokens.every((t) => t.length <= 6)
-
-  // Mixed letter-tracking: most tokens are single chars but one chunk is >6
-  // (e.g. "C o nstrict" → tokens ["C","o","nstrict"] where "nstrict" > 6)
   const singleCharRatio = tokens.filter((t) => t.length <= 2).length / tokens.length
   const likelyTracked = allShort || (tokens.length >= 2 && singleCharRatio >= 0.5)
 
@@ -160,6 +210,15 @@ function normItem(s: string): string {
 /** Join row items into a string using gap-based spacing */
 function normRow(items: Item[]): string {
   return items.map((i) => normItem(i.str)).join(" ").replace(/\s{3,}/g, "  ").trim()
+}
+
+/**
+ * Normalize a single text item from the operator-list extraction.
+ * Op-list items already have correct unicode (no letter-tracking garble),
+ * so we only collapse excess whitespace without any tracking-collapse logic.
+ */
+function normOpItem(s: string): string {
+  return s.replace(/\s+/g, " ").trim()
 }
 
 function slug(s: string): string {
@@ -359,9 +418,9 @@ function parseTalents(pages: PageData[], startPage: number, endPage: number): Ta
       const prereqItems = items.filter(i => i.x >= TALENT_NAME_END && i.x < TALENT_DESC_START)
       const descItems  = items.filter(i => i.x >= TALENT_DESC_START)
 
-      const nameText  = nameItems.map(i => normItem(i.str)).filter(Boolean).join(" ").trim()
-      const prereqText = prereqItems.map(i => normItem(i.str)).filter(Boolean).join(" ").trim()
-      const descText  = descItems.map(i => normItem(i.str)).filter(Boolean).join(" ").trim()
+      const nameText  = nameItems.map(i => normOpItem(i.str)).filter(Boolean).join(" ").trim()
+      const prereqText = prereqItems.map(i => normOpItem(i.str)).filter(Boolean).join(" ").trim()
+      const descText  = descItems.map(i => normOpItem(i.str)).filter(Boolean).join(" ").trim()
 
       // Skip decorative / empty rows
       if (!nameText && !prereqText && !descText) continue
@@ -494,6 +553,189 @@ function parseWeapons(pages: PageData[], startPage: number, endPage: number): We
   }
 
   return weapons
+}
+
+// ─── Armour parser ────────────────────────────────────────────────────────────
+
+export type ArmourItem = {
+  id: string
+  name: string
+  category: string
+  locations: string
+  ap: string
+  weight: string
+  cost: string
+  availability: string
+}
+
+/**
+ * Parse Table 5-12: Armour (page 146).
+ * Op-list items are correctly rendered.
+ * Columns: Name(x54) | Locations(x181-220) | AP(x297-305) | Wt(x341-347) | Cost(x399-410) | Avail(x461-477)
+ * Category headers are rows with ONLY a name item and nothing in other columns.
+ */
+function parseArmour(pages: PageData[], startPage: number, endPage: number): ArmourItem[] {
+  const items: ArmourItem[] = []
+  let category = "Unknown"
+  const seenIds = new Set<string>()
+
+  for (let p = startPage; p <= endPage && p < pages.length; p++) {
+    for (const { items: rowItems } of getRows(pages[p])) {
+      // Filter to armour table x range (54-500)
+      const row = rowItems.filter(i => i.x >= 54 && i.x <= 500)
+      if (row.length === 0) continue
+
+      const rowText = row.map(i => i.str).join(" ")
+
+      // Stop at next chapter
+      if (/Table\s*5[-–]13|Clothing|Personal\s+Items/i.test(rowText)) break
+      // Skip header row
+      if (/^Armour\s+Type|^Name.*Location/i.test(rowText)) continue
+      // Skip decorative/page-number rows
+      if (/^[\d\s†]+$/.test(rowText.trim())) continue
+
+      // Category header: only name items at x < 180, nothing else
+      const nameItems = row.filter(i => i.x < 180)
+      const statItems = row.filter(i => i.x >= 280)
+
+      if (nameItems.length > 0 && statItems.length === 0 && row.length <= 2) {
+        // Pure category header (sometimes has a location-column item too)
+        const possibleHeader = nameItems.map(i => i.str).join(" ").trim()
+        if (possibleHeader.length > 2 && !/^\d+$/.test(possibleHeader)) {
+          category = possibleHeader
+        }
+        continue
+      }
+
+      // Item row: must have an AP value (~integer) and an availability value
+      const apItem = row.find(i => i.x >= 280 && i.x <= 315 && /^\d+$/.test(i.str.trim()))
+      const availItem = row.find(i => i.x >= 450 && AVAILABILITY_VALS.some(av => new RegExp(av, "i").test(i.str)))
+      if (!apItem || !availItem) continue
+
+      const name = nameItems.map(i => i.str).join(" ").trim()
+      if (!name || name.length < 2) continue
+      if (seenIds.has(slug(name))) continue
+
+      const locItems = row.filter(i => i.x >= 180 && i.x < 280)
+      const wtItem = row.find(i => i.x >= 320 && i.x < 390)
+      const costItem = row.find(i => i.x >= 390 && i.x < 450)
+
+      seenIds.add(slug(name))
+      items.push({
+        id: slug(name),
+        name,
+        category,
+        locations: locItems.map(i => i.str).join(" ").trim() || "—",
+        ap: apItem.str,
+        weight: wtItem?.str ?? "—",
+        cost: costItem?.str ?? "—",
+        availability: availItem.str,
+      })
+    }
+  }
+  return items
+}
+
+// ─── Gear parser (Ammo, Clothing, Drugs, Tools, Cybernetics) ─────────────────
+
+export type GearItem = {
+  id: string
+  name: string
+  category: string
+  weight: string
+  cost: string
+  availability: string
+}
+
+const GEAR_TABLE_MARKERS: Array<[RegExp, string]> = [
+  [/Table\s*5[-–]11.*Ammo/i,                      "Ammo"],
+  [/Table\s*5[-–]13.*Clothing/i,                   "Clothing & Personal Items"],
+  [/Table\s*5[-–]14.*Drugs/i,                      "Drugs & Consumables"],
+  [/Table\s*5[-–]16.*Tools/i,                      "Tools"],
+  [/Table\s*5[-–]1[89].*Cybernetics|Cybernetics/i, "Cybernetics"],
+]
+
+/**
+ * Parse general gear tables: Ammo, Clothing, Drugs, Tools, Cybernetics.
+ *
+ * These tables have 3–4 columns: Name | [Weight] | Cost | Availability.
+ * Op-list items are used (correct unicode, no tracking garble).
+ * The table X range is determined from the marker row's leftmost item.
+ *
+ * Pages scanned: 140–162 (covers all armoury gear tables).
+ */
+function parseGear(pages: PageData[], startPage: number, endPage: number): GearItem[] {
+  const items: GearItem[] = []
+  const seenIds = new Set<string>()
+
+  for (let p = startPage; p <= endPage && p < pages.length; p++) {
+    const rows = getRows(pages[p])
+    for (let r = 0; r < rows.length; r++) {
+      const rowItems = rows[r].items
+
+      // Check for a gear table marker
+      for (const [marker, category] of GEAR_TABLE_MARKERS) {
+        const markerRow = rowItems.map(i => i.str).join(" ")
+        if (!marker.test(markerRow)) continue
+
+        // Table column boundaries: determined by the marker header x position
+        const tableMinX = Math.min(...rowItems.map(i => i.x)) - 5
+        const tableMaxX = tableMinX + 300
+
+        // Parse rows until next section break
+        for (let rr = r + 1; rr < rows.length; rr++) {
+          const tableItems = rows[rr].items.filter(i => i.x >= tableMinX && i.x <= tableMaxX)
+          if (tableItems.length === 0) continue
+
+          const rowStr = tableItems.map(i => i.str).join(" ").trim()
+
+          // Stop on next table marker
+          if (GEAR_TABLE_MARKERS.some(([m]) => m.test(rowStr))) break
+          if (/Table\s*5[-–]\d/i.test(rowStr)) break
+
+          // Skip column headers (Name / Wt / Cost / Availability)
+          if (/^Name\b|^\s*Wt\s+Cost|^Cost.*Availability/i.test(rowStr)) continue
+          // Skip footnote markers and page numbers
+          if (/^[†\d\s]+$/.test(rowStr)) continue
+          if (/^\s*$/.test(rowStr)) continue
+
+          // Detect availability value as anchor (last matching item in the row)
+          const availIdx = tableItems.findIndex(i =>
+            AVAILABILITY_VALS.some(av => new RegExp("^" + av + "$", "i").test(i.str.trim()))
+          )
+          if (availIdx < 1) continue
+
+          const avail = tableItems[availIdx].str.trim()
+          const cost = tableItems[availIdx - 1]?.str.trim() ?? "—"
+
+          let name = ""
+          let weight = "—"
+
+          if (availIdx === 2) {
+            // 3-column: name | cost | availability
+            name = tableItems[0].str.trim()
+          } else if (availIdx >= 3) {
+            // 4-column: name | weight | cost | availability
+            name = tableItems.slice(0, availIdx - 2).map(i => i.str).join(" ").trim()
+            weight = tableItems[availIdx - 2].str.trim()
+          }
+
+          if (!name || name.length < 2) continue
+          // Skip header-like names
+          if (/^(Name|Wt|Cost|Avail)/i.test(name)) continue
+
+          const id = slug(name)
+          if (seenIds.has(id)) continue
+          seenIds.add(id)
+
+          items.push({ id, name, category, weight, cost, availability: avail })
+        }
+        break  // only one marker can match per row
+      }
+    }
+  }
+
+  return items
 }
 
 // ─── Psychic Powers parser ────────────────────────────────────────────────────
@@ -651,7 +893,8 @@ function parsePowers(pages: PageData[], startPage: number, endPage: number): Psy
 
 async function main() {
   console.log("Reading PDF:", PDF_PATH)
-  const pages = await extractPages(PDF_PATH)
+  const doc = await loadDoc(PDF_PATH)
+  const pages = await extractPages(doc)
   console.log(`${pages.length} pages ready.`)
 
   if (RAW_ONLY) {
@@ -671,6 +914,25 @@ async function main() {
   console.log("\nFinding section boundaries...")
   const sections = findSections(pages)
 
+  // Re-extract talent pages with the operator-list approach, which gives correct
+  // unicode directly (bypassing pdfjs font-tracking garbling in getTextContent).
+  // Talent table spans talentsStart through talentsStart+2 (≈3 pages).
+  const talentsStart = sections.talents + 1
+  const talentsOpEnd = talentsStart + 2
+  console.log(`\nRe-extracting talent pages ${talentsStart + 1}–${talentsOpEnd + 1} via op-list...`)
+  for (let p = talentsStart; p <= talentsOpEnd; p++) {
+    pages[p] = await extractPageOp(doc, p + 1)  // pdfjs is 1-indexed
+  }
+
+  // Re-extract armoury gear pages via op-list (pages 140–162, 0-indexed 139–161).
+  // getTextContent garbles the tracked font on these pages.
+  const GEAR_OP_START = 139   // PDF page 140 (0-indexed)
+  const GEAR_OP_END   = 161   // PDF page 162 (0-indexed)
+  console.log(`Re-extracting gear pages ${GEAR_OP_START + 1}–${GEAR_OP_END + 1} via op-list...`)
+  for (let p = GEAR_OP_START; p <= GEAR_OP_END; p++) {
+    pages[p] = await extractPageOp(doc, p + 1)
+  }
+
   mkdirSync(OUTPUT_DIR, { recursive: true })
 
   // ── Skills ──────────────────────────────────────────────────────────────────
@@ -682,7 +944,6 @@ async function main() {
   // ── Talents ─────────────────────────────────────────────────────────────────
   // Quick-ref table starts ONE page after the Chapter IV intro heading.
   // Scan up to +3 pages from the table start to be safe.
-  const talentsStart = sections.talents + 1
   console.log("\nParsing talents (pages", talentsStart + 1, "–", talentsStart + 2, ")...")
   const talents = parseTalents(pages, talentsStart, talentsStart + 2)
   console.log(`  → ${talents.length} talents`)
@@ -701,9 +962,20 @@ async function main() {
   console.log(`  → ${powers.length} powers`)
   writeFileSync(join(OUTPUT_DIR, "powers.json"), JSON.stringify(powers, null, 2))
 
-  // ── Gear ─────────────────────────────────────────────────────────────────────
-  console.log("\nGear: prose-heavy section, creating placeholder")
-  writeFileSync(join(OUTPUT_DIR, "gear.json"), JSON.stringify([], null, 2))
+  // ── Armour ───────────────────────────────────────────────────────────────────
+  // Table 5-12 is on page 146 (0-indexed 145); scan a couple of pages in case it continues.
+  const armourStart = 145
+  console.log("\nParsing armour (pages", armourStart + 1, "–", armourStart + 2, ")...")
+  const armour = parseArmour(pages, armourStart, armourStart + 1)
+  console.log(`  → ${armour.length} armour items`)
+  writeFileSync(join(OUTPUT_DIR, "armour.json"), JSON.stringify(armour, null, 2))
+
+  // ── Gear (Ammo, Clothing, Drugs, Tools, Cybernetics) ─────────────────────────
+  // Tables scattered across pages 143–161; op-list re-extracted above.
+  console.log("\nParsing gear (pages 143–162)...")
+  const gear = parseGear(pages, GEAR_OP_START, GEAR_OP_END)
+  console.log(`  → ${gear.length} gear items`)
+  writeFileSync(join(OUTPUT_DIR, "gear.json"), JSON.stringify(gear, null, 2))
 
   console.log(`\nDone → ${OUTPUT_DIR}`)
 
@@ -713,6 +985,11 @@ async function main() {
   console.log(`  Talents with prereqs: ${talents.filter((t) => t.prerequisites).length}/${talents.length}`)
   console.log(`  Weapons with availability: ${weapons.filter((w) => w.availability !== "—").length}/${weapons.length}`)
   console.log(`  Powers with threshold: ${powers.filter((p) => p.threshold !== "—").length}/${powers.length}`)
+  console.log(`  Armour items by category:`, [...new Set(armour.map(a => a.category))].join(", "))
+  console.log(`  Gear items by category:`, [...new Map(gear.map(g => [g.category, gear.filter(x => x.category === g.category).length])).entries()].map(([k,v])=>k+'('+v+')').join(', '))
+  // Show first 5 talents for quick quality check
+  console.log("\n  Sample talents:")
+  talents.slice(0, 5).forEach(t => console.log(`    ${t.name} | ${t.prerequisites ?? "—"} | ${t.description}`))
 }
 
 main().catch((err) => {

@@ -44,4 +44,24 @@ export type PsychicPower = {
   description: string
 }
 
-export type CodexSection = "skills" | "talents" | "weapons" | "powers"
+export type ArmourItem = {
+  id: string
+  name: string
+  category: string
+  locations: string
+  ap: string
+  weight: string
+  cost: string
+  availability: string
+}
+
+export type GearItem = {
+  id: string
+  name: string
+  category: string
+  weight: string
+  cost: string
+  availability: string
+}
+
+export type CodexSection = "skills" | "talents" | "weapons" | "powers" | "armour" | "gear"

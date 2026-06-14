@@ -2,13 +2,13 @@ import { Hono } from "hono"
 import { readFileSync } from "fs"
 import { join } from "path"
 import { fileURLToPath } from "url"
-import type { Skill, Talent, Weapon, PsychicPower, CodexSection } from "@data-slate/shared"
+import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, CodexSection } from "@data-slate/shared"
 
 const DATA_DIR = fileURLToPath(new URL("../data/codex", import.meta.url))
 
-type AnyItem = Skill | Talent | Weapon | PsychicPower
+type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem
 
-const VALID_SECTIONS: CodexSection[] = ["skills", "talents", "weapons", "powers"]
+const VALID_SECTIONS: CodexSection[] = ["skills", "talents", "weapons", "powers", "armour", "gear"]
 
 // Load JSON once, cache in memory
 const cache: Partial<Record<CodexSection, AnyItem[]>> = {}
@@ -47,6 +47,15 @@ function matchesQuery(item: AnyItem, section: CodexSection, q: string): boolean 
       return p.discipline.toLowerCase().includes(q) ||
              p.focus_time.toLowerCase().includes(q)
     }
+    case "armour": {
+      const a = item as ArmourItem
+      return a.category.toLowerCase().includes(q) ||
+             a.locations.toLowerCase().includes(q)
+    }
+    case "gear": {
+      const g = item as GearItem
+      return g.category.toLowerCase().includes(q)
+    }
     default:
       return false
   }
@@ -54,7 +63,7 @@ function matchesQuery(item: AnyItem, section: CodexSection, q: string): boolean 
 
 export const codexRouter = new Hono()
 
-// GET /codex?section=skills|talents|weapons|powers[&q=search]
+// GET /codex?section=skills|talents|weapons|powers|armour|gear[&q=search]
 codexRouter.get("/", (c) => {
   const sectionParam = c.req.query("section") as CodexSection | undefined
   if (!sectionParam || !VALID_SECTIONS.includes(sectionParam)) {
