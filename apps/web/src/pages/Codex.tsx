@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, Fragment } from "react"
 import { Link } from "react-router-dom"
 import "./Admin.css"
 import "./Codex.css"
@@ -43,6 +43,8 @@ function SkillsTable({ items }: { items: Skill[] }) {
 }
 
 function TalentsTable({ items }: { items: Talent[] }) {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
   return (
     <table className="codex-table">
       <thead>
@@ -53,13 +55,32 @@ function TalentsTable({ items }: { items: Talent[] }) {
         </tr>
       </thead>
       <tbody>
-        {items.map((t) => (
-          <tr key={t.id}>
-            <td className="codex-name">{t.name}</td>
-            <td className="codex-muted codex-prereq">{t.prerequisites ?? "—"}</td>
-            <td className="codex-desc">{t.description}</td>
-          </tr>
-        ))}
+        {items.map((t) => {
+          const hasLong = Boolean(t.longDescription)
+          const expanded = expandedId === t.id
+          return (
+            <Fragment key={t.id}>
+              <tr
+                className={hasLong ? "codex-row-clickable" : ""}
+                onClick={hasLong ? () => setExpandedId(expanded ? null : t.id) : undefined}
+              >
+                <td className="codex-name">{t.name}</td>
+                <td className="codex-muted codex-prereq">{t.prerequisites ?? "—"}</td>
+                <td className="codex-desc">
+                  {hasLong && (
+                    <span className="codex-expand-icon">{expanded ? "▾" : "▸"}</span>
+                  )}
+                  {t.description}
+                </td>
+              </tr>
+              {expanded && t.longDescription && (
+                <tr className="codex-row-expanded">
+                  <td colSpan={3} className="codex-long-desc">{t.longDescription}</td>
+                </tr>
+              )}
+            </Fragment>
+          )
+        })}
       </tbody>
     </table>
   )

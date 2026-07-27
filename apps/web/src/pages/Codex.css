@@ -201,6 +201,30 @@
   max-width: 340px;
 }
 
+.codex-row-clickable {
+  cursor: pointer;
+}
+
+.codex-expand-icon {
+  display: inline-block;
+  width: 0.9em;
+  color: #ffb000;
+  font-size: 0.55rem;
+}
+
+.codex-row-expanded td {
+  background: rgba(255, 176, 0, 0.04);
+  border-bottom: 1px solid #1a0e00;
+}
+
+.codex-long-desc {
+  color: #c88800 !important;
+  font-size: 0.56rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  padding: 0.5rem 0.75rem 0.75rem 1.25rem !important;
+}
+
 .codex-prereq {
   white-space: nowrap;
   font-size: 0.52rem;

@@ -14,6 +14,7 @@ export type Talent = {
   name: string
   prerequisites: string | null
   description: string
+  longDescription: string | null
 }
 
 export type Weapon = {

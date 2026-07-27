@@ -45,6 +45,7 @@ export type Talent = {
   name: string
   prerequisites: string | null
   description: string
+  longDescription: string | null
 }
 
 export type Weapon = {
@@ -397,6 +398,10 @@ const TALENT_DESC_START = 285  // items with x ≥ this are part of the descript
 function parseTalents(pages: PageData[], startPage: number, endPage: number): Talent[] {
   const talents: Talent[] = []
   let current: Talent | null = null
+  // The first parsed page also contains the chapter intro prose and the
+  // "Talent Groups" sidebar, both of which precede the actual Table 4-1.
+  // Don't accept entries until we've passed the table's own header row.
+  let inTable = false
 
   const flushCurrent = () => {
     if (current && current.name.length > 1 && !talents.find((t) => t.id === current!.id)) {
@@ -426,6 +431,15 @@ function parseTalents(pages: PageData[], startPage: number, endPage: number): Ta
       if (!nameText && !prereqText && !descText) continue
       // Skip footnote-only rows (†) and page numbers
       if (/^[†\d\s]+$/.test(nameText + prereqText + descText)) continue
+
+      // Table 4-1's own column header ("Talent Name | Prerequisite | Benefit")
+      // marks where the real table begins — everything before it on this page
+      // (chapter intro prose, "Talent Groups" sidebar) must be ignored.
+      if (!inTable) {
+        if (/Talent\s*Name|Table\s*4\s*[-–]\s*1/i.test(nameText + prereqText + descText)) inTable = true
+        continue
+      }
+
       // Skip column header rows
       if (/Talent.*Name|Name.*Type|Prerequisite.*Characteristic/i.test(nameText + descText)) continue
       // Skip chapter-heading rows
@@ -440,6 +454,7 @@ function parseTalents(pages: PageData[], startPage: number, endPage: number): Ta
           name: clean(nameText),
           prerequisites: prereq,
           description: clean(descText),
+          longDescription: null,
         }
       } else if (current && descText) {
         // Continuation line (name column empty, description wraps)
@@ -450,6 +465,126 @@ function parseTalents(pages: PageData[], startPage: number, endPage: number): Ta
 
   flushCurrent()
   return talents
+}
+
+// ─── Talent Descriptions (long-form prose) parser ────────────────────────────
+
+function fingerprint(s: string): string {
+  return s
+    .replace(/ﬂ/g, "fl")
+    .replace(/ﬁ/g, "fi")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+}
+
+/**
+ * Split a page's items into up to 3 left-to-right column bands.
+ *
+ * Column x-positions shift slightly from page to page in this section (odd
+ * vs even page margins), so fixed pixel thresholds misclassify some pages —
+ * e.g. one page's column 2 starts at x=245 while another's starts at x=211,
+ * which is inside a fixed column-1 band sized for the first page. Instead,
+ * self-calibrate per page: find the 2 largest gaps between consecutive
+ * distinct x-values and cut there. A stray outlier (e.g. a page number far
+ * to the right) just becomes noise inside whichever band it falls into —
+ * harmless, since those rows get filtered out elsewhere as digit-only.
+ */
+function splitColumns(items: Item[]): Item[][] {
+  // Ignore sparse x-positions (e.g. a lone page number off to the side) when
+  // locating cuts — a stray outlier's isolated gap would otherwise outrank
+  // the true, narrower column boundary for one of the top-2 gap slots.
+  const counts = new Map<number, number>()
+  for (const it of items) counts.set(it.x, (counts.get(it.x) ?? 0) + 1)
+  const xs = [...counts.keys()].filter((x) => counts.get(x)! >= 2).sort((a, b) => a - b)
+  if (xs.length < 3) return [items]
+
+  const gaps = xs.slice(1).map((x, i) => ({ at: x, size: x - xs[i] }))
+  const cuts = gaps
+    .filter((g) => g.size > 25)
+    .sort((a, b) => b.size - a.size)
+    .slice(0, 2)
+    .map((g) => g.at)
+    .sort((a, b) => a - b)
+
+  if (cuts.length === 0) return [items]
+
+  const bands: Item[][] = []
+  let prev = -Infinity
+  for (const cut of [...cuts, Infinity]) {
+    const band = items.filter((i) => i.x >= prev && i.x < cut)
+    if (band.length > 0) bands.push(band)
+    prev = cut
+  }
+  return bands
+}
+
+/**
+ * Parse the 3-column "Talent Descriptions" prose section that follows the
+ * quick-ref table (pages 114+), producing slug(name) -> full paragraph text.
+ *
+ * Header rows use a tracked/small-caps font where op-list extraction still
+ * splits each name into several fragments with unpredictable casing (e.g.
+ * "Concealed Cavity" comes through as "c", "o N c e a l e d", "c a V I t Y").
+ * Reconstructing proper spacing/casing from styling alone is unreliable, so
+ * instead each row's raw fingerprint (lowercase letters only, punctuation and
+ * whitespace stripped) is matched against known talent names already parsed
+ * from the quick-ref table — an exact match marks the start of that talent's
+ * description block. This sidesteps the casing problem entirely.
+ */
+function parseTalentDescriptions(
+  pages: PageData[],
+  startPage: number,
+  endPage: number,
+  knownTalents: Talent[],
+): Record<string, string> {
+  const byFingerprint = new Map<string, string>()
+  for (const t of knownTalents) byFingerprint.set(fingerprint(t.name), t.id)
+
+  const result: Record<string, string> = {}
+  let currentId: string | null = null
+
+  for (let p = startPage; p <= endPage && p < pages.length; p++) {
+    const pageText = getRows(pages[p]).map((r) => normRow(r.items)).join(" ")
+    // Stop once the Armoury/Money chapter begins
+    if (/Table\s*5[-–]\s*1\b|Income\s+and\s+Social\s+Class|THE\s+ARMOURY/i.test(pageText)) break
+
+    const columns = splitColumns(pages[p].items)
+
+    for (const colItems of columns) {
+      const rows = new Map<number, Item[]>()
+      for (const it of colItems) {
+        if (!rows.has(it.y)) rows.set(it.y, [])
+        rows.get(it.y)!.push(it)
+      }
+      const sortedRows = [...rows.entries()].sort((a, b) => b[0] - a[0])
+
+      for (const [, rowItems] of sortedRows) {
+        rowItems.sort((a, b) => a.x - b.x)
+        const rawJoined = rowItems.map((i) => i.str).join("")
+
+        // Skip footnote/page-number-only rows
+        if (/^[\d†\s]*$/.test(rawJoined.trim())) continue
+
+        const fp = fingerprint(rawJoined)
+        if (fp.length >= 3 && byFingerprint.has(fp)) {
+          currentId = byFingerprint.get(fp)!
+          continue
+        }
+
+        const rowText = rowItems.map((i) => normOpItem(i.str)).filter(Boolean).join(" ").trim()
+        if (!rowText) continue
+        // Skip labels already captured elsewhere — not part of the prose body
+        if (/^Prerequisites\s*:/i.test(rowText)) continue
+        if (/^Talent\s+Groups?\s*:/i.test(rowText)) continue
+
+        if (currentId) {
+          result[currentId] = result[currentId] ? clean(result[currentId] + " " + rowText) : clean(rowText)
+        }
+      }
+    }
+  }
+
+  return result
 }
 
 // ─── Weapons parser ───────────────────────────────────────────────────────────
@@ -916,12 +1051,24 @@ async function main() {
 
   // Re-extract talent pages with the operator-list approach, which gives correct
   // unicode directly (bypassing pdfjs font-tracking garbling in getTextContent).
-  // Talent table spans talentsStart through talentsStart+2 (≈3 pages).
-  const talentsStart = sections.talents + 1
+  // The quick-ref Table 4-1 begins on the SAME page as the "Chapter IV: Gaining
+  // Talents" heading (verified against the source PDF), not the page after it —
+  // starting at sections.talents + 1 skips the A/B/early-C rows on that first page.
+  // Table spans talentsStart through talentsStart+2 (3 pages).
+  const talentsStart = sections.talents
   const talentsOpEnd = talentsStart + 2
   console.log(`\nRe-extracting talent pages ${talentsStart + 1}–${talentsOpEnd + 1} via op-list...`)
   for (let p = talentsStart; p <= talentsOpEnd; p++) {
     pages[p] = await extractPageOp(doc, p + 1)  // pdfjs is 1-indexed
+  }
+
+  // Re-extract the Talent Descriptions prose section (3-column layout) that
+  // immediately follows the quick-ref table, through to the Armoury chapter.
+  const TALENT_DESC_OP_START = talentsOpEnd + 1
+  const TALENT_DESC_OP_END = talentsOpEnd + 12
+  console.log(`Re-extracting talent description pages ${TALENT_DESC_OP_START + 1}–${TALENT_DESC_OP_END + 1} via op-list...`)
+  for (let p = TALENT_DESC_OP_START; p <= TALENT_DESC_OP_END && p < pages.length; p++) {
+    pages[p] = await extractPageOp(doc, p + 1)
   }
 
   // Re-extract armoury gear pages via op-list (pages 140–162, 0-indexed 139–161).
@@ -942,12 +1089,21 @@ async function main() {
   writeFileSync(join(OUTPUT_DIR, "skills.json"), JSON.stringify(skills, null, 2))
 
   // ── Talents ─────────────────────────────────────────────────────────────────
-  // Quick-ref table starts ONE page after the Chapter IV intro heading.
-  // Scan up to +3 pages from the table start to be safe.
-  console.log("\nParsing talents (pages", talentsStart + 1, "–", talentsStart + 2, ")...")
-  const talents = parseTalents(pages, talentsStart, talentsStart + 2)
+  // Quick-ref table starts on the SAME page as the Chapter IV intro heading.
+  console.log("\nParsing talents (pages", talentsStart + 1, "–", talentsOpEnd + 1, ")...")
+  const talents = parseTalents(pages, talentsStart, talentsOpEnd)
   console.log(`  → ${talents.length} talents`)
-  writeFileSync(join(OUTPUT_DIR, "talents.json"), JSON.stringify(talents, null, 2))
+
+  console.log("\nParsing talent descriptions (pages", TALENT_DESC_OP_START + 1, "–", TALENT_DESC_OP_END + 1, ")...")
+  const talentDescs = parseTalentDescriptions(pages, TALENT_DESC_OP_START, TALENT_DESC_OP_END, talents)
+  const matched = talents.filter((t) => talentDescs[t.id]).length
+  console.log(`  → ${matched}/${talents.length} talents matched a long description`)
+
+  const talentsWithLong: Talent[] = talents.map((t) => ({
+    ...t,
+    longDescription: talentDescs[t.id] ?? null,
+  }))
+  writeFileSync(join(OUTPUT_DIR, "talents.json"), JSON.stringify(talentsWithLong, null, 2))
 
   // ── Weapons ─────────────────────────────────────────────────────────────────
   console.log("\nParsing weapons (pages", sections.weapons + 1, "–", sections.weapons + 25, ")...")
