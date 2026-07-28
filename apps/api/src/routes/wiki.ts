@@ -74,6 +74,17 @@ async function ensureTable() {
   } catch {
     // Column already exists — ignore
   }
+  // Track which notes have already been scanned by /wiki/sync and /wiki/link-all
+  try {
+    await db.execute("ALTER TABLE notes ADD COLUMN wiki_synced_at TEXT")
+  } catch {
+    // Column already exists — ignore
+  }
+  try {
+    await db.execute("ALTER TABLE notes ADD COLUMN wiki_linked_at TEXT")
+  } catch {
+    // Column already exists — ignore
+  }
   // Ensure entity_relations table exists
   await db.execute(`
     CREATE TABLE IF NOT EXISTS entity_relations (
@@ -295,11 +306,16 @@ wikiRouter.patch("/:id", async (c) => {
   return c.json(rows[0] ?? null)
 })
 
-// POST /wiki/sync — upsert entities from all notes (idempotent)
+// POST /wiki/sync — upsert entities from notes not yet scanned (idempotent)
 wikiRouter.post("/sync", async (c) => {
   await ensureTable()
 
-  const { rows: notes } = await db.execute("SELECT id, entities FROM notes")
+  const body = await c.req.json<{ force?: boolean }>().catch(() => ({ force: false }))
+  const force = body.force === true
+
+  const { rows: notes } = await db.execute(
+    force ? "SELECT id, entities FROM notes" : "SELECT id, entities FROM notes WHERE wiki_synced_at IS NULL"
+  )
   let inserted = 0
 
   for (const note of notes) {
@@ -323,6 +339,14 @@ wikiRouter.post("/sync", async (c) => {
     }
   }
 
+  const now = new Date().toISOString()
+  for (const note of notes) {
+    await db.execute({
+      sql: "UPDATE notes SET wiki_synced_at = ?1 WHERE id = ?2",
+      args: [now, note.id as string],
+    })
+  }
+
   // Find potential duplicates across all canonical entities
   const { rows: allEntities } = await db.execute(
     "SELECT id, name FROM entities WHERE canonical_id IS NULL"
@@ -331,17 +355,28 @@ wikiRouter.post("/sync", async (c) => {
     allEntities.map((e) => ({ id: e.id as string, name: e.name as string }))
   )
 
-  return c.json({ inserted, potential_duplicates })
+  return c.json({ inserted, notes_scanned: notes.length, potential_duplicates })
 })
 
 // POST /wiki/link-all — extract relations for all canonical entities (no dossier generation)
 wikiRouter.post("/link-all", async (c) => {
   await ensureTable()
 
+  const body = await c.req.json<{ force?: boolean }>().catch(() => ({ force: false }))
+  const force = body.force === true
+
   const { rows: allEntityRows } = await db.execute(
     "SELECT id, name, type FROM entities WHERE canonical_id IS NULL"
   )
-  const { rows: notes } = await db.execute("SELECT transcript, entities FROM notes ORDER BY date ASC")
+  const { rows: notes } = await db.execute(
+    force
+      ? "SELECT id, transcript, entities FROM notes ORDER BY date ASC"
+      : "SELECT id, transcript, entities FROM notes WHERE wiki_linked_at IS NULL ORDER BY date ASC"
+  )
+
+  if (!notes.length) {
+    return c.json({ processed: 0, skipped: 0, relations_added: 0, notes_scanned: 0 })
+  }
 
   let processed = 0
   let skipped = 0
@@ -408,7 +443,15 @@ wikiRouter.post("/link-all", async (c) => {
     }
   }
 
-  return c.json({ processed, skipped, relations_added: relationsAdded })
+  const now = new Date().toISOString()
+  for (const note of notes) {
+    await db.execute({
+      sql: "UPDATE notes SET wiki_linked_at = ?1 WHERE id = ?2",
+      args: [now, note.id as string],
+    })
+  }
+
+  return c.json({ processed, skipped, relations_added: relationsAdded, notes_scanned: notes.length })
 })
 
 // POST /wiki/merge — merge drop_id into keep_id

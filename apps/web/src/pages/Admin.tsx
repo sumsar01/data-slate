@@ -46,9 +46,10 @@ export default function Admin() {
   const [wikiFilter, setWikiFilter] = useState("")
   const [wikiTypeFilter, setWikiTypeFilter] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
-  const [syncResult, setSyncResult] = useState<{ inserted: number } | null>(null)
+  const [syncResult, setSyncResult] = useState<{ inserted: number; notes_scanned: number } | null>(null)
   const [linkingAll, setLinkingAll] = useState(false)
-  const [linkAllResult, setLinkAllResult] = useState<{ processed: number; skipped: number; relations_added: number } | null>(null)
+  const [linkAllResult, setLinkAllResult] = useState<{ processed: number; skipped: number; relations_added: number; notes_scanned: number } | null>(null)
+  const [forceResync, setForceResync] = useState(false)
   const [duplicates, setDuplicates] = useState<Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: string }>>([])
   const [dismissedDupes, setDismissedDupes] = useState<Set<string>>(new Set())
   const [generatingSummaryFor, setGeneratingSummaryFor] = useState<string | null>(null)
@@ -136,7 +137,11 @@ export default function Admin() {
     setLinkingAll(true)
     setLinkAllResult(null)
     try {
-      const res = await authFetch(`${API_URL}/wiki/link-all`, { method: "POST" })
+      const res = await authFetch(`${API_URL}/wiki/link-all`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force: forceResync }),
+      })
       const data = await res.json()
       setLinkAllResult(data)
     } catch (e) {
@@ -152,7 +157,11 @@ export default function Admin() {
     setDuplicates([])
     setDismissedDupes(new Set())
     try {
-      const res = await authFetch(`${API_URL}/wiki/sync`, { method: "POST" })
+      const res = await authFetch(`${API_URL}/wiki/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force: forceResync }),
+      })
       const data = await res.json()
       setSyncResult(data)
       if (data.potential_duplicates) setDuplicates(data.potential_duplicates)
@@ -437,13 +446,15 @@ export default function Admin() {
           </div>
           {syncResult && (
             <div className="admin-row">
-              <span className="admin-value">{syncResult.inserted} NEW ENTITIES INDEXED</span>
+              <span className="admin-value">
+                {syncResult.notes_scanned} NOTES SCANNED // {syncResult.inserted} NEW ENTITIES INDEXED
+              </span>
             </div>
           )}
           {linkAllResult && (
             <div className="admin-row">
               <span className="admin-value">
-                {linkAllResult.relations_added} CONNECTIONS FORGED // {linkAllResult.processed} PROCESSED // {linkAllResult.skipped} SKIPPED
+                {linkAllResult.notes_scanned} NOTES SCANNED // {linkAllResult.relations_added} CONNECTIONS FORGED // {linkAllResult.processed} PROCESSED // {linkAllResult.skipped} SKIPPED
               </span>
             </div>
           )}
@@ -476,6 +487,16 @@ export default function Admin() {
                 ))}
             </div>
           )}
+          <div className="admin-row">
+            <label className="admin-label">
+              <input
+                type="checkbox"
+                checked={forceResync}
+                onChange={(e) => setForceResync(e.target.checked)}
+              />
+              {" "}FULL RESYNC (IGNORE PROCESSED MARKERS)
+            </label>
+          </div>
           <div className="admin-row">
             <button className="admin-btn" onClick={syncWiki} disabled={syncing}>
               {syncing ? "SCANNING..." : "⚙ SYNC ENTITIES"}
