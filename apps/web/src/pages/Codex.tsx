@@ -17,7 +17,24 @@ const SECTIONS: { key: CodexSection; label: string }[] = [
 
 // ── Section renderers ─────────────────────────────────────────────────────────
 
+/** Click-to-expand row state, shared by any table with an optional long-form description. */
+function useExpand() {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const toggle = (id: string) => setExpandedId((cur) => (cur === id ? null : id))
+  return [expandedId, toggle] as const
+}
+
+function ExpandedDescRow({ colSpan, text }: { colSpan: number; text: string }) {
+  return (
+    <tr className="codex-row-expanded">
+      <td colSpan={colSpan} className="codex-long-desc">{text}</td>
+    </tr>
+  )
+}
+
 function SkillsTable({ items }: { items: Skill[] }) {
+  const [expandedId, toggleExpand] = useExpand()
+
   return (
     <table className="codex-table">
       <thead>
@@ -29,21 +46,36 @@ function SkillsTable({ items }: { items: Skill[] }) {
         </tr>
       </thead>
       <tbody>
-        {items.map((s) => (
-          <tr key={s.id}>
-            <td className="codex-name">{s.name}</td>
-            <td className={`codex-badge codex-badge--${s.type.toLowerCase()}`}>{s.type.toUpperCase()}</td>
-            <td>{s.characteristic}</td>
-            <td className="codex-muted">{s.descriptor ?? "—"}</td>
-          </tr>
-        ))}
+        {items.map((s) => {
+          const hasLong = Boolean(s.description)
+          const expanded = expandedId === s.id
+          return (
+            <Fragment key={s.id}>
+              <tr
+                className={hasLong ? "codex-row-clickable" : ""}
+                onClick={hasLong ? () => toggleExpand(s.id) : undefined}
+              >
+                <td className="codex-name">
+                  {hasLong && (
+                    <span className="codex-expand-icon">{expanded ? "▾" : "▸"}</span>
+                  )}
+                  {s.name}
+                </td>
+                <td className={`codex-badge codex-badge--${s.type.toLowerCase()}`}>{s.type.toUpperCase()}</td>
+                <td>{s.characteristic}</td>
+                <td className="codex-muted">{s.descriptor ?? "—"}</td>
+              </tr>
+              {expanded && hasLong && <ExpandedDescRow colSpan={4} text={s.description} />}
+            </Fragment>
+          )
+        })}
       </tbody>
     </table>
   )
 }
 
 function TalentsTable({ items }: { items: Talent[] }) {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [expandedId, toggleExpand] = useExpand()
 
   return (
     <table className="codex-table">
@@ -62,7 +94,7 @@ function TalentsTable({ items }: { items: Talent[] }) {
             <Fragment key={t.id}>
               <tr
                 className={hasLong ? "codex-row-clickable" : ""}
-                onClick={hasLong ? () => setExpandedId(expanded ? null : t.id) : undefined}
+                onClick={hasLong ? () => toggleExpand(t.id) : undefined}
               >
                 <td className="codex-name">{t.name}</td>
                 <td className="codex-muted codex-prereq">{t.prerequisites ?? "—"}</td>
@@ -73,11 +105,7 @@ function TalentsTable({ items }: { items: Talent[] }) {
                   {t.description}
                 </td>
               </tr>
-              {expanded && t.longDescription && (
-                <tr className="codex-row-expanded">
-                  <td colSpan={3} className="codex-long-desc">{t.longDescription}</td>
-                </tr>
-              )}
+              {expanded && t.longDescription && <ExpandedDescRow colSpan={3} text={t.longDescription} />}
             </Fragment>
           )
         })}

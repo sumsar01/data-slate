@@ -25,21 +25,21 @@
     "name": "Arms Master",
     "prerequisites": "BS 30, Basic Weapon Training (any two)",
     "description": "Use non-proﬁcient weapons at –10 penalty.",
-    "longDescription": "Weapon Training in at least two groups of weapons. Such is your skill with a gun that you are able to pick up an unfamiliar weapon and use it as though you had trained with it for years. You can use ranged weapons you do not have training in at –10 rather than –20."
+    "longDescription": "Such is your skill with a gun that you are able to pick up an unfamiliar weapon and use it as though you had trained with it for years. You can use ranged weapons you do not have training in at –10 rather than –20."
   },
   {
     "id": "assassin-strike",
     "name": "Assassin Strike",
     "prerequisites": "Ag 40, Acrobatic",
     "description": "On a successful Acrobatics Test after making a melee attack, you may move as a Free Action.",
-    "longDescription": "You are like a serene dancer when engaged in combat, leaping and spiralling between dismembered corpses like some butcher ballerina. Whenever you engage an opponent and make a melee attack, you may make an Acrobatics Test to move at your Half Move rate as a Free Action. Your opponent may not take the customary free attack."
+    "longDescription": "You are like a serene dancer when engaged in combat, leaping and spiralling between dismembered corpses like some butcher ballerina. Whenever you engage an opponent and make a melee attack, you may make an Acrobatics Test to"
   },
   {
     "id": "autosanguine",
     "name": "Autosanguine",
     "prerequisites": null,
     "description": "Heal 2 Damage/day, always Lightly Wounded.",
-    "longDescription": "Ancient and blessed technology ﬁlters your blood. Handed down from generations past, your implants repair minor injuries. For the purposes of healing, you are always considered to be Lightly Wounded. In addition, you naturally heal at an increased rate, removing 2 points of Damage each day. Your autosanguinators also sooth the minor pains and sores caused by the blessed metal of your implants pressing upon your weak flesh. This has no game effect, but does make you slightly less irritable than before. b a s I c W e a P o N t r a I N I N g Launcher, Melta, Plasma, Primitive, SP. You have received Basic Weapon Training in a group of weapons, and can use them without penalty."
+    "longDescription": "Ancient and blessed technology ﬁlters your blood. Handed down from generations past, your implants repair minor injuries. For the purposes of healing, you are always considered to be Lightly Wounded. In addition, you naturally heal at an increased rate, removing 2 points of Damage each day. Your autosanguinators also sooth the minor pains and sores caused by the blessed metal of your implants pressing upon your weak flesh. This has no game effect, but does make you slightly less irritable than before. You have received Basic Weapon Training in a group of weapons, and can use them without penalty."
   },
   {
     "id": "basic-weapon-training",
@@ -74,7 +74,7 @@
     "name": "Blademaster",
     "prerequisites": "WS 30, Melee Weapon Training (any)",
     "description": "Re-roll a missed attack, once per Round.",
-    "longDescription": "Weapon Training. Your mastery of sword and knife is unsurpassed and your blade always strikes true. When attacking with a sword or a knife of any type, including chainswords and power swords, you may re-roll a missed attack once per Round."
+    "longDescription": "Your mastery of sword and knife is unsurpassed and your blade always"
   },
   {
     "id": "blind-fighting",
@@ -109,7 +109,7 @@
     "name": "Cleanse and Purify",
     "prerequisites": "Basic Weapon Training (Flame)",
     "description": "Penalty to avoid being hit by your ﬂamer attacks.",
-    "longDescription": "(Flame) talent. Burn! Burn! Burn! None shall escape your ﬁery wrath! Targets exposed to your flamer attacks take a –20 penalty to avoid being hit."
+    "longDescription": "Burn! Burn! Burn! None shall escape your ﬁery wrath! Targets exposed to your flamer attacks take a –20 penalty to avoid being hit."
   },
   {
     "id": "combat-master",
@@ -151,7 +151,7 @@
     "name": "Crippling Strike",
     "prerequisites": "WS 50",
     "description": "Deal +1d5–1 Critical Damage with a melee weapon.",
-    "longDescription": "You are able to land your blows in the spot where they will inflict the most harm. Whenever you deal Critical Damage to an opponent using a melee weapon, you may deal an additional 1d5–1 points."
+    "longDescription": "You are able to land your blows in the spot where they will inflict the most harm."
   },
   {
     "id": "crushing-blow",
@@ -172,7 +172,7 @@
     "name": "Deadeye Shot",
     "prerequisites": "BS 30",
     "description": "Called Shots are at –10 penalty.",
-    "longDescription": "You always hit an opponent right between the eyes… or wherever else you intended to hit him. When making a Called Shot, you take only a –10 penalty instead of the normal –20. You are skilled at making difﬁcult shots. When making a Called Shot you do not incur the normal –20 penalty. This Talent replaces Deadeye Shot."
+    "longDescription": "You always hit an opponent right between the eyes… or wherever else you intended to hit him. When making a Called Shot, you take only a –10 penalty instead of the normal –20."
   },
   {
     "id": "decadence",
@@ -207,7 +207,7 @@
     "name": "Discipline Focus",
     "prerequisites": "Psy Rating 3",
     "description": "Gain +2 on Power Rolls to manifest discipline powers.",
-    "longDescription": "Pyromancy, Telekinetics, Telepathy. You devote a great deal of time and effort into mastering your Discipline. Choose one of your Disciplines. You gain a +2 to Power Rolls made to manifest any powers of this Discipline."
+    "longDescription": "Choose one of your Disciplines. You gain a +2 to Power Rolls made to manifest any powers of this Discipline."
   },
   {
     "id": "disturbing-voice",
@@ -228,21 +228,21 @@
     "name": "Dual Shot",
     "prerequisites": "Ag 40, Two-Weapon Wielder",
     "description": "One Ballistic Skill Test hits target twice.",
-    "longDescription": "Weapon Wielder. You are able to focus the ﬁrepower of two guns to maximise the impact. When armed with two pistols, you can ﬁre both simultaneously as a Full Action. Make a single Ballistic Skill Test. On a success, you hit the target with both shots."
+    "longDescription": "You are able to focus the ﬁrepower of two guns to maximise the impact. When armed with two pistols, you"
   },
   {
     "id": "dual-strike",
     "name": "Dual Strike",
     "prerequisites": "Ag 40, Two-Weapon Wielder",
     "description": "One Weapon Skill Test hits target twice.",
-    "longDescription": "Weapon Wielder. You are able to focus your melee attacks to maximise the impact. When armed with two melee weapons, you can attack with both simultaneously as a Full Action. Make a single Weapon Skill Test. On a success, you hit the target with both weapons."
+    "longDescription": "You are able to focus your melee attacks to maximise the impact. When armed with two melee weapons, you can attack with both simultaneously as a Full Action. Make a single Weapon Skill Test. On a success, you hit the target with both weapons."
   },
   {
     "id": "electrical-succour",
     "name": "Electrical Succour",
     "prerequisites": "Tech-Priest",
     "description": "+10 bonus to Toughness Tests to remove Fatigue.",
-    "longDescription": "inductor/Potentia coil). You call upon the sacred flow of energy to replenish your weak flesh. Whilst in contact with a functioning, powered machine, or fully charged battery, you may make an Ordinary (+10) Toughness Test. If you succeed, remove one level of Fatigue plus one additional level of Fatigue for each degree of success. This takes one minute of meditation and ritual incantation to activate."
+    "longDescription": "You call upon the sacred flow of energy to replenish your weak flesh. Whilst in contact with a functioning, powered machine, or fully charged battery, you may make an Ordinary (+10) Toughness Test. If you succeed, remove one level of Fatigue plus one additional level of Fatigue for each degree of success. This takes one minute of meditation and ritual incantation to activate."
   },
   {
     "id": "electro-graft-use",
@@ -256,7 +256,7 @@
     "name": "Energy Cache",
     "prerequisites": "Tech-Priest",
     "description": "Luminen Blast, Charge and Shock are Fatigue free.",
-    "longDescription": "coil). You have learnt how to focus some of the power stored within your potentia coil. You no longer gain Fatigue from using Luminen Charge, Luminen Shock and Luminen Blast. e X o t I c W e a P o N t r a I N I N g You have received Exotic Weapon Training in a single exotic weapon, and can use it without penalty."
+    "longDescription": "You have learnt how to focus some of the power stored within your potentia coil. You no longer gain Fatigue from using Luminen Charge, Luminen Shock and Luminen Blast. You have received Exotic Weapon Training in a single exotic weapon, and can use it without penalty."
   },
   {
     "id": "exotic-weapon-training",
@@ -284,21 +284,21 @@
     "name": "Feedback Screech",
     "prerequisites": "Tech-Priest",
     "description": "30m radius, Test Willpower or lose Half Action.",
-    "longDescription": "Unit). By muttering illogical formulae under your breath, you are able to foment rebellion within your vox synthesisers. Your audio circuits protest in a screeching blast of noise, shocking and distracting others in equal measure. All creatures, except Daemonic and machine-based, within a 30 metre radius must make a Willpower Test or lose a Half Action on their next Turn as they shudder, swear, cover their ears or otherwise react to the horrid noise. This is a Full Action and may not be used again for 1d5 Rounds while your audio circuits reset."
+    "longDescription": "By muttering illogical formulae under your breath, you are able to foment rebellion within your vox synthesisers. Your audio circuits protest in a screeching blast of noise, shocking and distracting others in equal measure. All creatures, except Daemonic and machine-based, within a 30 metre radius must make a Willpower Test or lose a Half Action on their next Turn as they shudder, swear, cover their ears or otherwise react to the horrid noise. This is a Full Action and may not be used again for 1d5 Rounds while your audio circuits reset."
   },
   {
     "id": "ferric-lure",
     "name": "Ferric Lure",
     "prerequisites": "Tech-Priest",
     "description": "WP Test to call 1kg/WP Bonus of metal objects.",
-    "longDescription": "inductor/Potentia coil). You can call an unsecured metal object that you can see to your hand. You may summon objects of up to 1 kilogram per point of your Willpower Bonus. The object must be within a 20 metre radius. To use this Talent, you must succeed on a Willpower Test as a Full Action."
+    "longDescription": "You can call an unsecured metal object that you can see to your hand. You may summon objects of up to 1 kilogram per point of your Willpower Bonus. The object must be within a 20 metre radius. To use this Talent, you must succeed on a Willpower Test as a Full Action."
   },
   {
     "id": "ferric-summons",
     "name": "Ferric Summons",
     "prerequisites": "Tech-Priest, Ferric Lure",
     "description": "WP Test to call 2kg/WP Bonus of metal objects.",
-    "longDescription": "inductor/Potentia coil), Ferric Lure. You can call an unsecured metal object that you can see to your hand. You may summon objects of up to 2 kilograms per point of your Willpower Bonus. The object must be within a 40 metre radius. You must make a Willpower Test and spend a Full Action to enact this rite."
+    "longDescription": "You can call an unsecured metal object that you can see to your hand. You may summon objects of up to 2 kilograms per point of your Willpower Bonus. The object must be within a 40 metre radius. You must make a Willpower Test and spend a Full Action to enact this rite."
   },
   {
     "id": "flagellant",
@@ -326,28 +326,28 @@
     "name": "Furious Assault",
     "prerequisites": "WS 35",
     "description": "On a successful WS Test, gain a free second attack.",
-    "longDescription": "Your blows follow one another in quick succession, raining down on your opponents like ﬁery bolts. Whenever you hit an opponent whilst using the All- Out Attack Manoeuvre, you may spend your Reaction to make an extra attack (this extra attack retains any bonuses or penalties of the original attack)."
+    "longDescription": "Your blows follow one another in quick succession, raining down on your opponents like ﬁery bolts. Whenever you hit an opponent whilst using the All-"
   },
   {
     "id": "good-reputation",
     "name": "Good Reputation",
     "prerequisites": "Fel 50, Peer",
     "description": "You have a good reputation amongst a certain group.",
-    "longDescription": "Ecclesiarchy, Imperial Guard, Imperial Navy, Inquisition, Underworld You are well respected within your social group or organisation. You gain an additional +10 bonus to Fellowship Tests when dealing with this group. This Talent is cumulative with the Peer talent, for a total of a +20 bonus."
+    "longDescription": "This Talent is cumulative with the Peer talent, for a total of a +20 bonus."
   },
   {
     "id": "gun-blessing",
     "name": "Gun Blessing",
     "prerequisites": "Tech-Priest",
     "description": "Unjam a number of guns equal to Int bonus in a 10m radius.",
-    "longDescription": "inductor/Potentia coil). With a wave you can unjam a number of guns equal to your Intelligence Bonus. You may bless any weapon in a 10 metre radius. To do so, make an Intelligence Test. A success indicates that you have rallied the spirits of the weapons. This blessing is a Full Action."
+    "longDescription": "With a wave you can unjam a number of guns equal to your Intelligence Bonus. You may bless any weapon in a 10 metre radius. To do so, make an Intelligence Test. A success indicates that you have rallied the spirits of the weapons. This blessing is a Full Action."
   },
   {
     "id": "gunslinger",
     "name": "Gunslinger",
     "prerequisites": "BS 40, Two-Weapon Wielder",
     "description": "Fighting with two pistols incurs only a –10 penalty.",
-    "longDescription": "Weapon Wielder. You are ready for anything when you have a pistol in each hand. When so armed, you reduce the penalty for fighting with two weapons by –10. If you have the Ambidextrous talent, you take no penalty when firing both weapons."
+    "longDescription": "You are ready for anything when you have a pistol in each hand. When so armed, you reduce the penalty for fighting with two weapons by –10. If you have the Ambidextrous talent, you take no penalty when firing both weapons."
   },
   {
     "id": "hard-target",
@@ -368,7 +368,7 @@
     "name": "Hatred",
     "prerequisites": null,
     "description": "Gain +10 bonus to attack hated creatures.",
-    "longDescription": "(speciﬁc), Daemons, Xeno (speciﬁc), Psykers, Heretics, Mutants. You have reason to hate one particular race or organisation, and your malice hones your melee attacks. Choose one race or group from those listed above. When ﬁghting opponents that qualify as members of that group, you gain a +10 bonus to all Weapon Skill Tests made to attack them. h e a V Y W e a P o N t r a I N I N g Launcher, Melta, Plasma, Primitive, SP. You know how to use one particular type of heavy weapon, and can use weapons of that type without penalty."
+    "longDescription": "You have reason to hate one particular race or organisation, and your malice hones your melee attacks. Choose one race or group from those listed above. When ﬁghting opponents that qualify as members of that group, you gain a +10 bonus to all Weapon Skill Tests made to attack them. You know how to use one particular type of heavy weapon, and can use weapons of that type without penalty."
   },
   {
     "id": "heavy-weapon-training",
@@ -382,14 +382,14 @@
     "name": "Heightened Senses",
     "prerequisites": null,
     "description": "Gain +10 bonus to a particular sense.",
-    "longDescription": "Taste, Touch. One of your senses is better than average. When you gain this Talent, select one of the ﬁve senses. You gain a +10 bonus to any Tests involving this sense."
+    "longDescription": "One of your senses is better than average. When you gain this Talent, select one of the ﬁve senses. You gain a +10 bonus to any Tests involving this sense."
   },
   {
     "id": "hip-shooting",
     "name": "Hip Shooting",
     "prerequisites": "BS 40, Ag 40",
     "description": "Gain a free attack when you make a Full Move.",
-    "longDescription": "Agility 40. You are able to shoot whilst on the move. As a Full Action, you may simultaneously move up to your Full Move rate and make a single attack with a pistol."
+    "longDescription": "You are able to shoot whilst on the move. As a Full Action, you may simultaneously move up to your Full Move rate and make a single attack with a pistol."
   },
   {
     "id": "independent-targeting",
@@ -480,28 +480,28 @@
     "name": "Luminen Blast",
     "prerequisites": "Tech-Priest",
     "description": "1d10+WP Bonus Energy Damage Bolt. Causes Fatigue.",
-    "longDescription": "inductor/Potentia coil). With the proper prayer and projection of will, you are able to strike at the enemies of the Omnissiah. Using your electoo inductors, you may create a crackling ball of bio-electrical energy that you may fling at your foes. On a successful Ballistic Skill Test, you may direct this energy against a single target within 10 metres. The target takes Energy Damage equal to 1d10 plus your Willpower Bonus. Each time you use this Talent, you gain a level of Fatigue."
+    "longDescription": "With the proper prayer and projection of will, you are able to strike at the enemies of the Omnissiah. Using your electoo inductors, you may create a crackling ball of bio-electrical energy that you may fling at your foes. On a successful Ballistic Skill Test, you may"
   },
   {
     "id": "luminen-charge",
     "name": "Luminen Charge",
     "prerequisites": "Tech-Priest",
     "description": "Toughness Test to power/charge tech. Causes Fatigue.",
-    "longDescription": "inductor/Potentia coil). You have learnt how to lend your life force to technology. On a successful Toughness Test you may use your bio-electrical ﬁeld to recharge or power machinery. This takes one minute of meditation and ritual incantation to activate. The Difﬁculty of the Toughness Test varies depending on the nature of the technology, as follows: Difﬁculty Example Ordinary (+10) Chemical battery, glow globe. Challenging (+0) Las gun charge pack, data-slate, personal heater. Difﬁcult (–10) Overcharge pack, air conditioning unit, servo- skull. Hard (–20) Land speeder engine, lascannon charge pack, servitor. Very Hard (–30) Industrial press, cogita - tor engine, xenos tech. Note that at the GM’s discretion, some technology is simply too arcane, broken or power-hungry for you to be able to activate. Each time you use this Talent, you gain a level of Fatigue."
+    "longDescription": "You have learnt how to lend your life force to technology. On a successful Toughness Test you may use your bio-electrical ﬁeld to recharge or power machinery. This takes one minute of meditation and ritual incantation to activate. The Difﬁculty of the Toughness Test varies depending on the nature of the technology, as follows: Difﬁculty Example Ordinary (+10) Chemical battery, glow globe. Challenging (+0) Las gun charge pack, data-slate, personal heater. Difﬁcult (–10) Overcharge pack, air conditioning unit, servo- skull. Hard (–20) Land speeder engine, lascannon charge pack, servitor. Very Hard (–30) Industrial press, cogita - tor engine, xenos tech. Note that at the GM’s discretion, some technology is simply too arcane, broken or power-hungry for you to be able to activate. Each time you use this Talent, you gain a level of Fatigue."
   },
   {
     "id": "luminen-shock",
     "name": "Luminen Shock",
     "prerequisites": "Tech-Priest",
     "description": "1d10+3 Energy Damage Shock. Causes Fatigue.",
-    "longDescription": "inductor/Potentia coil). By focusing your bio-electrical energy through electoo inductors, you are able to damage your opponents. You must touch your enemy for this ability to work. In combat, you must either make a successful Weapon Skill Test or be Grappling to deliver the blast. Each Luminen Shock deals 1d10+3 points of Energy Damage. Each time you use this Talent, you gain a level of Fatigue."
+    "longDescription": "By focusing your bio-electrical energy through electoo inductors, you are able to damage your opponents. You must touch your enemy for this ability to work. In combat, you must either make a successful Weapon Skill Test or be Grappling to deliver the blast. Each Luminen Shock deals 1d10+3 points of Energy Damage. Each time you use this Talent, you gain a level of Fatigue."
   },
   {
     "id": "maglev-grace",
     "name": "Maglev Grace",
     "prerequisites": "Tech-Priest",
     "description": "Hover 1d10+TB minutes once per day.",
-    "longDescription": "coil). By long hours of rote learning, you have mastered one of the miracles of the Omnissiah. By spending a Half Action, you may hover 20–30 centimetres off the ground for a number of minutes equal to 1d10 plus your Toughness Bonus. You may move at your normal walking pace and must employ a Half Action each round to concentrate on maintaining the rite. You may activate this rite whilst falling to slow your rate of descent. Treat all falling Damage as 1d10+3 Impact Damage. Each Maglev Grace exhausts the power stored in your potentia coil, and thus you may only use this rite once in every twelve hour period. m a g l e V t r a N s c e N d e N c e coil), Maglev Grace. Devotion to the Machine God has granted you greater knowledge of miracles. As a Half Action, you may hover 20–30 centimetres off the ground for a number of minutes equal to 2d10 plus your Toughness Bonus. You may move at your normal running speed and must employ a Half Action each Round to concentrate on maintaining your rite. You may activate this rite whilst falling to produce a controlled descent. Provided that this rite is active when you reach the ground, then you take no Damage from falling. You may enact this rite twice in every twelve hour period."
+    "longDescription": "By long hours of rote learning, you have mastered one of the miracles of the Omnissiah. By spending a Half Action, you may hover 20–30 centimetres off the ground for a number of minutes equal to 1d10 plus your Toughness Bonus. You may move at your normal walking pace and must employ a Half Action each round to concentrate on maintaining the rite. You may activate this rite whilst falling to slow your rate of descent. Treat all falling Damage as 1d10+3 Impact Damage. Each Maglev Grace exhausts the power stored in your potentia coil, and thus you may only use this rite once in every twelve hour period. Devotion to the Machine God has granted you greater knowledge of miracles. As a Half Action, you may hover 20–30 centimetres off the ground for a number of minutes equal to 2d10 plus your Toughness Bonus. You may move at your normal running speed and must employ a Half Action each Round to concentrate on maintaining your rite. You may activate this rite whilst falling to produce a controlled descent. Provided that this rite is active when you reach the ground, then you take no Damage from falling. You may enact this rite twice in every twelve hour period."
   },
   {
     "id": "maglev-transcendence",
@@ -522,7 +522,7 @@
     "name": "Master Chirurgeon",
     "prerequisites": "Medicae +10",
     "description": "Perform advanced medical procedures.",
-    "longDescription": "You are trained in the most advanced medical techniques known to man. You gain a +10 bonus on all Medicae Tests. If you are treating a Heavily or Critically Wounded patient, a successful Test heals 2 Wounds instead of the normal 1. If this character is in danger of losing a limb from a Critical Hit (see Chapter VII: Playing the Game ), you also provide the patient with a +20 bonus to the Toughness Test to resist limb loss."
+    "longDescription": "You are trained in the most advanced medical techniques known to man. You gain a +10 bonus on all Medicae"
   },
   {
     "id": "master-orator",
@@ -536,14 +536,14 @@
     "name": "Mechadendrite Use",
     "prerequisites": "Tech-Priest",
     "description": "You can use a type of mechadendrite.",
-    "longDescription": "Mantle/Cranial Circuitry). Medicae, Optical, Utility. You have been given the appropriate training, initiation and hypnodoctrination to use a particular type of mechadendrite."
+    "longDescription": "You have been given the appropriate training, initiation and hypnodoctrination to use a particular type of mechadendrite."
   },
   {
     "id": "meditation",
     "name": "Meditation",
     "prerequisites": null,
     "description": "You may enter a trance to remove Fatigue.",
-    "longDescription": "By putting your mind at rest and entering a trance you can repair the hurts of your body. You must succeed on a Willpower Test. If so, for every ten minutes you remain in a trance, you remove one level of Fatigue. m e l e e W e a P o N t r a I N I N g Shock, Power. You have received basic training in a group of hand-to-hand weaponry, and can use them without penalty."
+    "longDescription": "By putting your mind at rest and entering a trance you can repair the hurts of your body. You must succeed on a Willpower Test. If so, for every ten minutes you remain in a trance, you remove one level of Fatigue. You have received basic training in a group of hand-to-hand weaponry, and can use them without penalty."
   },
   {
     "id": "melee-weapon-training",
@@ -557,7 +557,7 @@
     "name": "Mental Fortress",
     "prerequisites": "WP 50, Strong-Minded",
     "description": "Gain protection against psychic attacks.",
-    "longDescription": "Minded. You are trained to aggressively resist psychic attacks. Whenever you are the target of a psychic attack, you force the psyker to make a Willpower Test. On a failure, the psyker takes 1d10 points of Damage plus 1 Damage per point of your Willpower Bonus. This Damage is considered Impact Damage, directed at the head (more speciﬁcally, the face). The psyker can reduce this Damage by an amount equal to his Willpower Bonus. This Damage bypasses armour and any Toughness Bonus."
+    "longDescription": "You are trained to aggressively resist psychic attacks. Whenever you are the target of a psychic attack, you force the psyker to make a Willpower Test. On a failure, the psyker takes 1d10 points of Damage plus 1 Damage per point of your Willpower Bonus. This Damage is"
   },
   {
     "id": "mental-rage",
@@ -585,7 +585,7 @@
     "name": "Minor Psychic Power",
     "prerequisites": null,
     "description": "You gain a Minor Psychic Power.",
-    "longDescription": "Powers. You have acquired an additional psychic ability. You gain one Minor"
+    "longDescription": "You have acquired an additional psychic ability. You gain one Minor"
   },
   {
     "id": "nerves-of-steel",
@@ -599,7 +599,7 @@
     "name": "Orthoproxy",
     "prerequisites": null,
     "description": "+20 bonus to resist mind control or interrogation.",
-    "longDescription": "You have learnt to draw mental fortitude from a liturgical circuit buried deep within your skull. You may “tune out” mind control attempts by concentrating on the prayers recited by the proxy unit. This grants you a +20 bonus to Willpower Tests made to resist mind control or interrogation."
+    "longDescription": "You have learnt to draw mental fortitude from a liturgical circuit buried deep within your skull. You may “tune out” mind control attempts by concentrating on the prayers recited by the proxy unit. This grants you"
   },
   {
     "id": "paranoia",
@@ -613,7 +613,7 @@
     "name": "Peer",
     "prerequisites": "Fel 30",
     "description": "Gain +10 bonus on Fel Tests to interact with organisation.",
-    "longDescription": "Arbites, Adeptus Mechanicus, Admin istratum, Astropaths, Ecclesiarchy, Feral Worlders, Government, Hivers, Inquisi tion, Middle Classes, Military, Nobility, The Insane, Underworld, Void Born, Workers. You know how to deal with a particular social group or organisation. You gain a +10 bonus to all Fellowship Tests when interacting with your chosen group. P I s t o l Launcher, Melta, Plasma, Primitive, SP. You have received training in a group of pistols and can use them without penalty. P o W e r Prerequisites Power suffuses your being, allowing you to manifest powers more easily. When manifesting powers, you gain a +1 bonus to your Manifesting rolls. You may select this Talent multiple times. Its effects are cumulative. P r e c I s e Strike. You are skilled at making difﬁcult strikes. When making a Called Shot with a melee weapon, you do not incur the normal –20 penalty. P r o s a N By an act of will, you speed the workings of your autosanguinators. Once every twelve hours you may make a Tech- Use Test. On a success, you remove 1d5 points of Damage. If you roll a 96-100 however, in addition to failing, you overstrain your implants. They cease to function for one week. For that time you are unable to use this Talent, and gain none of the beneﬁts of the Autosanguine talent. Once the week is over, both Talents are restored. Prosanguination takes ten minutes of meditation and ritual incantation to activate. Fellowship 30. Academics, Adeptus t r a I N I N g Bolt, Flame, Las, W e l l"
+    "longDescription": null
   },
   {
     "id": "pistol-training",
@@ -648,14 +648,14 @@
     "name": "Psy Rating 1",
     "prerequisites": null,
     "description": "Gain powers, roll 1d10+WP bonus for Power Rolls.",
-    "longDescription": "You have unlocked your Psychic Powers. Select a number of Minor Psychic - Powers equal to one-half your Willpower Bonus (round up) from those described - in Chapter VI: Psychic Powers . You gain a Psy Rating of 1 and roll one dice and add your Willpower Bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers."
+    "longDescription": "You have unlocked your Psychic Powers. Select a number of Minor Psychic - Powers equal to one-half your Willpower Bonus (round up) from those described - in Chapter VI: Psychic Powers . You gain a Psy Rating of 1 and roll one dice and add your Willpower Bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers. You have advanced knowledge of Psychic Power. Select a number of Minor Psychic Powers equal to half your Willpower Bonus (round up). You now have a Psy Rating of 2 and may roll up to two dice and add your Willpower bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers."
   },
   {
     "id": "psy-rating-2",
     "name": "Psy Rating 2",
     "prerequisites": "Psy Rating 1",
     "description": "Gain powers, roll 2d10+WP bonus for Power Rolls.",
-    "longDescription": "b l o W Weapon Skill 40, Sure g u I N e You have advanced knowledge of Psychic Power. Select a number of Minor Psychic Powers equal to half your Willpower Bonus (round up). You now have a Psy Rating of 2 and may roll up to two dice and add your Willpower bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers."
+    "longDescription": "Weapon Skill 40, Sure"
   },
   {
     "id": "psy-rating-3",
@@ -669,7 +669,7 @@
     "name": "Psy Rating 4",
     "prerequisites": "Psy Rating 3",
     "description": "Gain powers, roll 4d10+WP bonus for Power Rolls.",
-    "longDescription": "You have distinguished yourself by your skill with psychic energy and the breadth of your knowledge of Psychic Powers. Gain a number of Discipline Powers in any Discipline that you know equal to one-half your Willpower Bonus and the same number of Minor Psychic Powers (round up). Alternatively, instead select one new Discipline and gain one power from this Discipline. You now have a Psy Rating of 4 and may roll up to four dice and add your Willpower bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers."
+    "longDescription": "You have distinguished yourself by your skill with psychic energy and the breadth of your knowledge of Psychic Powers. Gain a number of Discipline Powers in any Discipline that you know equal to one-half your Willpower Bonus and the same number of Minor Psychic Powers (round up). Alternatively, instead select one new Discipline and gain one power from this Discipline. You now have a Psy"
   },
   {
     "id": "psy-rating-5",
@@ -683,14 +683,14 @@
     "name": "Psy Rating 6",
     "prerequisites": "Psy Rating 5",
     "description": "Gain powers, roll 6d10+WP bonus for Power Rolls.",
-    "longDescription": "You have reached perhaps the greatest human potential with psychic powers and few can compare with your mastery. Gain a number of Discipline Powers in any Discipline that you know equal to one-half your Willpower Bonus and the same number of Minor Psychic Powers (round up). Alternatively, instead select one new Discipline and gain one power from this Discipline. You now have a Psy Rating of 6 and may roll up to six dice and add your Willpower bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers."
+    "longDescription": "You have reached perhaps the greatest human potential with psychic powers and few can compare with your mastery. Gain a number of Discipline Powers in any Discipline that you know equal to one-half your Willpower Bonus and the same number of Minor Psychic Powers (round up). Alternatively, instead select one new Discipline and gain one power from this Discipline. You now have a Psy Rating of 6 and may roll up to six dice and add your Willpower bonus when manifesting Psychic Powers. Special: If your Willpower Bonus later increases, you do not retroactively gain additional powers. You have acquired an additional Psychic Power. You gain one power of any Discipline you know."
   },
   {
     "id": "psychic-power",
     "name": "Psychic Power",
     "prerequisites": null,
     "description": "Gain an extra Psychic Power.",
-    "longDescription": "You have acquired an additional Psychic Power. You gain one power of any Discipline you know."
+    "longDescription": null
   },
   {
     "id": "quick-draw",
@@ -718,35 +718,35 @@
     "name": "Resistance",
     "prerequisites": null,
     "description": "Gain +10 bonus to Resistance Tests.",
-    "longDescription": "Poisons, Psychic Powers. Whether through past exposure, gruelling physical training or luck of genetics, you are highly resistant to a particular thing. When you pick this Talent select a group to be resistant to. You gain a +10 bonus when making a test to resist or avoid the object of your resistance."
+    "longDescription": "Whether through past exposure, gruelling physical training or luck of genetics, you are highly resistant to a particular thing. When you pick this Talent select a group to be resistant to. You gain a +10 bonus when making a test to resist or avoid the object of your resistance."
   },
   {
     "id": "rite-of-awe",
     "name": "Rite of Awe",
     "prerequisites": "Tech-Priest",
     "description": "50m radius, –10 to all Tests due to Fear.",
-    "longDescription": "Unit). You may recite an infrasonic liturgy that causes awe and fear. All humans within a 50 metre radius regardless of their ability to hear, feel a sense of dread and religious guilt. Alongside these emotional effects, all humans take a –10 penalty to their next Skill Test. Characters may make a Willpower Test to shake off these effects. Whilst incanting the rite, you may not talk on any additional frequency. The rite is two minutes long, and it is considered very bad form to break off incantations at any point within the liturgy. Note that humans without auditory implants cannot hear infrasonic sound, and thus will assume you are not speaking."
+    "longDescription": "You may recite an infrasonic liturgy that causes awe and fear. All humans within a 50 metre radius regardless of their ability to hear, feel a sense of dread and religious guilt. Alongside these emotional effects, all humans take a –10 penalty to their next Skill Test. Characters may make a Willpower Test to shake off these effects. Whilst incanting the rite, you may not talk on any additional frequency. The rite is two minutes long, and it is considered very bad form to break off incantations at any point within the liturgy. Note that humans without auditory implants cannot hear infrasonic sound, and thus will assume you are not speaking."
   },
   {
     "id": "rite-of-fear",
     "name": "Rite of Fear",
     "prerequisites": "Tech-Priest",
     "description": "Fear rating 1 for two minutes. 50m radius.",
-    "longDescription": "Unit). You may recite an infrasonic dirge, which causes terror within the weak. All humans, regardless of their ability to hear, within a 50 metre radius consider you to have a Fear Rating of 1. Whilst incanting the dirge, you may not talk on any additional frequency. The rite is two minutes long, and it is considered very bad form to break off incantations at any point within the liturgy. Note that humans without auditory implants cannot hear infrasonic sound, and thus will assume you are not speaking."
+    "longDescription": "You may recite an infrasonic dirge, which causes terror within the weak."
   },
   {
     "id": "rite-of-pure-thought",
     "name": "Rite of Pure Thought",
     "prerequisites": "Tech-Priest",
     "description": "You are immune to emotion.",
-    "longDescription": "Circuitry). You have replaced the creative right half of your brain with a cogitator. You no longer feel emotion, and are instead filled with the cold purity of logic. You are now immune to Fear, Pinning and any effects that cause emotional disturbance. Others now find you disturbing to say the least. Your GM will remove any Mental Disorders that are no longer relevant, and grant you new ones of equal severity."
+    "longDescription": "You have replaced the creative right half of your brain with a cogitator. You no longer feel emotion, and are instead filled with the cold purity of logic. You are now immune to Fear, Pinning and any effects that cause emotional disturbance. Others now find you disturbing to say the least. Your GM will remove any Mental Disorders that are no longer relevant, and grant you new ones of equal severity."
   },
   {
     "id": "sharpshooter",
     "name": "Sharpshooter",
     "prerequisites": "BS 40, Deadeye Shot",
     "description": "No penalties for Called Shots.",
-    "longDescription": null
+    "longDescription": "This Talent replaces Deadeye Shot."
   },
   {
     "id": "sound-constitution",
@@ -781,7 +781,7 @@
     "name": "Strong Minded",
     "prerequisites": "WP 30, Resistance (Psychic Powers)",
     "description": "Re-roll failed WP Tests made to resist Psychic Powers.",
-    "longDescription": "Resistance (Psychic Powers). Your mind is like a fortress guarded against psychic attack. You may re- roll failed Willpower Tests to resist any Psychic Powers that affect your mind. Psychic Powers that have a physical effect, such as Telekinesis, are unaffected by this Talent."
+    "longDescription": "Your mind is like a fortress guarded against psychic attack. You may re- roll failed Willpower Tests to resist any Psychic Powers that affect your mind. Psychic Powers that have a physical effect, such as Telekinesis, are unaffected by this Talent."
   },
   {
     "id": "sure-strike",
@@ -802,7 +802,7 @@
     "name": "Takedown",
     "prerequisites": null,
     "description": "Make a special attack to Stun your opponent.",
-    "longDescription": "You are skilled at taking an opponent alive. As a Half Action you may declare that you are attempting to Takedown an opponent before Testing Weapon Skill. If you hit and do at least 1 point of Damage, this damage is ignored and your opponent must make a Toughness Test or be Stunned for one Round."
+    "longDescription": "You are skilled at taking an opponent alive. As a Half Action you may declare that you are attempting to Takedown"
   },
   {
     "id": "talented",
@@ -816,7 +816,7 @@
     "name": "Technical Knock",
     "prerequisites": "Int 30",
     "description": "Unjam a gun as a Half Action.",
-    "longDescription": "With a honeyed whisper and ritual motion, you can awaken sleeping gun-spirits into furious action once more. You may unjam any gun as a Half Action. You must touch the gun in question to enact this rite. You may only perform this rite on one weapon per Round—any more would be disrespectful. t h r o W N W e a P o N t r a I N I N g Shock, Power. You have received basic training in a group of thrown weaponry, and can use such weapons without penalty."
+    "longDescription": "With a honeyed whisper and ritual motion, you can awaken sleeping gun-spirits into furious action once more. You may unjam any gun as a Half Action. You must touch the gun in question to enact this rite. You may only perform this rite on one weapon per Round—any more would be disrespectful. You have received basic training in a group of thrown weaponry, and can use such weapons without penalty."
   },
   {
     "id": "thrown-weapon-training",
@@ -837,14 +837,14 @@
     "name": "True Grit",
     "prerequisites": "T 40",
     "description": "Reduce Critical Damage you take.",
-    "longDescription": "You are able to shrug off wounds that would fell lesser men. Whenever you suffer Critical Damage, halve the result (rounding up). e X a m P l e Drake has the True Grit talent and is shot for 12 points of Damage. He has a TB of 3, 2 points of armour and 3 Wounds remaining. This means that after reduction for TB, armour and Wounds, the Critical Damage he takes (i.e. damage suffered once a character reaches 0 Wounds) is 4 (12-3+2+3=4). Because he has the True Grit talent this Damage is then halved. Drake therefore only takes 2 points of Critical Damage. ."
+    "longDescription": "You are able to shrug off wounds that would fell lesser men. Whenever you suffer Critical Damage, halve the result (rounding up)."
   },
   {
     "id": "two-weapon-wielder",
     "name": "Two-Weapon Wielder",
     "prerequisites": "WS 35 or BS35, Ag 35",
     "description": "Attack twice when wielding two weapons.",
-    "longDescription": "Weapon Skill 35, Agility 35. When armed with two weapons of a particular type, you may spend a Full Action to attack with both on your turn. Each Test made to attack with the weapons takes a –20 penalty (see Chapter VII: Playing the Game, page 197 for more details). You must take Two-Weapon Wielder (Melee) and Two-Weapon Wielder (Ballistic) if you wish to use a gun and hand weapon at the same time."
+    "longDescription": "When armed with two weapons of a particular type, you may spend a Full Action to attack with both on your turn. Each Test made to attack with the weapons takes a –20 penalty (see Chapter VII: Playing the Game, page 197 for more details). You must take Two-Weapon Wielder (Melee) and Two-Weapon Wielder (Ballistic) if you wish to use a gun and hand weapon at the same time."
   },
   {
     "id": "unremarkable",
@@ -865,6 +865,6 @@
     "name": "Wall of Steel",
     "prerequisites": "Ag 35",
     "description": "Gain an extra Parry each Round.",
-    "longDescription": "Your blades are so quick that they form a wall of impenetrable steel. You may make an additional Parry once per Round. In effect, this gives a character a second Reaction that may only be used to Parry, thus allowing them to make two Parries in a Turn. Note they may still only attempt a single Parry against any one attack. m o N e Y • a V a I l a b I l I t Y • c r a f t s m a N s h I P • W e a P o N s • a r m o u r • g e a r • c Y b e r N e t I c s"
+    "longDescription": "Your blades are so quick that they form a wall of impenetrable steel. You may make an additional Parry once per Round. In effect, this gives a character a second Reaction that may only be used to Parry, thus allowing them to make two Parries in a Turn. Note they may still only attempt a single Parry against any one attack."
   }
 ]

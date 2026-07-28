@@ -531,51 +531,176 @@ function splitColumns(items: Item[]): Item[][] {
  * from the quick-ref table — an exact match marks the start of that talent's
  * description block. This sidesteps the casing problem entirely.
  */
-function parseTalentDescriptions(
+/**
+ * Parse a 3-column prose/reference section (Talent Descriptions, Skill
+ * Descriptions, ...) that follows a quick-ref table, producing
+ * slug(name) -> full paragraph text for each known entry.
+ *
+ * Header rows use a tracked/small-caps font where op-list extraction still
+ * splits each name into several fragments with unpredictable casing (e.g.
+ * "Concealed Cavity" comes through as "c", "o N c e a l e d", "c a V I t Y").
+ * Reconstructing proper spacing/casing from styling alone is unreliable, so
+ * instead each row's raw fingerprint (lowercase letters only, punctuation and
+ * whitespace stripped) is matched against known entry names — an exact match
+ * marks the start of that entry's description block. This sidesteps the
+ * casing problem entirely.
+ */
+function parseProseDescriptions(
   pages: PageData[],
   startPage: number,
   endPage: number,
-  knownTalents: Talent[],
+  knownEntries: Array<{ id: string; name: string }>,
+  opts: { stopRegex: RegExp; labelRegex?: RegExp; skipLineRegex?: RegExp },
 ): Record<string, string> {
   const byFingerprint = new Map<string, string>()
-  for (const t of knownTalents) byFingerprint.set(fingerprint(t.name), t.id)
+  for (const t of knownEntries) byFingerprint.set(fingerprint(t.name), t.id)
 
   const result: Record<string, string> = {}
   let currentId: string | null = null
+  // A labelled line (e.g. "Prerequisites:", "Talent Groups:") sometimes wraps
+  // onto a second row (e.g. "Prerequisites: Tech-Priest (Respirator" /
+  // "Unit)."). Once a label line is seen, keep skipping until a row
+  // completes the sentence (ends in a period) so the wrapped tail doesn't
+  // leak into the description.
+  let skippingLabel = false
+  // Each entry gets exactly one definition in this kind of reference section.
+  // A name's fingerprint reappearing later (e.g. a running-header/guide-word
+  // artifact repeating an earlier entry's name) is never a second real
+  // listing — once an entry's block has ended, refuse to reopen it, so a
+  // stray repeat can't re-attach a totally unrelated page's text to it.
+  const closedIds = new Set<string>()
+  const closeCurrent = () => {
+    if (currentId) closedIds.add(currentId)
+    currentId = null
+  }
 
   for (let p = startPage; p <= endPage && p < pages.length; p++) {
     const pageText = getRows(pages[p]).map((r) => normRow(r.items)).join(" ")
-    // Stop once the Armoury/Money chapter begins
-    if (/Table\s*5[-–]\s*1\b|Income\s+and\s+Social\s+Class|THE\s+ARMOURY/i.test(pageText)) break
+    if (opts.stopRegex.test(pageText)) break
+
+    // Reset at each page boundary. If a page's headers fail to match for
+    // any reason (extraction quirk specific to that page), the entry last
+    // matched on the PREVIOUS page must not keep absorbing this page's
+    // unrelated body text — that silently corrupts one entry with garbage
+    // instead of just leaving a few entries on the bad page unmatched,
+    // which is the far safer failure mode.
+    closeCurrent()
+    skippingLabel = false
 
     const columns = splitColumns(pages[p].items)
 
     for (const colItems of columns) {
-      const rows = new Map<number, Item[]>()
-      for (const it of colItems) {
-        if (!rows.has(it.y)) rows.set(it.y, [])
-        rows.get(it.y)!.push(it)
-      }
-      const sortedRows = [...rows.entries()].sort((a, b) => b[0] - a[0])
+      // Same reasoning as the page-boundary reset above, one level finer:
+      // a column can hold an unrelated sidebar/callout box (e.g. example
+      // vehicle stat blurbs next to the "Evaluate" skill) with no matching
+      // entry name — without this, leftover state from the previous column
+      // would absorb it into whatever was last matched there.
+      closeCurrent()
+      skippingLabel = false
 
-      for (const [, rowItems] of sortedRows) {
+      // Cluster by y with a small tolerance rather than exact equality — two
+      // fragments of the SAME word can land 1-2pt apart due to sub-pixel
+      // rounding, and an exact-match grouping would treat them as separate
+      // rows, inserting a spurious space mid-word (e.g. "Administratum"
+      // coming out as "Admin istratum").
+      const sortedItems = [...colItems].sort((a, b) => b.y - a.y)
+      const rows: Item[][] = []
+      let anchorY: number | null = null
+      for (const it of sortedItems) {
+        if (anchorY === null || anchorY - it.y > 3) {
+          rows.push([])
+          anchorY = it.y
+        }
+        rows[rows.length - 1].push(it)
+      }
+
+      for (const rowItems of rows) {
         rowItems.sort((a, b) => a.x - b.x)
         const rawJoined = rowItems.map((i) => i.str).join("")
 
         // Skip footnote/page-number-only rows
         if (/^[\d†\s]*$/.test(rawJoined.trim())) continue
 
-        const fp = fingerprint(rawJoined)
-        if (fp.length >= 3 && byFingerprint.has(fp)) {
-          currentId = byFingerprint.get(fp)!
-          continue
+        // A row made of several very short fragments (each ≤6 chars) is the
+        // signature of the tracked small-caps header font (see normItem
+        // above) — used below both to match headers and to recognize (and
+        // discard) unmatched ones instead of treating them as body prose.
+        const tokens = rowItems.map((i) => i.str.trim()).filter(Boolean)
+        // Threshold is 8, not 6, because a tracked-font fragment can itself
+        // contain embedded spaces (e.g. "I N I N" is 7 chars) — using the
+        // stricter 6 here would let a genuine header fragment slip through
+        // and get treated as body prose instead of being recognized/skipped.
+        const looksLikeHeader = tokens.length >= 2 && tokens.every((t) => t.length <= 8)
+
+        const openEntry = (id: string) => {
+          if (closedIds.has(id)) return false
+          if (currentId && currentId !== id) closedIds.add(currentId)
+          currentId = id
+          skippingLabel = false
+          return true
         }
+
+        const fp = fingerprint(rawJoined)
+        if (fp.length >= 3) {
+          if (byFingerprint.has(fp)) {
+            openEntry(byFingerprint.get(fp)!)
+            continue
+          }
+          // Some headers share their row with a same-line suffix (e.g. a
+          // skill's "Barter(Basic)" tag), so the exact match above misses.
+          // Try a longest-prefix match instead — gated to header-shaped rows
+          // only, since on ordinary prose rows a name like "Search" could
+          // coincidentally prefix-match the start of an unrelated sentence
+          // ("Search the area..." -> "searchthearea").
+          if (looksLikeHeader) {
+            let bestLen = 0
+            let bestId: string | null = null
+            for (const [knownFp, id] of byFingerprint) {
+              if (fp.startsWith(knownFp) && knownFp.length > bestLen) {
+                bestLen = knownFp.length
+                bestId = id
+              }
+            }
+            if (bestId) {
+              openEntry(bestId)
+              continue
+            }
+          }
+        }
+
+        // Header-shaped but unmatched (extraction quirk on that specific
+        // header) — still clearly not body prose, so it must not be
+        // appended to whatever entry is currently active or it corrupts
+        // that entry's description with unrelated garbled fragments.
+        //
+        // Tempting but WRONG: also closing `currentId` here (since an
+        // unmatched header still marks *some* real boundary) sounds safer
+        // but isn't — a header can legitimately wrap onto a continuation
+        // row that still looks header-shaped (many short fragments), and
+        // closing on that wrongly cuts off the entry that's still actively
+        // accumulating. Measured: this dropped matched skills 39→20 and
+        // talents 113→112, i.e. broke far more entries than the rare
+        // cross-neighbor leak it was meant to prevent. Leaving the (rarer)
+        // leak as a known limitation beats that trade.
+        if (looksLikeHeader) continue
 
         const rowText = rowItems.map((i) => normOpItem(i.str)).filter(Boolean).join(" ").trim()
         if (!rowText) continue
+
+        if (skippingLabel) {
+          if (/[.:]\s*$/.test(rowText)) skippingLabel = false
+          continue
+        }
+        // Self-contained one-line subtitle (e.g. a skill's "(Advanced,
+        // Interaction)" tag or standalone characteristic name) — skip it
+        // without triggering the multi-row wrap-continuation logic below,
+        // since it never wraps and rarely ends in "." or ":".
+        if (opts.skipLineRegex && opts.skipLineRegex.test(rowText)) continue
         // Skip labels already captured elsewhere — not part of the prose body
-        if (/^Prerequisites\s*:/i.test(rowText)) continue
-        if (/^Talent\s+Groups?\s*:/i.test(rowText)) continue
+        if (opts.labelRegex && opts.labelRegex.test(rowText)) {
+          if (!/\.\s*$/.test(rowText)) skippingLabel = true
+          continue
+        }
 
         if (currentId) {
           result[currentId] = result[currentId] ? clean(result[currentId] + " " + rowText) : clean(rowText)
@@ -1071,6 +1196,16 @@ async function main() {
     pages[p] = await extractPageOp(doc, p + 1)
   }
 
+  // Re-extract the Skill Descriptions prose section (same 3-column layout),
+  // which runs from right after the skills quick-ref table to the start of
+  // Chapter IV (Talents).
+  const SKILL_DESC_OP_START = sections.skillsTable + 1
+  const SKILL_DESC_OP_END = talentsStart
+  console.log(`Re-extracting skill description pages ${SKILL_DESC_OP_START + 1}–${SKILL_DESC_OP_END + 1} via op-list...`)
+  for (let p = SKILL_DESC_OP_START; p <= SKILL_DESC_OP_END && p < pages.length; p++) {
+    pages[p] = await extractPageOp(doc, p + 1)
+  }
+
   // Re-extract armoury gear pages via op-list (pages 140–162, 0-indexed 139–161).
   // getTextContent garbles the tracked font on these pages.
   const GEAR_OP_START = 139   // PDF page 140 (0-indexed)
@@ -1086,7 +1221,28 @@ async function main() {
   console.log("\nParsing skills table (page", sections.skillsTable + 1, ")...")
   const skills = parseSkillsTable(pages[sections.skillsTable])
   console.log(`  → ${skills.length} skills`)
-  writeFileSync(join(OUTPUT_DIR, "skills.json"), JSON.stringify(skills, null, 2))
+
+  console.log("\nParsing skill descriptions (pages", SKILL_DESC_OP_START + 1, "–", SKILL_DESC_OP_END + 1, ")...")
+  const skillDescs = parseProseDescriptions(pages, SKILL_DESC_OP_START, SKILL_DESC_OP_END, skills, {
+    stopRegex: /Gaining\s+Talents|Chapter\s+IV/i,
+    skipLineRegex: /^\(.*\)$|^(Agility|Perception|Fellowship|Strength|Toughness|Willpower|Intelligence|Weapon Skill|Ballistic Skill)$/i,
+    labelRegex: /^Skill\s+Group\s*:/i,
+  })
+  const skillsMatched = skills.filter((s) => skillDescs[s.id]).length
+  console.log(`  → ${skillsMatched}/${skills.length} skills matched a long description`)
+
+  // Known-bad: these 3 skills sit next to an unusually wide vehicle-example
+  // sidebar box (Chimera/Aquila Lander) whose text isn't cleanly separable
+  // from the surrounding column by splitColumns() — confirmed contaminated
+  // by manual inspection. Suppressing rather than shipping garbled text;
+  // "no long description" is a better outcome than a visibly wrong one.
+  const SKILL_DESC_BLACKLIST = new Set(["drive", "evaluate", "pilot"])
+
+  const skillsWithLong: Skill[] = skills.map((s) => ({
+    ...s,
+    description: SKILL_DESC_BLACKLIST.has(s.id) ? "" : skillDescs[s.id] ?? "",
+  }))
+  writeFileSync(join(OUTPUT_DIR, "skills.json"), JSON.stringify(skillsWithLong, null, 2))
 
   // ── Talents ─────────────────────────────────────────────────────────────────
   // Quick-ref table starts on the SAME page as the Chapter IV intro heading.
@@ -1095,13 +1251,25 @@ async function main() {
   console.log(`  → ${talents.length} talents`)
 
   console.log("\nParsing talent descriptions (pages", TALENT_DESC_OP_START + 1, "–", TALENT_DESC_OP_END + 1, ")...")
-  const talentDescs = parseTalentDescriptions(pages, TALENT_DESC_OP_START, TALENT_DESC_OP_END, talents)
+  const talentDescs = parseProseDescriptions(pages, TALENT_DESC_OP_START, TALENT_DESC_OP_END, talents, {
+    stopRegex: /Table\s*5[-–]\s*1\b|Income\s+and\s+Social\s+Class|THE\s+ARMOURY/i,
+    labelRegex: /^Prerequisites\s*:|^Talent\s+Groups?\s*:/i,
+  })
   const matched = talents.filter((t) => talentDescs[t.id]).length
   console.log(`  → ${matched}/${talents.length} talents matched a long description`)
 
+  // Known-bad: "Peer" sits right before a run of 3-4 talents (Pistol
+  // Training, Power Well, Precise Blow, Prosanguine) on the same page whose
+  // headers fail to be recognized even as "header-shaped" for this specific
+  // page's rendering — their body text has nowhere else to go and ends up
+  // appended to Peer. Confirmed by manual inspection. Suppressing rather
+  // than shipping garbled text; those 4 talents were already unmatched
+  // (null) regardless, so nothing else is lost by also nulling Peer's.
+  const TALENT_DESC_BLACKLIST = new Set(["peer"])
+
   const talentsWithLong: Talent[] = talents.map((t) => ({
     ...t,
-    longDescription: talentDescs[t.id] ?? null,
+    longDescription: TALENT_DESC_BLACKLIST.has(t.id) ? null : talentDescs[t.id] ?? null,
   }))
   writeFileSync(join(OUTPUT_DIR, "talents.json"), JSON.stringify(talentsWithLong, null, 2))
 
@@ -1116,6 +1284,16 @@ async function main() {
   console.log("\nParsing psychic powers (pages", sections.powers + 1, "–", sections.powers + 35, ")...")
   const powers = parsePowers(pages, sections.powers, sections.powers + 35)
   console.log(`  → ${powers.length} powers`)
+  // NOTE: unlike Talents/Skills, this section's 3-column layout has a
+  // "label ... value" stat block (Threshold/Focus Time/Sustained/Range)
+  // WITHIN each column, whose label-to-value gap (~140pt) is wider than the
+  // actual gap between columns (~20-25pt). That breaks splitColumns()'s
+  // largest-gap heuristic — it picks the label/value gap as a column
+  // boundary instead of the real one, interleaving unrelated powers'
+  // paragraphs. Fixing this needs a frequency/density-aware column
+  // detector (true column edges recur on nearly every row; this stat-block
+  // gap only recurs on ~4 rows per power) — left as a follow-up rather than
+  // shipping garbled long descriptions.
   writeFileSync(join(OUTPUT_DIR, "powers.json"), JSON.stringify(powers, null, 2))
 
   // ── Armour ───────────────────────────────────────────────────────────────────
@@ -1137,7 +1315,7 @@ async function main() {
 
   // Quick quality summary
   console.log("\nQuality check:")
-  console.log(`  Skills without descriptions: ${skills.filter((s) => !s.description).length}/${skills.length}`)
+  console.log(`  Skills without descriptions: ${skillsWithLong.filter((s) => !s.description).length}/${skillsWithLong.length}`)
   console.log(`  Talents with prereqs: ${talents.filter((t) => t.prerequisites).length}/${talents.length}`)
   console.log(`  Weapons with availability: ${weapons.filter((w) => w.availability !== "—").length}/${weapons.length}`)
   console.log(`  Powers with threshold: ${powers.filter((p) => p.threshold !== "—").length}/${powers.length}`)

@@ -5,7 +5,7 @@
     "characteristic": "Agility",
     "type": "Advanced",
     "descriptor": "Movement",
-    "description": ""
+    "description": "The Acrobatics skill encompasses a variety of movement techniques unavailable to less flexible Acolytes. From performing somersaults to tumbling, from flipping through the air to daring leaps and jumps, this Skill expands your movement options. Use this Skill to perform some spectacular feat of derring-do. The Difﬁculty depends on the desired action. The more complicated the manoeuvre, such as somersaulting over a group of enraged cultists to grab the skids of a Vulture as it takes off, the harder the difﬁculty. The more degrees of success you attain, the more impressive the result. There are two special rules associated with this Skill: Disengage: You may make an Acrobatics Test when attempting a Disengage Action to reduce it to a Half Action. Jumping & Leaping: substitute an Acrobatics Test for an Agility Test when Jumping or Strength Tests when Leaping. An Acrobatics Test is typically a Full Action."
   },
   {
     "id": "awareness",
@@ -13,7 +13,7 @@
     "characteristic": "Perception",
     "type": "Basic",
     "descriptor": null,
-    "description": ""
+    "description": "The Awareness skill reflects your ability to perceive hidden dangers and to notice small details about your physical surroundings. You use the Awareness skill to notice ambushes, spot traps and discern other threats to you and your allies. Awareness is not tied to any one sense; it encompasses them all. When using Awareness to detect a hidden enemy, the Test is always Opposed. Otherwise, the thing you are trying to detect applies a Difﬁculty based on how cunningly concealed it is. An Awareness Test is usually a Free Action made in reaction to something."
   },
   {
     "id": "barter",
@@ -29,7 +29,7 @@
     "characteristic": "Fellowship",
     "type": "Advanced",
     "descriptor": "Interaction",
-    "description": ""
+    "description": "When you make a Blather Test, you stall for time by running off at the mouth, spewing a stream of words and nonsense in an attempt to confuse and distract others. A Blather Test is always Opposed by your target’s Willpower (or Scrutiny). If you succeed and the target fails, the target is distracted by you and can do nothing for one Round, staring dumbfounded and wondering if you are drunk, crazy or both. For every degree of success, you dumbfound the target for an additional Round. If your target succeeds and you fail, or if you both fail, your attempt at verbal acrobatics fails and the target may act normally. In the case where you both succeed, the character that had the most degrees of success determines the outcome. You can also use Blather against multiple opponents. For similar"
   },
   {
     "id": "carouse",
@@ -45,7 +45,7 @@
     "characteristic": "Fellowship",
     "type": "Basic",
     "descriptor": "Interaction",
-    "description": ""
+    "description": "The Charm skill is used to befriend others. You make Charm Tests whenever you want to change the minds of individuals or small groups, to beg, or seduce. You need not make a Charm"
   },
   {
     "id": "chem-use",
@@ -53,7 +53,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": "Crafting,Investigation",
-    "description": ""
+    "description": "You can use the Chem-Use skill to handle and prepare chemicals safely, especially toxins, poisons and drugs. Chem-Use covers the use and manufacture of toxins and it can also be used to identify a variety of chemicals (Investigation use). To prepare or apply a chemical, you must succeed at a Chem-Use Test, with modiﬁers determined by the GM. On a failed test the chemical is wasted. If you fail by ﬁve or more degrees, you accidentally poison yourself or overdose. See Chapter V: Armoury for more information on chemicals and their effects. When using a toxin wand or administering an antidote, the time taken to do so is halved with a successful Chem-Use Test. A Chem-Use Test to administer a chemical is a Full Action. Using Chem-Use to manufacture toxins utilises the rules for Crafting items as described on page 96 ."
   },
   {
     "id": "ciphers",
@@ -61,7 +61,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Ciphers skill reflects an understanding of shorthand codes employed by certain groups to confer basic ideas, warnings, and information about a given area. This can be in the form of hand signals or as physical symbols inscribed on a surface, usually in a subtle place. Ciphers are not very sophisticated, mostly used to warn of danger, mark a target or indicate protection. Skill Tests"
   },
   {
     "id": "climb",
@@ -69,7 +69,7 @@
     "characteristic": "Strength",
     "type": "Basic",
     "descriptor": "Movement",
-    "description": ""
+    "description": "Use the Climb skill to ascend or descend surfaces described as sheer. Sheer surfaces are walls without handholds, overhangs and other poor climbing conditions. Generally, a successful Test allows you to ascend or descend at half of your Half Move rate. Note that poor climbing conditions may impose a penalty to the Test. See Climbing in Chapter VII: Playing the Game for more details. A Climb Test is a Half Action."
   },
   {
     "id": "command",
@@ -77,7 +77,7 @@
     "characteristic": "Fellowship",
     "type": "Basic",
     "descriptor": "Interaction",
-    "description": ""
+    "description": "Command is used to make subordinates follow your orders. You may only use this Skill on those who are under your authority. A successful Command Test indicates that those whom you direct follow your instructions. On a failed Test, they either misinterpret the command or do nothing at all, or if you fail by ﬁve or more degrees, contradict your orders entirely. A Command Test can affect a number"
   },
   {
     "id": "common-lore",
@@ -85,7 +85,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": "Investigation",
-    "description": ""
+    "description": "Use the Common Lore skill to recall the habits, institutions, traditions, public ﬁgures"
   },
   {
     "id": "concealment",
@@ -101,7 +101,7 @@
     "characteristic": "Agility",
     "type": "Basic",
     "descriptor": "Movement",
-    "description": ""
+    "description": "The Contortionist skill is used to wriggle free from bonds, squeeze through a narrow opening, or slip out of chains. Escape Bonds Whenever you attempt to slip free from any kind of bonds, you make a Contortionist Test. The Difﬁculty depends on the Intelligence of the person who secured you in the ﬁrst place. If their Intelligence exceeds your Agility Characteristic, the Test is Hard (–20). Other factors may worsen or diminish the Difﬁculty, such as whether simple manacles or complicated arbitrator restraint cuffs were used, or whether you were hastily secured or your captor took his time to ensure that you could not escape."
   },
   {
     "id": "deceive",
@@ -109,7 +109,7 @@
     "characteristic": "Fellowship",
     "type": "Basic",
     "descriptor": "Interaction",
-    "description": ""
+    "description": "The Deceive skill is used to lie and con others. You make Deceive Tests whenever you would convince others of something that is not necessarily true, want to dupe them or otherwise swindle and mislead them. You need not make a Deceive Test every time you lie to an NPC; only when you want to change their opinions of you or convince them of something. A Deceive Test can affect a number of targets equal to your Fellowship Bonus and your targets must be able to see and hear you clearly, and understand what you say. Deceive is typically opposed by Scrutiny. A Deceive Test typically takes one minute."
   },
   {
     "id": "demolition",
@@ -117,7 +117,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": "Crafting",
-    "description": ""
+    "description": "You use the Demolition skill to blow things up without blowing yourself up at the same time! It is used to plant explosive devices and defuse bombs, as well as for the safe handling and manufacture of explosives. Demolition involves explosive devices that are planted or set, rather than those that are simply lobbed at the enemy. Manufacture Explosives Given enough time and resources you may use the Demolition skill to make an explosive device from scratch, or rig an otherwise normal device to explode. The Difﬁculty of the Test varies according to what ingredients you have available and how long you have to manufacture it. Rigging a frag grenade to explode when primed is a simple matter, but building a melta bomb from scratch is considerably harder. Generally, manufacturing explosives uses the rules for Crafting items described on page 96 . Planting Explosives Explosive devices such as demolition charges, melta bombs and krak grenades are far more effective when planted on a target. To plant an explosive make a Demolition Test. Success indicates that you have successfully planted the explosive, with a trigger mechanism and condition of your choice. Possible triggers include timers, fuses, proximity sensors or remote controls. Failure indicates that you believe the explosives to be planted properly, but when triggered they fail to go off. If you fail by ﬁve or more degrees, you accidentally set the explosives off yourself ! Boom! You may voluntarily make the Test more difﬁcult, for example increasing the time to plant a bomb in a more vulnerable location. By doing so, the Damage dealt is increased by +2 for each level of Difﬁculty increased or additional minute spent setting the explosive. For every degree of success on the Demolition Test, the explosive is harder to detect and to defuse. Note the number of degrees of success down when you"
   },
   {
     "id": "disguise",
@@ -125,7 +125,7 @@
     "characteristic": "Fellowship",
     "type": "Basic",
     "descriptor": null,
-    "description": ""
+    "description": "The Disguise skill is used to mask your true appearance. Appropriate clothing, props, make-up and prosthetics are often key to a successful disguise, as are more radical accoutrements such as plastic surgery, bionic implants or polymorphine. It is also possible to masquerade as a member of the opposite sex, a different race or a speciﬁc person, though these are more difﬁcult to pull off. Often, Disguise is an Opposed Skill Test against your foes’ Scrutiny. The time it takes to create a disguise varies greatly depending on its complexity, but it usually requires a minimum of one minute to don a simple disguise. d o d g e ( b a s I c , c o m b a t ) You may use the Dodge skill once per Round to negate a successful hand-to- hand or ranged attack. On a successful Test, the attack deals no Damage. See Chapter VII: Playing the Game for more information on Dodge. A Dodge Test is a Reaction."
   },
   {
     "id": "dodge",
@@ -165,7 +165,7 @@
     "characteristic": "Fellowship",
     "type": "Basic",
     "descriptor": "Investigation",
-    "description": ""
+    "description": "The Inquiry skill is your ability to pick up rumours, secrets and guarded information by asking questions, buying drinks and generally watching and listening for anything of interest that might bubble up. Inquiry can be used in one of two ways. The ﬁrst and most common way is to pick up general information about local developments. A successful Test reveals basic information, with additional and"
   },
   {
     "id": "interrogation",
@@ -173,7 +173,7 @@
     "characteristic": "Willpower",
     "type": "Advanced",
     "descriptor": "Investigation",
-    "description": ""
+    "description": "The key tool in an Inquisitor’s arsenal is interrogation—the ability to extract quality information from an unwilling subject. There is a ﬁne line between interrogation and crude torture. In the case of the latter, subjects tend to reveal whatever their tormenter wishes to hear, but in the case of the former, a skilled interrogator can tease out the darkest secrets by utilising a variety of devices, serums and techniques. Gear, environmental conditions and circumstances can all apply additional modiﬁers at the GM’s discretion. Make an Opposed Test, pitting your Interrogation skill against your opponent’s Willpower. If you beat your opponent, you get one answer plus one other answer for each degree of success. If your opponent wins the Opposed Test, you get nothing of worth. On a serious failure, you botch the procedure and inflict 1d10 plus your Willpower Bonus in Damage. If you fail by ﬁve or more degrees, you deal Damage as before but your subject gains a +30 bonus to Willpower Tests made to resist Interrogation. Each Interrogation Test inflicts one level of Fatigue on the target. An Interrogation Test consumes 1d5 hours of time."
   },
   {
     "id": "intimidate",
@@ -181,7 +181,7 @@
     "characteristic": "Strength",
     "type": "Basic",
     "descriptor": "Interaction",
-    "description": ""
+    "description": "You make Intimidate Tests whenever you want to coerce or frighten individuals or a small group. You need not make an Intimidate Test every time you make a threat. Usually Intimidate is backed up by Strength, but more subtle threats"
   },
   {
     "id": "invocation",
@@ -189,7 +189,7 @@
     "characteristic": "Willpower",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "An Invocation Test allows you to boost your Power Roll when using Psychic Powers by an amount equal to your Willpower Bonus. An Invocation Test is a Full Action. During this time, you clear your mind through various means, such as muttering mantras, meditating, ﬁngering psychic-foci and so on. A successful Test indicates that your mind is well prepared to touch the warp. On the next Round, you may add your Willpower Bonus in addition to any other bonus you add to your Power Roll. Doc Skul decides to visit the Inﬂict Pain Minor Psychic Power on his hated rival, Slippery Zim. He spends a full Turn shaking his bone rattle and muttering spitefully under his breath as part of his Invocation Test. He rolls to see if these preparations will help him Focus Power. He rolls 15—a success! On the following Round, he attempts to manifest Inﬂict Pain. He gets 4 on his Power Roll and adds his Willpower Bonus of 3 to this as normal. Because of his successful Invocation, he may now add an additional 3 points to this roll. In total, Doc Skul has made a Power Roll of 10 (4+3+3=10). His Focus Power Action succeeds, and Slippery Zim doubles over in pain! Failure on an Invocation Test indicates that you are not composed enough to gain any beneﬁts from your preparations. If you make a successful Invocation Test and then do not take the Focus Power Action on the following Turn, there are no side effects (aside from you possibly looking a little foolish)."
   },
   {
     "id": "lip-reading",
@@ -197,7 +197,7 @@
     "characteristic": "Perception",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "Use the Lip Reading skill to “listen in” on conversations that take place out of earshot. To use this Skill, you must have an unobstructed view of the speaker’s mouth and you must also be able to understand the language spoken. Distance is the biggest factor. The further away the subject is, the harder the Test. The base Difﬁculty is Challenging (+0), but it worsens by one step for every ten metres of distance. Note that equipment that magniﬁes vision can be used to offset this penalty and even provide bonuses. A successful Test reveals the general gist of the conversation, such as the person is talking about the weather, new tariffs at the space dock, and so on. Each degree of success reveals more speciﬁc details. A Lip Reading Test is a Full Action, though it lasts as long as the target speaks. l I t e r a c Y ( a d V a N c e d ) The Literacy skill enables you to read any language you can speak. You normally do not need to Test Literacy for everyday instances of reading or writing, but the GM may call for a Literacy Test when you attempt to read a challenging dialect, poor penmanship, decipher obscure phraseology, archaic usage or unusual idioms. To read one page of text— approximately 750 words—a Literacy Test takes about a minute."
   },
   {
     "id": "literacy",
@@ -213,7 +213,7 @@
     "characteristic": "Intelligence",
     "type": "Basic",
     "descriptor": "Investigation",
-    "description": ""
+    "description": "Logic represents your proﬁciency at mathematics and your ability at problem solving. Logic Tests might be made to decipher a code or to solve a particularly troublesome equation. Logic is also used by Tech-Priests to incant mathematical rituals on machinery. Note that Logic is a purely theoretical Skill—Tech-Use is its practical counterpart. A Logic Test usually takes one minute of pondering and thinking, although especially difﬁcult problems might require much longer."
   },
   {
     "id": "medicae",
@@ -221,7 +221,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Medicae skill is used to treat and repair injuries by closing wounds and restoring the balance of the body’s humors. There are two general methods for using Medicae: First Aid and Extended Care. You can use the former to attend fallen or injured comrades, while the latter serves to hasten the removal of damage. First Aid Using the Medicae skill to perform First Aid offers a quick ﬁx for injured or dying characters. A successful Medicae Test removes Damage equal to your Intelligence Bonus to Lightly Wounded characters, 1 Damage from Heavily Wounded characters and 1 point of Critical Damage from Critically Wounded characters. On a failure, the patient is not adversely affected and simply removes Damage at the natural healing rate. However, a failure by three or more degrees indicates that Lightly or Heavily Wounded take a point of Damage, whilst a character on 0 Wounds must make a Toughness Test or die. First Aid may only be applied to each Wound once and is a Full Action by you and your patient. Extended Care Extended Care speeds the healing process. You can attend a number of patients equal to your Intelligence Bonus. Each patient above this number imposes a cumulative –10 penalty to your Medicae Tests to provide extended care. For Lightly Wounded patients make one Test at the end of each day. For Heavily or Critically Wounded patients, Test once at the end of each week. On a success, your patient removes twice the normal Damage (removing Critical Damage ﬁrst then normal Damage), plus 1 Damage for each degree of success. On a failure, your patients are not adversely affected, removing Damage at the normal rates. A failure by three or more degrees indicates that all Lightly Wounded or Heavily Wounded characters take 1 Damage—use Sudden Death to resolve Critical Damage. Failing by ﬁve or more degrees indicates that all patients take 1d10 Damage—again, use Sudden Death to resolve Critical Damage."
   },
   {
     "id": "navigation",
@@ -229,7 +229,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "You employ the Navigation skill whenever you want to use maps, technical readouts, innate knowledge and landmarks to chart a proper course and avoid becoming lost. A successful Navigation Test can also estimate travel times based on geography, cosmography, time of year, weather and so on. Under normal circumstances, a single successful Test each day is sufﬁcient to keep you on track, though the GM may call for additional Tests if there are unusual conditions, such as fluctuating landmasses, swirling eddies of plasma or violent storms. Surface Navigation is used to navigate across a planet’s surface, using logi-compasses, map readouts and geographical knowledge. Stellar Navigation is used to navigate in space between planets, using star charts and carto mantic rituals. A Navigation Test usually represents several hours of charting courses, consulting maps and making heading corrections, but it may take one minute or less if its purpose is just to ﬁnd out where you are."
   },
   {
     "id": "performer",
@@ -253,7 +253,7 @@
     "characteristic": "Perception",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "You can use the Psyniscience skill to become attuned with the ebb and"
   },
   {
     "id": "scholastic-lore",
@@ -261,7 +261,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": "Investigation",
-    "description": ""
+    "description": "The Scholastic Lore skill grants you knowledge of a particular scholarly subject. A successful Test enables you to recall pertinent facts and—if you have access to the proper facilities or resources—to do research. Scholastic Lore represents a depth of learning far beyond Common Lore and it requires extensive study. You make Scholastic Lore Tests to identify an object, creature or place that falls under your particular area of expertise. A successful Test about a subject related to your speciality reveals the basic information. Each"
   },
   {
     "id": "scrutiny",
@@ -269,7 +269,7 @@
     "characteristic": "Perception",
     "type": "Basic",
     "descriptor": null,
-    "description": ""
+    "description": "Use the Scrutiny skill to make assessments about people you encounter, to determine if someone is lying to you, to sense ulterior motives and generally appraise the worth of another being. When trying to perceive a falsehood, or some other form of deception, you make an Opposed Test, pitting your Scrutiny against the target’s Deceive. If you beat your opponent by achieving more degrees of success, you get a hunch that something is not right. Note that Scrutiny does not confer telepathy and cannot be used to reveal all the secrets about a target. Rather, this"
   },
   {
     "id": "search",
@@ -285,7 +285,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "Other secret tongues may be available at the GM’s discretion. Secret Tongue is used to speak and comprehend a particularly obscure and arcane language known to only those of a speciﬁc profession, organisation or class. Secret tongues are more like codes than real languages. By the use of signiﬁers, body language and code words, users can speak in one tongue but use a secret language to impart deeper meaning or to relay a lot of information quickly. Under normal circumstances, Skill Tests are unnecessary if all speakers know the secret language. They may be required in adverse conditions such as communicating in a noisy venue, or during the chaos of battle. Groups of Acolytes may develop their own coded language, unique to their cell. This is represented by the Secret Tongue (Acolyte) skill. Acolyte: A pre-arranged series of code phrases and inflections intelligible only to a fellow cell member. Note that each cell of Acolytes has a unique version of this language."
   },
   {
     "id": "security",
@@ -293,7 +293,7 @@
     "characteristic": "Agility",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "You can use the Security skill to bypass locks and other security systems. The Difﬁculty of the Test depends on the quality of the defence. Generally one Test is sufﬁcient, but more complicated systems may require additional Tests or degrees of success. A Security Test takes one minute, with each degree of success reducing this time by ten seconds."
   },
   {
     "id": "shadowing",
@@ -301,7 +301,7 @@
     "characteristic": "Agility",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Shadowing skill allows you to follow another creature or vehicle without being seen. Shadowing differs from Concealment in that you are moving while masking your presence, often slipping from one place of cover to another or, if that is not possible, acting as if you are doing something else, such as reading through a data-slate, scrutinizing a wanted poster or anything else that makes you blend in with your environment. A Shadowing Test is always an Opposed Test, pitting your Skill against your opponent’s Awareness skill (or half their Perception if they do not have the Awareness skill). A single Shadowing Test is sufﬁcient to follow your opponent unseen for one minute."
   },
   {
     "id": "silent-move",
@@ -309,7 +309,7 @@
     "characteristic": "Agility",
     "type": "Basic",
     "descriptor": null,
-    "description": ""
+    "description": "Use the Silent Move skill whenever you want to creep about without making a noise. The Difﬁculty depends on the surface on which you walk—broken glass, twigs, gravel and so on, can all make extra noise. A Silent Move Test is always an Opposed Test, pitting your Skill against your opponent’s Awareness skill (or half their Perception if they do not have the Awareness skill). A Silent Move Test is usually a Free Action made as part of a Move Action."
   },
   {
     "id": "sleightof-hand",
@@ -317,7 +317,7 @@
     "characteristic": "Agility",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Sleight of Hand skill is used to palm objects, pick pockets or perform tricks with small items like coins and cards. The smaller the object, the easier it is to pick up, which is reflected in the task’s Difficulty as set by the GM. In most cases, a Sleight of Hand Test is an Opposed Test, pitting your Skill against your opponent’s Awareness skill (or half their Perception if they do not have the Awareness skill). You may also opt to use Sleight of Hand instead of Gamble to hide cards up your sleeve or palm dice. See the Gamble skill for more information. Sleight of Hand is usually a Half Action. You may make a Sleight of Hand Test as a Free Action, but you worsen the Difﬁculty by –10."
   },
   {
     "id": "speak-language",
@@ -325,7 +325,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Speak Language skill is used to communicate with others using a common tongue. Although the people of the Imperium are widely scattered, they are united by an official tongue—that of Low Gothic. However, every world has its own local dialects and peculiarities, and"
   },
   {
     "id": "survival",
@@ -333,7 +333,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "You use the Survival skill to subsist in the wild. This Skill encompasses such activities as ﬁshing, game hunting, making ﬁres, ﬁnding edible food, constructing improvised shelters, ﬁnding safe resting places, and so on. The Difﬁculty of the Test depends on the environment, with death worlds being much more difﬁcult to survive on than an agri-world. Failing a Survival Test usually indicates that you have failed to ﬁnd what you are looking for, either because you are inept or because it is simply not there to be found. Failing by ﬁve or more degrees indicates that you fail spectacularly, usually by bringing trouble down on your head—perhaps by triggering a rockslide, or stirring up a den of angry silt-bears or foolishly consuming poisoned berries. A Survival Test takes one hour, with each degree of success reducing this time by ten minutes. Under certain circumstances, like trying to ﬁnd a crude shelter from a meteor storm, the Difﬁculty can be increased and the time taken reduced to one minute."
   },
   {
     "id": "swim",
@@ -341,7 +341,7 @@
     "characteristic": "Strength",
     "type": "Basic",
     "descriptor": "Movement",
-    "description": ""
+    "description": "The Swim skill is used to swim and dive. Swimming under normal conditions does not require a Test. However, Tests may be called for when waters are rough or when swimming for an extended period is required. For more information on the Swim skill, see Swimming in Chapter VII: Playing the Game, page 214 . The Swim skill assumes a character is attempting to swim in water, but on alien worlds a character might encounter unusual substances such as lakes of sulphuric acid. The Difﬁculty of the Test might be increased to represent particular conditions. Swim does not protect a character from harm when swimming in toxic or otherwise dangerous liquids, nor does it negate the need for protective clothing. A Swim test is a Free Action made as part of a Move Action."
   },
   {
     "id": "tech-use",
@@ -349,7 +349,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "A character may use Tech-Use to repair mechanical items and to work out how unusual technical artefacts work. When using a basic, simple piece of mechanical equipment under normal circumstances, such as a vox or auspex, no Test is required. A Tech-Use Test is needed if the item is unusual, malfunctioning or conditions are especially troublesome, such as attempting to use an auspex during an electrical storm, or trying to get an ancient warp engine to start up after a thousand years’ disuse. Tech-Use may also be used to repair faulty or damaged items, the difﬁculty depending on the complexity of the item and the damage dealt to it. Tech-Use might sometimes be used to build an item from scratch, although a relevant Trade skill is more commonly used. A Tech-Use Test to ﬁgure out how an item works usually takes one minute, but might take less or more time depending on the complexity. A Test made to repair an item can take much longer, usually one hour but reduced by ten minutes for every degree of success."
   },
   {
     "id": "tracking",
@@ -357,7 +357,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "The Tracking skill is used to follow prey, be it animal or otherwise. Following obvious tracks requires no Test and can be done without slowing down. However, any instance when climate, lighting or terrain conditions would interfere always require a Tracking Test. The Difﬁculty depends on the quality of the prints and the circumstances. For example, a recent snowfall would make tracking prints Difﬁcult (–10) or even Hard (–20). When following obscure tracks, the tracker’s Movement rate drops to half. Sometimes you will be following quarry that has attempted to cover its tracks, in which case this becomes an Opposed Test made against the quarry’s Concealment Test result. You may also make Tests to deduce your distance from the quarry, their numbers and their racial type. A Tracking Test is a Free Action made as part of a Move Action."
   },
   {
     "id": "trade",
@@ -365,7 +365,7 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": "Crafting",
-    "description": ""
+    "description": "Various Having a Trade skill indicates that you know how to practice a trade or craft. With this Skill, you can make a living or create items suited to your trade. You can also make a Trade Test to identify the handiwork of a particular craftsman, or to know something about a particular item. See page 96 for rules on Crafting. A Trade Test normally represents a day’s hard work. A Trade Test made to identify an item or craftsman is usually a Full Action, during which time the tradesman sucks his teeth and sighs before making his prognosis. Agri: Used to grow, care and harvest crops and animals. Apothecary: Used to blend and prepare herbal remedies. Armourer: Used to create and maintain armour and weapons. Artist: Used to create works of art. Cartographer: Used to take accurate measurements and turn them into maps. Cook: Used to create and identify food. Copyist: Used to swiftly copy text, illuminate manuscripts and forge written material. Embalmer: Used to prepare and preserve corpses. Mason: Used to assess and construct stone buildings. Merchant: Used to ﬁnd, bargain and sell trade goods. Miner: Used to extract minerals, maintain mines and identify common hazards. Prospector: Used to ﬁnd and identify valuable materials. Scrimshawer: Used to inscribe patterns, text and imagery onto materials. Smith: Used to forge metals into shape. Soothsayer: Used to give the appearance of telling the future."
   },
   {
     "id": "wrangling",
@@ -373,6 +373,6 @@
     "characteristic": "Intelligence",
     "type": "Advanced",
     "descriptor": null,
-    "description": ""
+    "description": "This Skill may be used in order to ride domesticated animals of appropriate size. The Wrangling skill also allows you to care for and control domesticated animals, like bloodhounds, Spike Pigs, horses, Grox and the like. Routine care and feeding requires no Test. Tests are most commonly made to spot developing illnesses or signs of discomfort, or for special grooming (preparing a mount for a parade, for instance). Wrangling can also be used to train animals to perform tricks and obey simple commands. Properly training an animal takes some time. Tests should be made once a week during training. A simple trick can be learned with one successful Test, a moderately difﬁcult trick can be learned with three successful Tests and a difﬁcult trick can be learned with ten successful Tests. Common tricks include guarding, fetching, attacking, and so on. You may also use this Skill to befriend animals. Domestic animals are always friendly to you. Wild animals or those trained to be hostile (like attack dogs) can be calmed with a successful Test. GMs may impose penalties for particularly loyal or ornery animals. Wrangling is of no use against cyber- animals such as familiars, even if they are built to resemble an animal. A Wrangling Test takes a variable amount of time, depending on what the character is attempting to accomplish. Training an animal takes at least a week of hard work, whereas attempting to befriend an animal is a Full Action."
   }
 ]
