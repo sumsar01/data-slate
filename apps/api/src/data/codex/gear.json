@@ -5,7 +5,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "1/20",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "shot",
@@ -13,7 +14,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "1/20",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "Shot is solid lead or stone balls and a powder charge used in primitive blackpowder weapons. Used With:"
   },
   {
     "id": "bullets",
@@ -21,7 +23,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "1/20",
-    "availability": "Plentiful"
+    "availability": "Plentiful",
+    "description": "Imperium and vary greatly in calibre and design. Bullets from one kind of ﬁrearm cannot be used in another unless they are very similar in make. So for example you could use bullets bought for a stub revolver in a stub automatic, but not in an autogun. Used With: Autopistol, stub revolver, stub automatic, hand cannon, autogun, hunting rifle and heavy stubber."
   },
   {
     "id": "shells",
@@ -29,7 +32,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "1/20",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "charge-pack-pistol",
@@ -37,7 +41,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "10/full clip",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "charge-pack-basic",
@@ -45,7 +50,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "15/full clip",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "charge-pack-heavy",
@@ -53,7 +59,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "30/full clip",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "fuel-pistol",
@@ -61,7 +68,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "8/full clip",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "fuel-basic",
@@ -69,7 +77,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "10/full clip",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "bolt-shells",
@@ -77,7 +86,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "16/1",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "melta-canister-pistol",
@@ -85,7 +95,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "20/full clip",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "melta-canister-basic",
@@ -93,7 +104,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "15/full clip",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "plasma-flask-pistol",
@@ -101,7 +113,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "24/full clip",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "plasma-flask-basic",
@@ -109,7 +122,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "18/full clip",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "exotic",
@@ -117,7 +131,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "20/1",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "dumdum-bullets",
@@ -125,7 +140,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "5/6",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "hot-shot-charge",
@@ -133,7 +149,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "15/1",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "inferno-shells",
@@ -141,7 +158,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "18/1",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "man-stopper-bullets",
@@ -149,7 +167,8 @@
     "category": "Ammo",
     "weight": "—",
     "cost": "5/6",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "backpack",
@@ -157,7 +176,8 @@
     "category": "Clothing & Personal Items",
     "weight": "1 kg",
     "cost": "10",
-    "availability": "Plentiful"
+    "availability": "Plentiful",
+    "description": "A personal carrying device can take many forms, but is usually some kind of bag with attached straps for ease of carrying. A backpack can usually carry approximately 50 kilograms."
   },
   {
     "id": "cameleoline-cloak",
@@ -165,7 +185,8 @@
     "category": "Clothing & Personal Items",
     "weight": "0.5 kg",
     "cost": "500",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "Cameleoline material is made up of mimic ﬁbres that blend the coloration of the wearer into their surroundings. A character wearing a cameleoline cloak gains a +20 bonus to Concealment Tests. If the wearer remains stationary, he counts as being at Extreme Range (see Chapter VII: Playing the Game, page 198 ) when targeted by ranged weapons."
   },
   {
     "id": "charm",
@@ -173,7 +194,8 @@
     "category": "Clothing & Personal Items",
     "weight": "—",
     "cost": "Var",
-    "availability": "Average"
+    "availability": "Average",
+    "description": ""
   },
   {
     "id": "chrono",
@@ -181,7 +203,8 @@
     "category": "Clothing & Personal Items",
     "weight": "—",
     "cost": "40",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": ""
   },
   {
     "id": "clip-drop-harness",
@@ -189,7 +212,8 @@
     "category": "Clothing & Personal Items",
     "weight": "2 kg",
     "cost": "25",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "clothing",
@@ -197,7 +221,8 @@
     "category": "Clothing & Personal Items",
     "weight": "—",
     "cost": "Var",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": ""
   },
   {
     "id": "explosive-collar",
@@ -205,7 +230,8 @@
     "category": "Clothing & Personal Items",
     "weight": "1 kg",
     "cost": "55",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "These unpleasant devices are most often seen attached to penal for the Emperor. Collars usually come with a remote trigger that can be used to detonate the collar up to, and sometimes over, ranges of 1,000 metres. When the collar explodes it instantly kills the wearer and inflicts 1d10 Explosive Damage on anyone within three metres. The remote trigger can also be used to remove the collar. Removing the collar without the trigger requires a Hard (–20) Tech-Use Test. A serious or worse failure indicates that the collar explodes."
   },
   {
     "id": "filtration-plugs",
@@ -213,7 +239,8 @@
     "category": "Clothing & Personal Items",
     "weight": "—",
     "cost": "15",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "These are simple plugs worn in each nostril to screen out most pollutants and harmful gases. A character wearing ﬁltration plugs gains a +20 bonus to any Toughness Test made to resist the effects of gas."
   },
   {
     "id": "infra-red-goggles",
@@ -221,7 +248,8 @@
     "category": "Clothing & Personal Items",
     "weight": "0.5 kg",
     "cost": "275",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "Relatively simple devices, IR goggles allow the wearer to see thermal images from warm bodies, revealing hiding enemies at night. A character wearing IR goggles suffers no penalties due to darkness and gains a +20 bonus to vision-based Perception Tests at night. Advanced models can be disguised to appear as simple eyeglasses. Advanced lenses designed to enhance the low-level light available on even the darkest nights. Users can see in the dark almost as well as in daylight with them. Characters wearing these gain the Dark Sight trait (see page 325"
   },
   {
     "id": "photo-visors-contacts",
@@ -229,7 +257,8 @@
     "category": "Clothing & Personal Items",
     "weight": "0.5 kg",
     "cost": "100",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "re-breather",
@@ -237,7 +266,8 @@
     "category": "Clothing & Personal Items",
     "weight": "1 kg",
     "cost": "50",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "Consisting of a mask or helmet, re-breathers contain their own air supply and are designed to preserve the user in even the most toxic atmospheres. A character wearing a re-breather is immune to the effects of gases and can even survive underwater. However, re-breathers typically have air canisters that last for about one hour and then must be replaced. Replacing a canister is a Full"
   },
   {
     "id": "recoil-glove",
@@ -245,7 +275,8 @@
     "category": "Clothing & Personal Items",
     "weight": "0.5 kg",
     "cost": "85",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "These gloves have interlocking plates connected with memory wire. When the user grips a weapon, it locks together into a rigid strut around the hand and wrist, thus preventing wrist or arm damage when the weapon discharges. A character using a recoil glove can ﬁre a Basic weapon with one hand without the normal –20 penalty. In addition, Pistol weapons that require two hands can be used one-handed without penalty."
   },
   {
     "id": "respirator-gas-mask",
@@ -253,7 +284,8 @@
     "category": "Clothing & Personal Items",
     "weight": "0.5 kg",
     "cost": "25",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "This is a breathing mask that covers the nose and mouth or entire face, and offers much better protection than ﬁltration plugs. A character wearing a respirator or gas mask gains a +30 bonus to Toughness Tests made to resist the effects of gas, and may re-roll failed results."
   },
   {
     "id": "void-suit",
@@ -261,7 +293,8 @@
     "category": "Clothing & Personal Items",
     "weight": "8 kg",
     "cost": "100",
-    "availability": "Plentiful"
+    "availability": "Plentiful",
+    "description": "These sealed suits are intended to preserve the wearer in the most hostile environments. A void suit incorporates a re-breather and in addition allows the wearer to survive in vacuum."
   },
   {
     "id": "synskin",
@@ -269,7 +302,8 @@
     "category": "Clothing & Personal Items",
     "weight": "2 kg",
     "cost": "2,500",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": "Synskin is a bio-reactive bodyglove with an inert non-reflective surface that moulds itself to the wearer’s form. Synskin adds 2 Armour Points to all locations and the wearer gains a +10 bonus to Concealment and Silent Move Tests. In addition, synskin renders the wearer invisible to the effects of infra-red goggles and Dark Sight."
   },
   {
     "id": "amasec",
@@ -277,7 +311,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "50",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "Amasec is a popular alcoholic drink distilled from wine. It can range from lesser brews barely ﬁt for ﬁrebombs to well- aged and flavourful brands suitable for only the ﬁnest of the Emperor’s servants."
   },
   {
     "id": "de-tox",
@@ -285,7 +320,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "65",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "This drug can negate the effects of most dangerous gases and toxins if administered fast enough. A dose of de-tox immediately ends the ongoing effects, both positive and negative, of any drugs, toxins or gases affecting the character (unless the effect states that de-tox is not effective against them). Using de-tox, however, is both painful and debilitating, causing such unpleasant side effects as vomiting, nose bleeds and a great voiding of the bowels. Upon taking this drug, a character is Stunned for a number of Rounds equal to 1d10 minus his Toughness Bonus. A result of 0 or less means that the character suffers no ill effects. When the same drug is used too often, especially in a short period of time, there is a chance for it to have no effect. This represents an Acolyte’s body building an immunity. If you use more than one dose of a drug within a 24 hour period you must make a Toughness Test for each use after the ﬁrst, with a cumulative –20 penalty. Should you fail, the drug has no effect and further doses do not affect you for a full 24 hours."
   },
   {
     "id": "frenzon",
@@ -293,7 +329,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "95",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "injector",
@@ -301,7 +338,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "5",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": ""
   },
   {
     "id": "lho-sticks",
@@ -309,7 +347,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "10",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "medikit",
@@ -317,7 +356,8 @@
     "category": "Drugs & Consumables",
     "weight": "2 kg",
     "cost": "150",
-    "availability": "Common"
+    "availability": "Common",
+    "description": ""
   },
   {
     "id": "obscura",
@@ -325,7 +365,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "285",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "While prohibited and the subject of widespread crackdowns, obscura remains a widely used narcotic among many Imperial subjects. Smugglers can often make a good living importing and selling the drug to all classes of civilians and military personnel. Those taking obscura enter a dream-like state for 1d5 hours (if required to engage in combat consider them under the effects of a hallucinogen grenade (see Then for 1d10 hours after the effects wear off, they enter a deep depression, unless another dose of obscura is taken."
   },
   {
     "id": "ration-packs",
@@ -333,7 +374,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "10",
-    "availability": "Plentiful"
+    "availability": "Plentiful",
+    "description": "Most food in the Imperium is packaged, processed and usually completely unrecognisable as anything edible. The quality of ration packs varies widely, from simple and poor fare such as corpse starch (CS) rations and cultured algae up to flavoured strips of grox meat and ﬁnest nutrislurry."
   },
   {
     "id": "recaf",
@@ -341,7 +383,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "5",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": "Recaf is a popular hot beverage, made from crushed and brewed leaves. The composition can vary from planet to planet, but most blends have a stimulant such as caffeine as a basic release agent."
   },
   {
     "id": "rotgut-booze",
@@ -349,7 +392,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "10",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": "Alcohol comes in many shapes and sizes throughout the Imperium, and most cultures are noted for at least one kind of fermented liquid. The catch-all term for these more basic brews (especially by travellers) is rotgut booze."
   },
   {
     "id": "sacred-machine-oil",
@@ -357,7 +401,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "150",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "slaught",
@@ -365,7 +410,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "75",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "spook",
@@ -373,7 +419,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "395",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "This drug can augment and even produce short-term psychic abilities in the user. If a character without any Psy Rating takes a dose of spook he must successfully make a Willpower Test or gain 1d5 Insanity Points as his mind is ﬁlled with horrible visions of the warp. On a success, the user gains a power from Table 5-15: Random Psychic Powers —see descriptions in Chapter VI: Psychic Powers . The power lasts for 1d5 hours and the user manifests the power—if he does not have the Focus Power skill—by making a Hard (–20) Willpower Test. If a character with a Psy Rating of 1 or more uses spook they must make a Willpower Test. If they fail they gain an Insanity Point and no further effects. If they pass they add 2 to all Power Rolls for the next hour. However, add +25 to any rolls made on the Psychic Phenomena table (see Table 6-2: Psychic Phenomena, page 162 )."
   },
   {
     "id": "stimm",
@@ -381,7 +428,8 @@
     "category": "Drugs & Consumables",
     "weight": "—",
     "cost": "20",
-    "availability": "Average"
+    "availability": "Average",
+    "description": ""
   },
   {
     "id": "auspex-scanner",
@@ -389,7 +437,8 @@
     "category": "Tools",
     "weight": "0.5 kg",
     "cost": "145",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "These devices are used to detect energy emissions, motion and biological life signs. A character using an auspex gains a +20 bonus to Awareness Tests and may make a Tech-Use Test to use an auspex to spot things not normally detectable to human senses alone, such as invisible gases, nearby bio- signs or ambient radiation. The standard range for an auspex is 50m, though walls more than 50cm thick and certain shielding materials can block the scanner."
   },
   {
     "id": "auto-quill",
@@ -397,7 +446,8 @@
     "category": "Tools",
     "weight": "—",
     "cost": "55",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "These arcane-looking scribing devices allow the user to copy text at an impressive rate with great accuracy. A character with the Trade (Copyist) skill can use an auto quill to gain a +10 to their Skill Tests."
   },
   {
     "id": "combi-tool",
@@ -405,7 +455,8 @@
     "category": "Tools",
     "weight": "1 kg",
     "cost": "200",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "Commonly found in the hands of member of the Adeptus Mechanicus, combi-tools are versatile if somewhat bizarre mechanical devices. A character using a combi-tool gains a +10 bonus to Tech-Use Tests."
   },
   {
     "id": "data-slate",
@@ -413,7 +464,8 @@
     "category": "Tools",
     "weight": "0.5 kg",
     "cost": "25",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "Data-slates are commonplace in the Imperium, as the primary means of storing and reading printed text and other media such as video or audio recordings. They are so cheap and easy to make that many contain a single media recording, such as text, and can only play that single ﬁle. Others can re-record new information, and transmit and receive data from other devices."
   },
   {
     "id": "demolition-charge",
@@ -421,7 +473,8 @@
     "category": "Tools",
     "weight": "1 kg",
     "cost": "250",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "excruciator-kit",
@@ -429,7 +482,8 @@
     "category": "Tools",
     "weight": "1 kg",
     "cost": "375",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "glow-globe-lamp-pack",
@@ -437,7 +491,8 @@
     "category": "Tools",
     "weight": "0.5 kg",
     "cost": "15",
-    "availability": "Abundant"
+    "availability": "Abundant",
+    "description": ""
   },
   {
     "id": "grapnel",
@@ -445,7 +500,8 @@
     "category": "Tools",
     "weight": "2 kg",
     "cost": "30",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "Grapnels use a small launcher or gun to ﬁre a hooked or magnetic grapnel, connected to the launcher with a thin but strong wire (100m). Once the grapnel attaches to the desired spot, such as a rooftop, the user can manually climb the line or activate a powered winch. In a pinch they can also be used as a crude (and messy) projectile weapon (counting as a single-shot crossbow)."
   },
   {
     "id": "lascutter",
@@ -453,7 +509,8 @@
     "category": "Tools",
     "weight": "4 kg",
     "cost": "65",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "When a door (or more commonly a bulkhead) cannot be opened normally, a lascutter comes into play. Originally used by miners, these short-range devices emit an intense laser beam, which can knife through hard, dense materials such as rock, steel and even armour plate with relative ease. As a general rule, a lascutter can cut through, or weld shut, 10 cm of metal a Turn (this length of time can be adjusted up or down depending on the thickness of the material in question). Lascutters are too unwieldy to be used in combat."
   },
   {
     "id": "magnoculars",
@@ -461,7 +518,8 @@
     "category": "Tools",
     "weight": "0.5 kg",
     "cost": "55",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "These are powerful vision aids, which magnify distant objects. More advanced, higher-quality magnoculars can also do such things as give range read-outs, detect heat sources, calculate target location positioning and take image snapshots for later analysis."
   },
   {
     "id": "manacles",
@@ -469,7 +527,8 @@
     "category": "Tools",
     "weight": "1 kg",
     "cost": "35",
-    "availability": "Plentiful"
+    "availability": "Plentiful",
+    "description": "These are solid restraints often used by bounty hunters and enforcers, which can equally be found in the hands of more nefarious individuals for darker purposes."
   },
   {
     "id": "micro-bead",
@@ -477,7 +536,8 @@
     "category": "Tools",
     "weight": "—",
     "cost": "20",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "A micro-bead or comm-bead is a short-range communication device worn in the ear, good out to about one kilometre. Such things as bad weather, dense terrain and intervening rock or plasteel can greatly reduce this range, however."
   },
   {
     "id": "multikey",
@@ -485,7 +545,8 @@
     "category": "Tools",
     "weight": "—",
     "cost": "150",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "As it can open most standard Imperial locks, the multikey is not a standard item for most honest Imperial citizens. For the same reason though, they are widely sought after by criminals and other disreputable elements. A character with a multikey gains a +30 bonus to any Security Test when trying to open locks."
   },
   {
     "id": "pict-recorder",
@@ -493,7 +554,8 @@
     "category": "Tools",
     "weight": "1 kg",
     "cost": "100",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "Pict recorders are relatively simple live-media recording devices, and some have holographic capabilities. Most also allow for playback as well as recording, and some are even built into special servitors so they can capture important archaeological tech-quests, weapons tests, alien interrogations and other possibly dangerous events."
   },
   {
     "id": "psy-focus",
@@ -501,7 +563,8 @@
     "category": "Tools",
     "weight": "—",
     "cost": "100",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": "Pyskers often use devices to help them focus their powers. A psy-focus could be sacred bones, carved wytch staves, blessed icons or crystals. When a Psyker with a Psy-focus makes an Invocation Test (see Chapter III: Skills, page 103 ) he gains a +10 bonus."
   },
   {
     "id": "screamers",
@@ -509,7 +572,8 @@
     "category": "Tools",
     "weight": "2 kg",
     "cost": "140",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "Screamers are proximity alarms that detect motion or sound (depending on the model) and alert their users to incoming dangers by setting off a horrendous noise. To use a screamer, you must succeed on a Tech-Use Test. The GM rolls this test in secret so you are not sure of whether or not the device will work properly. Once set, a screamer has a Perception of 75 for the purposes of detecting sounds or motions. If it detects an intruder, it sounds its alarm, which can be heard anywhere out to one kilometre. Doors, walls and other barriers may reduce the alarm’s range."
   },
   {
     "id": "stummers",
@@ -517,7 +581,8 @@
     "category": "Tools",
     "weight": "2 kg",
     "cost": "25",
-    "availability": "Average"
+    "availability": "Average",
+    "description": "The reverse of a screamer, stummers generate sound waves to cancel out ambient sounds and noises made by moving personnel in a small area. A character carrying an active stummer gains a +30 bonus to Silent Move Tests. A stummer typically has enough power for 20 minutes of continuous use before needing to be recharged (taking about one hour)."
   },
   {
     "id": "vox-caster",
@@ -525,7 +590,8 @@
     "category": "Tools",
     "weight": "4 kg",
     "cost": "300",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": "A vox is a simple communication device that can be used to send signals over great distances, up to and including ships in orbit from a planet’s surface. Using a vox to receive or transmit signals requires a successful Ordinary (+10) Tech-Use Test."
   },
   {
     "id": "writing-kit",
@@ -533,7 +599,8 @@
     "category": "Tools",
     "weight": "2 kg",
     "cost": "20",
-    "availability": "Common"
+    "availability": "Common",
+    "description": "A writing kit contains papers, inks and quills."
   },
   {
     "id": "bionic-arm",
@@ -541,7 +608,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "1,000",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "bionic-locomotion",
@@ -549,7 +617,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "1,500",
-    "availability": "Scarce"
+    "availability": "Scarce",
+    "description": ""
   },
   {
     "id": "bionic-respiratory-system",
@@ -557,7 +626,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "800",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "auger-arrays",
@@ -565,7 +635,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "1,000",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "cortex-implants",
@@ -573,7 +644,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "5,000",
-    "availability": "Very Rare"
+    "availability": "Very Rare",
+    "description": ""
   },
   {
     "id": "cybernetic-senses",
@@ -581,7 +653,8 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "2,250",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   },
   {
     "id": "mind-impulse-unit",
@@ -589,6 +662,7 @@
     "category": "Cybernetics",
     "weight": "—",
     "cost": "1,750",
-    "availability": "Rare"
+    "availability": "Rare",
+    "description": ""
   }
 ]

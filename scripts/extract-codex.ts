@@ -76,6 +76,12 @@ export type PsychicPower = {
   description: string
 }
 
+export type WeaponQuality = {
+  id: string
+  name: string
+  description: string
+}
+
 // ─── PDF extraction ───────────────────────────────────────────────────────────
 
 async function loadDoc(path: string): Promise<any> {
@@ -475,6 +481,60 @@ function fingerprint(s: string): string {
     .replace(/ﬁ/g, "fi")
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "")
+}
+
+/**
+ * Remove label items (e.g. "Threshold:") together with the very next item
+ * on their same row (their value, e.g. "8") from a page's item list, BEFORE
+ * column-splitting runs.
+ *
+ * Some sections lay out a "label ... value" mini-table within each column
+ * (e.g. Psychic Powers' Threshold/Focus Time/Sustained/Range block), where
+ * the label-to-value gap (~140pt) is wider than the actual gap between
+ * columns (~20-25pt). splitColumns()'s largest-gap heuristic then picks
+ * that intra-column gap as a column boundary instead of the real one,
+ * interleaving unrelated entries' paragraphs. Since all 3 columns share the
+ * same row (y) — one column's label can sit anywhere in that shared row,
+ * not necessarily leftmost — this strips the specific label+value ITEM PAIR
+ * only, leaving any other columns' body prose sharing that same y intact.
+ */
+function stripLabelValuePairs(items: Item[], labelRegex: RegExp): Item[] {
+  const rows = new Map<number, Item[]>()
+  for (const it of items) {
+    if (!rows.has(it.y)) rows.set(it.y, [])
+    rows.get(it.y)!.push(it)
+  }
+  const keep: Item[] = []
+  for (const rowItems of rows.values()) {
+    rowItems.sort((a, b) => a.x - b.x)
+    for (let i = 0; i < rowItems.length; i++) {
+      if (labelRegex.test(rowItems[i].str.trim())) {
+        i++ // also skip the value immediately following the label
+        continue
+      }
+      keep.push(rowItems[i])
+    }
+  }
+  return keep
+}
+
+/**
+ * Remove rows matching `shouldStrip` (e.g. a psychic power summary-table
+ * row) from a page's item list entirely, BEFORE column-splitting runs.
+ */
+function stripRows(items: Item[], shouldStrip: (rowItems: Item[]) => boolean): Item[] {
+  const rows = new Map<number, Item[]>()
+  for (const it of items) {
+    if (!rows.has(it.y)) rows.set(it.y, [])
+    rows.get(it.y)!.push(it)
+  }
+  const keep: Item[] = []
+  for (const rowItems of rows.values()) {
+    rowItems.sort((a, b) => a.x - b.x)
+    if (shouldStrip(rowItems)) continue
+    keep.push(...rowItems)
+  }
+  return keep
 }
 
 /**
@@ -905,6 +965,7 @@ export type GearItem = {
   weight: string
   cost: string
   availability: string
+  description: string
 }
 
 const GEAR_TABLE_MARKERS: Array<[RegExp, string]> = [
@@ -988,7 +1049,7 @@ function parseGear(pages: PageData[], startPage: number, endPage: number): GearI
           if (seenIds.has(id)) continue
           seenIds.add(id)
 
-          items.push({ id, name, category, weight, cost, availability: avail })
+          items.push({ id, name, category, weight, cost, availability: avail, description: "" })
         }
         break  // only one marker can match per row
       }
@@ -1279,22 +1340,132 @@ async function main() {
   console.log(`  → ${weapons.length} weapons`)
   writeFileSync(join(OUTPUT_DIR, "weapons.json"), JSON.stringify(weapons, null, 2))
 
+  // ── Weapon Special Qualities glossary ────────────────────────────────────────
+  // A 2-column glossary right before the weapon tables (e.g. "Accurate",
+  // "Blast (X)", "Reliable") that individual weapons' `special` field
+  // references by name — same tracked-header layout as Talents/Skills.
+  console.log("\nParsing weapon special qualities...")
+  const WEAPON_QUALITY_NAMES = [
+    "Accurate", "Balanced", "Blast", "Defensive", "Flame", "Flexible",
+    "Inaccurate", "Overheats", "Power Field", "Primitive", "Reliable",
+    "Scatter", "Shocking", "Smoke", "Snare", "Tearing", "Recharge", "Toxic",
+    "Unbalanced", "Unreliable", "Unstable", "Unwieldy",
+  ]
+  const knownQualities = WEAPON_QUALITY_NAMES.map((name) => ({ id: slug(name), name }))
+  const WQ_START = sections.weapons - 4
+  // Include sections.weapons itself — a few qualities (Unbalanced,
+  // Unreliable, Unstable, Unwieldy) sit at the top of that same page,
+  // just before its weapon table begins further down.
+  const WQ_END = sections.weapons
+  const qualityPages: PageData[] = [...pages]
+  for (let p = WQ_START; p <= WQ_END && p >= 0 && p < pages.length; p++) {
+    const opPage = await extractPageOp(doc, p + 1)
+    // The last quality (Unwieldy) sits right before the weapon tables begin
+    // on the same page — strip table-shaped rows (an availability value, or
+    // a weapon-class + damage-dice combo) the same way Gear/Powers do, so
+    // that leftover table data can't tack onto the last entry's tail.
+    const strippedItems = stripRows(opPage.items, (rowItems) => {
+      const joined = rowItems.map((i) => i.str).join(" ")
+      if (AVAILABILITY_VALS.some((av) => new RegExp(`\\b${av}\\b`, "i").test(joined))) return true
+      const hasClass = WEAPON_CLASSES.some((c) => new RegExp(`\\b${c}\\b`).test(joined))
+      if (hasClass && /\d+d\d+/i.test(joined)) return true
+      // Category/column headers repeating across each weapon table
+      // ("Bolt Weapons  Name", "Melta Weapons  Name", ...) — "Name" as a
+      // standalone column header essentially never appears in this prose.
+      return /\bWeapons?\s+Name\b/i.test(joined)
+    })
+    const rows = new Map<number, Item[]>()
+    for (const it of strippedItems) {
+      if (!rows.has(it.y)) rows.set(it.y, [])
+      rows.get(it.y)!.push(it)
+    }
+    qualityPages[p] = { items: strippedItems, rows }
+  }
+  const qualityDescs = parseProseDescriptions(qualityPages, WQ_START, WQ_END, knownQualities, {
+    stopRegex: /[^\s\S]/, // never matches — bounded instead by the fixed page range above
+  })
+  // "Unstable" is immediately followed by the weapon tables' repeating
+  // category headers ("Bolt Weapons  Name  Melta Weapons  Name ..."), split
+  // across rows in a way stripRows()'s single-row check doesn't catch —
+  // truncate at the first repeat of this exact phrase rather than chasing
+  // a fully general multi-row table-header detector for one entry's tail.
+  const weaponQualities: WeaponQuality[] = knownQualities
+    .filter((q) => qualityDescs[q.id])
+    .map((q) => ({
+      ...q,
+      description: qualityDescs[q.id]
+        .replace(/\s*(?:\w+\s+)?Weapons\s+Name\b.*$/i, "")
+        // A full section/table TITLE ("Table 5–7: Ranged Weapons") trailing
+        // at the very end is the weapons chapter starting — unlike a
+        // legitimate inline citation ("consult Table 5-6: Weapon
+        // Overheating"), a title is not followed by more sentence text.
+        .replace(/\s*Table\s*5[-–]\s*\d+\s*:\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s*$/i, "")
+        // Decorative page-epigraph quotes (a curly “ ... ” with a garbled
+        // tracked-font body) occasionally trail the last entry on a page.
+        .replace(/\s*“[^”]*”\s*$/, ""),
+    }))
+  console.log(`  → ${weaponQualities.length}/${knownQualities.length} weapon qualities matched a description`)
+  writeFileSync(join(OUTPUT_DIR, "weapon-qualities.json"), JSON.stringify(weaponQualities, null, 2))
+
   // ── Psychic Powers ───────────────────────────────────────────────────────────
   // Powers chapter spans ~35 pages (pages 165–200 approx)
   console.log("\nParsing psychic powers (pages", sections.powers + 1, "–", sections.powers + 35, ")...")
   const powers = parsePowers(pages, sections.powers, sections.powers + 35)
   console.log(`  → ${powers.length} powers`)
-  // NOTE: unlike Talents/Skills, this section's 3-column layout has a
-  // "label ... value" stat block (Threshold/Focus Time/Sustained/Range)
-  // WITHIN each column, whose label-to-value gap (~140pt) is wider than the
-  // actual gap between columns (~20-25pt). That breaks splitColumns()'s
-  // largest-gap heuristic — it picks the label/value gap as a column
-  // boundary instead of the real one, interleaving unrelated powers'
-  // paragraphs. Fixing this needs a frequency/density-aware column
-  // detector (true column edges recur on nearly every row; this stat-block
-  // gap only recurs on ~4 rows per power) — left as a follow-up rather than
-  // shipping garbled long descriptions.
-  writeFileSync(join(OUTPUT_DIR, "powers.json"), JSON.stringify(powers, null, 2))
+
+  // Each discipline's summary table is immediately followed by a 3-column
+  // prose section, same tracked-header layout as Talents/Skills — but each
+  // column also has a "label ... value" stat block (Threshold/Focus Time/
+  // Sustained/Range) whose label-to-value gap (~140pt) is wider than the
+  // real inter-column gap (~20-25pt), which used to break splitColumns()'s
+  // largest-gap heuristic. Fix: strip those stat-block rows out of a
+  // SEPARATE page-array copy before column-splitting, so only recurring
+  // body-prose columns remain to calibrate from.
+  const POWERS_OP_START = sections.powers
+  const POWERS_OP_END = sections.powers + 35
+  console.log(`Re-extracting power description pages ${POWERS_OP_START + 1}–${POWERS_OP_END + 1} via op-list...`)
+  const powerPages: PageData[] = [...pages]
+  for (let p = POWERS_OP_START; p <= POWERS_OP_END && p < pages.length; p++) {
+    const opPage = await extractPageOp(doc, p + 1)
+    // Strip Threshold:/Focus Time:/Sustained:/Range: label+value pairs
+    // wherever they sit in a shared row (not necessarily the leftmost item).
+    const withoutStatBlocks = stripLabelValuePairs(
+      opPage.items,
+      /^(Threshold|Focus\s*Time|Sustained|Range)\s*:$/i,
+    )
+    // Summary-table rows ("Call Item  5  Half Action  No") use a clean,
+    // un-tracked font — unlike prose headers, their name text would pass
+    // the exact-fingerprint match too, constantly resetting currentId
+    // mid-table before any real prose is ever reached. Detect and drop
+    // the whole row by its distinctive "<digit> <action-type> <yes/no>"
+    // shape (a combination that essentially never appears in body prose).
+    const strippedItems = stripRows(withoutStatBlocks, (rowItems) => {
+      const joined = rowItems.map((i) => i.str).join(" ")
+      return /\d+\s+(Half Action|Full Action|Reaction|Free Action)\s+(Yes|No)\b/i.test(joined)
+    })
+    const rows = new Map<number, Item[]>()
+    for (const it of strippedItems) {
+      if (!rows.has(it.y)) rows.set(it.y, [])
+      rows.get(it.y)!.push(it)
+    }
+    powerPages[p] = { items: strippedItems, rows }
+  }
+  const powerDescs = parseProseDescriptions(powerPages, POWERS_OP_START, POWERS_OP_END, powers, {
+    stopRegex: /[^\s\S]/, // never matches — bounded instead by the fixed page range above
+  })
+  const powersMatched = powers.filter((pw) => powerDescs[pw.id]).length
+  console.log(`  → ${powersMatched}/${powers.length} powers matched a long description`)
+
+  // Known-bad: "Fling"'s stat-block strip left a stray "Sustained : No"
+  // fragment at the start (confirmed by manual inspection) — suppressing
+  // rather than shipping the visibly-wrong prefix.
+  const POWER_DESC_BLACKLIST = new Set(["fling"])
+
+  const powersWithDesc: PsychicPower[] = powers.map((pw) => ({
+    ...pw,
+    description: POWER_DESC_BLACKLIST.has(pw.id) ? "" : powerDescs[pw.id] ?? "",
+  }))
+  writeFileSync(join(OUTPUT_DIR, "powers.json"), JSON.stringify(powersWithDesc, null, 2))
 
   // ── Armour ───────────────────────────────────────────────────────────────────
   // Table 5-12 is on page 146 (0-indexed 145); scan a couple of pages in case it continues.
@@ -1309,7 +1480,63 @@ async function main() {
   console.log("\nParsing gear (pages 143–162)...")
   const gear = parseGear(pages, GEAR_OP_START, GEAR_OP_END)
   console.log(`  → ${gear.length} gear items`)
-  writeFileSync(join(OUTPUT_DIR, "gear.json"), JSON.stringify(gear, null, 2))
+
+  // Each gear category has its own prose write-up per item (e.g. "Chrono",
+  // "Explosive Collar"), same 3-column tracked-header layout as Talents/
+  // Skills, spread across the same already re-extracted page range. But
+  // this range ALSO contains this category's own quick-ref TABLE, whose
+  // item-name cells use a clean (non-tracked) font — those would otherwise
+  // match a fingerprint just as validly as a real header, getting opened
+  // and then immediately closed by the next page-boundary reset before the
+  // REAL prose header is ever reached, permanently blocking it via
+  // closedIds. Strip anything shaped like a table row (any row containing
+  // a Table 5-N availability value) from a separate page-array copy first.
+  const gearPages: PageData[] = [...pages]
+  for (let p = GEAR_OP_START; p <= GEAR_OP_END && p < pages.length; p++) {
+    const strippedItems = stripRows(pages[p].items, (rowItems) => {
+      const joined = rowItems.map((i) => i.str).join(" ")
+      return AVAILABILITY_VALS.some((av) => new RegExp(`\\b${av}\\b`, "i").test(joined))
+    })
+    const rows = new Map<number, Item[]>()
+    for (const it of strippedItems) {
+      if (!rows.has(it.y)) rows.set(it.y, [])
+      rows.get(it.y)!.push(it)
+    }
+    gearPages[p] = { items: strippedItems, rows }
+  }
+
+  console.log(`Parsing gear descriptions (pages ${GEAR_OP_START + 1}–${GEAR_OP_END + 1})...`)
+  const gearDescs = parseProseDescriptions(gearPages, GEAR_OP_START, GEAR_OP_END, gear, {
+    // NOTE: "Chapter VI" alone is NOT safe here — a drug's description
+    // cross-references "Chapter VI: Psychic Powers" mid-sentence, and that
+    // string match is indistinguishable from a real heading in plain text.
+    stopRegex: /TYPES\s+OF\s+PSYKER/i,
+  })
+  const gearMatched = gear.filter((g) => gearDescs[g.id]).length
+  console.log(`  → ${gearMatched}/${gear.length} gear items matched a long description`)
+
+  // Known-bad: confirmed by manual inspection to have absorbed a neighboring
+  // item's prose. Root cause: several ammo variants have a same-line
+  // parenthetical suffix ("Charge Pack (pistol)") that breaks the exact
+  // fingerprint match the same way a skill's "(Basic)" tag once did, and
+  // several Mechadendrite sub-types (Optical, Ballistic, Utility, ...)
+  // were never captured as items at all by parseGear()'s table parser —
+  // in both cases their header can never match, so their body text has
+  // nowhere to go but the previous entry. Suppressing rather than shipping
+  // garbled text; a real fix would need parseGear() to also parse those
+  // missing item rows, which is a separate, pre-existing gap.
+  const GEAR_DESC_BLACKLIST = new Set([
+    "bionic-arm", "bionic-locomotion", "bionic-respiratory-system",
+    "shells", "bolt-shells", "exotic", "charm", "chrono", "clothing",
+    "injector", "sacred-machine-oil", "stimm", "auger-arrays",
+    "cortex-implants", "cybernetic-senses", "mind-impulse-unit",
+  ])
+
+  const gearWithDesc: GearItem[] = gear.map((g) => ({
+    ...g,
+    description: GEAR_DESC_BLACKLIST.has(g.id) ? "" : gearDescs[g.id] ?? "",
+  }))
+  writeFileSync(join(OUTPUT_DIR, "gear.json"), JSON.stringify(gearWithDesc, null, 2))
 
   console.log(`\nDone → ${OUTPUT_DIR}`)
 

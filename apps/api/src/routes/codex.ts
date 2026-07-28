@@ -2,13 +2,13 @@ import { Hono } from "hono"
 import { readFileSync } from "fs"
 import { join } from "path"
 import { fileURLToPath } from "url"
-import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, CodexSection } from "@data-slate/shared"
+import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, WeaponQuality, CodexSection } from "@data-slate/shared"
 
 const DATA_DIR = fileURLToPath(new URL("../data/codex", import.meta.url))
 
-type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem
+type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem | WeaponQuality
 
-const VALID_SECTIONS: CodexSection[] = ["skills", "talents", "weapons", "powers", "armour", "gear"]
+const VALID_SECTIONS: CodexSection[] = ["skills", "talents", "weapons", "powers", "armour", "gear", "weapon-qualities"]
 
 // Load JSON once, cache in memory
 const cache: Partial<Record<CodexSection, AnyItem[]>> = {}
@@ -54,7 +54,12 @@ function matchesQuery(item: AnyItem, section: CodexSection, q: string): boolean 
     }
     case "gear": {
       const g = item as GearItem
-      return g.category.toLowerCase().includes(q)
+      return g.category.toLowerCase().includes(q) ||
+             g.description.toLowerCase().includes(q)
+    }
+    case "weapon-qualities": {
+      const wq = item as WeaponQuality
+      return wq.description.toLowerCase().includes(q)
     }
     default:
       return false

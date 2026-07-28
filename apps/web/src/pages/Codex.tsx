@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react"
 import { Link } from "react-router-dom"
 import "./Admin.css"
 import "./Codex.css"
-import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, CodexSection } from "@data-slate/shared"
+import type { Skill, Talent, Weapon, PsychicPower, ArmourItem, GearItem, WeaponQuality, CodexSection } from "@data-slate/shared"
 
 const API_URL = import.meta.env.VITE_API_URL ?? ""
 
@@ -10,6 +10,7 @@ const SECTIONS: { key: CodexSection; label: string }[] = [
   { key: "skills",  label: "SKILLS" },
   { key: "talents", label: "TALENTS" },
   { key: "weapons", label: "WEAPONS" },
+  { key: "weapon-qualities", label: "QUALITIES" },
   { key: "armour",  label: "ARMOUR" },
   { key: "gear",    label: "GEAR" },
   { key: "powers",  label: "PSYCHIC POWERS" },
@@ -163,6 +164,27 @@ function WeaponsTable({ items }: { items: Weapon[] }) {
   )
 }
 
+function QualitiesTable({ items }: { items: WeaponQuality[] }) {
+  return (
+    <table className="codex-table">
+      <thead>
+        <tr>
+          <th>NAME</th>
+          <th>DESCRIPTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((q) => (
+          <tr key={q.id}>
+            <td className="codex-name">{q.name}</td>
+            <td className="codex-desc">{q.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 function ArmourTable({ items }: { items: ArmourItem[] }) {
   const groups = new Map<string, ArmourItem[]>()
   for (const a of items) {
@@ -214,6 +236,8 @@ const GEAR_CATEGORY_ORDER = [
 ]
 
 function GearTable({ items }: { items: GearItem[] }) {
+  const [expandedId, toggleExpand] = useExpand()
+
   const groups = new Map<string, GearItem[]>()
   for (const g of items) {
     if (!groups.has(g.category)) groups.set(g.category, [])
@@ -240,14 +264,29 @@ function GearTable({ items }: { items: GearItem[] }) {
               </tr>
             </thead>
             <tbody>
-              {gears.map((g) => (
-                <tr key={g.id}>
-                  <td className="codex-name">{g.name}</td>
-                  <td>{g.weight}</td>
-                  <td>{g.cost}</td>
-                  <td className="codex-muted">{g.availability}</td>
-                </tr>
-              ))}
+              {gears.map((g) => {
+                const hasLong = Boolean(g.description)
+                const expanded = expandedId === g.id
+                return (
+                  <Fragment key={g.id}>
+                    <tr
+                      className={hasLong ? "codex-row-clickable" : ""}
+                      onClick={hasLong ? () => toggleExpand(g.id) : undefined}
+                    >
+                      <td className="codex-name">
+                        {hasLong && (
+                          <span className="codex-expand-icon">{expanded ? "▾" : "▸"}</span>
+                        )}
+                        {g.name}
+                      </td>
+                      <td>{g.weight}</td>
+                      <td>{g.cost}</td>
+                      <td className="codex-muted">{g.availability}</td>
+                    </tr>
+                    {expanded && hasLong && <ExpandedDescRow colSpan={4} text={g.description} />}
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </section>
@@ -259,6 +298,8 @@ function GearTable({ items }: { items: GearItem[] }) {
 const DISCIPLINE_ORDER = ["Minor", "Biomancy", "Divination", "Pyromancy", "Telekinetics", "Telepathy"]
 
 function PowersTable({ items }: { items: PsychicPower[] }) {
+  const [expandedId, toggleExpand] = useExpand()
+
   const groups = new Map<string, PsychicPower[]>()
   for (const p of items) {
     if (!groups.has(p.discipline)) groups.set(p.discipline, [])
@@ -285,16 +326,31 @@ function PowersTable({ items }: { items: PsychicPower[] }) {
               </tr>
             </thead>
             <tbody>
-              {powers.map((p) => (
-                <tr key={p.id}>
-                  <td className="codex-name">{p.name}</td>
-                  <td className="codex-highlight codex-threshold">{p.threshold}</td>
-                  <td className="codex-muted">{p.focus_time}</td>
-                  <td className={p.sustained ? "codex-yes" : "codex-no"}>
-                    {p.sustained ? "YES" : "NO"}
-                  </td>
-                </tr>
-              ))}
+              {powers.map((p) => {
+                const hasLong = Boolean(p.description)
+                const expanded = expandedId === p.id
+                return (
+                  <Fragment key={p.id}>
+                    <tr
+                      className={hasLong ? "codex-row-clickable" : ""}
+                      onClick={hasLong ? () => toggleExpand(p.id) : undefined}
+                    >
+                      <td className="codex-name">
+                        {hasLong && (
+                          <span className="codex-expand-icon">{expanded ? "▾" : "▸"}</span>
+                        )}
+                        {p.name}
+                      </td>
+                      <td className="codex-highlight codex-threshold">{p.threshold}</td>
+                      <td className="codex-muted">{p.focus_time}</td>
+                      <td className={p.sustained ? "codex-yes" : "codex-no"}>
+                        {p.sustained ? "YES" : "NO"}
+                      </td>
+                    </tr>
+                    {expanded && hasLong && <ExpandedDescRow colSpan={4} text={p.description} />}
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </section>
@@ -305,7 +361,7 @@ function PowersTable({ items }: { items: PsychicPower[] }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem
+type AnyItem = Skill | Talent | Weapon | PsychicPower | ArmourItem | GearItem | WeaponQuality
 
 export default function Codex() {
   const [activeSection, setActiveSection] = useState<CodexSection>("skills")
@@ -416,12 +472,13 @@ export default function Codex() {
           </div>
         ) : (
           <>
-            {activeSection === "skills"  && <SkillsTable  items={items as Skill[]}        />}
-            {activeSection === "talents" && <TalentsTable items={items as Talent[]}       />}
-            {activeSection === "weapons" && <WeaponsTable items={items as Weapon[]}       />}
-            {activeSection === "armour"  && <ArmourTable  items={items as ArmourItem[]}   />}
-            {activeSection === "gear"    && <GearTable    items={items as GearItem[]}     />}
-            {activeSection === "powers"  && <PowersTable  items={items as PsychicPower[]} />}
+            {activeSection === "skills"           && <SkillsTable    items={items as Skill[]}         />}
+            {activeSection === "talents"          && <TalentsTable   items={items as Talent[]}        />}
+            {activeSection === "weapons"          && <WeaponsTable   items={items as Weapon[]}        />}
+            {activeSection === "weapon-qualities" && <QualitiesTable items={items as WeaponQuality[]} />}
+            {activeSection === "armour"           && <ArmourTable    items={items as ArmourItem[]}    />}
+            {activeSection === "gear"             && <GearTable      items={items as GearItem[]}      />}
+            {activeSection === "powers"           && <PowersTable    items={items as PsychicPower[]}  />}
           </>
         )}
       </main>

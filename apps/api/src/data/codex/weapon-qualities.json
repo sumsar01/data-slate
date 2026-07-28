@@ -1,0 +1,112 @@
+[
+  {
+    "id": "accurate",
+    "name": "Accurate",
+    "description": "Some weapons are designed with precision in mind and respond superbly in skilled hands. They grant an additional bonus of +10 to the ﬁrer’s Ballistic Skill when used with an Aim Action, this is in addition to the bonus granted from Aiming."
+  },
+  {
+    "id": "balanced",
+    "name": "Balanced",
+    "description": "Some weapons, such as swords and knives, are designed so that the weight of the hilt balances the weight of the blade, making the weapon easier to wield. Balanced weapons grant a +10 bonus to Weapon Skill Tests made to Parry."
+  },
+  {
+    "id": "blast",
+    "name": "Blast",
+    "description": "Many missiles, grenades and some guns create an explosion when they hit their target. When working out a hit from a Blast weapon anyone within the weapon’s blast radius in metres, indicated by the number in parenthesis, is also hit. Roll Hit Location and Damage individually for each person affected by a blast."
+  },
+  {
+    "id": "defensive",
+    "name": "Defensive",
+    "description": "A Defensive weapon, such as a shield, is intended to be used to block attacks and is awkward when used for making attacks. Defensive weapons grant a +15 bonus to tests made when used to Parry, but take a –10 penalty when used to make attacks."
+  },
+  {
+    "id": "flame",
+    "name": "Flame",
+    "description": "Flame weapons project a cone of flame out to the range of the weapon. Unlike other weapons, flamers have just one range, and when ﬁred, cast ﬁery death out to this distance. The wielder does not need to Test Ballistic Skill; he simply ﬁres the weapon. All creatures in the flame’s path, a cone-shaped area extending in a 30 degree arc from the ﬁrer out to the weapon’s range, must make an Agility Test or be struck by the flames and take damage normally. If they take damage, they must succeed on a second Agility Test or be set on ﬁre. Cover does not protect characters from attacks made by Flame weapons. Because Flame weapons make no roll to hit, they are always considered to hit targets in the body, and will Jam if the ﬁrer rolls a 9 on his Damage dice (before adding any bonuses)."
+  },
+  {
+    "id": "flexible",
+    "name": "Flexible",
+    "description": "Some weapons are made up from lots of loosely connected segments, such as chains or supple woven hides, such as whips. These kinds of weapons lash about when used to attack and cannot be Parried."
+  },
+  {
+    "id": "inaccurate",
+    "name": "Inaccurate",
+    "description": "Weapons with this quality are either badly designed or simply woefully made, and regardless of the care taken when used, offer little better than a lucky chance to hit. No bonus is gained froom the use of the Aim Action with such weapons."
+  },
+  {
+    "id": "overheats",
+    "name": "Overheats",
+    "description": "Certain weapons are prone to overheating, either because of poor design or they ﬁre unstable superheated ammunition. An unmodiﬁed to hit roll of 91 or higher causes the weapon to Overheat. Roll 1d10 and consult Table 5-6: Weapon Overheating to see what happens. Table 5–6: Weapon Overheating 1–5 The ﬁrer must make a Toughness Test or drop the weapon. The weapon cannot be ﬁred for 1d10 Rounds. 6–8 The f irer takes 1d10+2 Energy Damage and must drop the weapon. In addition the weapon is too hot to pick up (anyone trying takes 1d10+1 Energy Damage) for 1d10 Rounds. 9–10 The weapon explodes and is destroyed. The ﬁrer and anyone within four metres takes Damage as if they had taken a single hit from the weapon."
+  },
+  {
+    "id": "power-field",
+    "name": "Power Field",
+    "description": "A ﬁeld of power wreathes weapons with this quality, increasing its Damage and Penetration. Such modiﬁers are already included in the weapon’s proﬁle. When you successfully use this weapon to Parry an attack made with a weapon that lacks this quality, you have a 75% chance of destroying your attacker’s weapon."
+  },
+  {
+    "id": "primitive",
+    "name": "Primitive",
+    "description": "Crude and basic in design, these kinds of weapons, while still deadly, are less effective against modern armour. All Armour Points are doubled against hits from Primitive weapons, unless the armour also has the Primitive quality."
+  },
+  {
+    "id": "reliable",
+    "name": "Reliable",
+    "description": "Based on tried and true technology, Reliable weapons seldom fail. If a Reliable weapon Jams, roll 1d10 and only on a roll of 10 has it in fact Jammed, otherwise it just misses as normal."
+  },
+  {
+    "id": "scatter",
+    "name": "Scatter",
+    "description": "The standard ammunition of these weapons spreads out when ﬁred, hitting more of the target. If ﬁred at a foe within Point Blank range, each two degrees of success the ﬁrer"
+  },
+  {
+    "id": "shocking",
+    "name": "Shocking",
+    "description": "Shocking weapons can Stun their opponents with a powerful surge of energy. A target that takes at least 1 point of Damage from a Shocking weapon, after Armour and Toughness Bonus, must make a Toughness Test, though they receive a +10 bonus for every Armour point they have on the location hit. If they fail, they are Stunned for a number of Rounds equal to half the Damage they suffered."
+  },
+  {
+    "id": "smoke",
+    "name": "Smoke",
+    "description": "Rather than inﬂicting Damage, these weapons throw up dense clouds of smoke to create cover. When a hit is scored from a weapon with the Smoke quality, it creates a smokescreen 3d10 metres in diameter from the point of impact. This screen lasts for 2d10 Rounds, or less in adverse weather conditions (see the effects of Smoke on page 210 )."
+  },
+  {
+    "id": "snare",
+    "name": "Snare",
+    "description": "Weapons with this quality are designed to entangle enemies. On a successful hit, the target must make an Agility Test or be immobilised. An immobilised target can attempt no other actions except to try to escape the bonds. He can attempt to burst the bonds (a Strength Test) or wriggle free (an Agility Test) in his Turn. The target is considered helpless until he escapes."
+  },
+  {
+    "id": "tearing",
+    "name": "Tearing",
+    "description": "Tearing weapons are vicious devices, often using multitudes of fast-moving jagged teeth to rip into ﬂesh and bone. These weapons roll two dice for Damage and choose the highest."
+  },
+  {
+    "id": "recharge",
+    "name": "Recharge",
+    "description": "Because of the volatile nature of the weapon’s ammunition or due to the way it ﬁres, the weapon needs time between shots to Recharge. The weapon must spend the Round after ﬁring building up a charge and cannot be ﬁred—in effect you can only ﬁre the weapon every other Round."
+  },
+  {
+    "id": "toxic",
+    "name": "Toxic",
+    "description": "Some weapons rely on toxins and poisons to do their damage. Anyone that takes Damage from a Toxic weapon, after reduction for Armour and Toughness Bonus must make a Toughness Test with a –5 penalty for every point of Damage taken. Success indicates there is no further effect from the weapon. Failure however deals an immediate 1d10 points of Impact Damage to the target with no reduction from Armour or Toughness Bonus."
+  },
+  {
+    "id": "unbalanced",
+    "name": "Unbalanced",
+    "description": "Heavy and difﬁcult to ready after an attack, these kinds of weapons impose a –10% penalty when used to Parry."
+  },
+  {
+    "id": "unreliable",
+    "name": "Unreliable",
+    "description": "Certain weapons misﬁre more often than normal because they are badly maintained or constructed. An Unreliable weapon suffers a Jam on a roll of 91 or higher, even if ﬁred on Semi- or Full Auto."
+  },
+  {
+    "id": "unstable",
+    "name": "Unstable",
+    "description": "Weapons with this quality use ammunition that is both volatile and unstable and can react unpredictably when detonated. When an Unstable weapon scores a hit, roll 1d10. On a score of 1 it inflicts only half Damage, on a score of 2–9 it deals normal Damage, and on a score of 10 it inflicts twice the normal Damage."
+  },
+  {
+    "id": "unwieldy",
+    "name": "Unwieldy",
+    "description": "Huge and often top-heavy, Unwieldy weapons are too awkward to be used defensively. Unwieldy weapons cannot be used to Parry. Many of the weapons described in this chapter require a Talent to use them effectively; lacking the necessary ability makes weapons particularly dangerous to employ. Still, there are bound to be circumstances when a character needs to use a weapon for which he does not have the Talent. Doing so imposes a –20 penalty on the relevant Test. If the weapon has the Flame special quality, the target is granted a +30 to his Agility Test to avoid being hit. In addition, when a ranged weapon is used untrained, it counts as having the Unreliable quality, increasing its chance of jamming."
+  }
+]

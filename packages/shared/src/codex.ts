@@ -63,6 +63,13 @@ export type GearItem = {
   weight: string
   cost: string
   availability: string
+  description: string
 }
 
-export type CodexSection = "skills" | "talents" | "weapons" | "powers" | "armour" | "gear"
+export type WeaponQuality = {
+  id: string
+  name: string
+  description: string
+}
+
+export type CodexSection = "skills" | "talents" | "weapons" | "powers" | "armour" | "gear" | "weapon-qualities"

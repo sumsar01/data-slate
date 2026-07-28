@@ -7,7 +7,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You call a number of simple-minded creatures within range to travel to your location. Creatures called depend on the nature of the environment, though the sorts of creatures called may include rats, ash slugs and other"
   },
   {
     "id": "call-item",
@@ -17,7 +17,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You summon a specially prepared item to instantly appear in your hand. To prepare the object, you must spend one"
   },
   {
     "id": "chameleon",
@@ -27,7 +27,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You cause reality to blur around you, distorting your image and allowing you to blend in with your surroundings. You gain a +30 bonus to Concealment Tests. In addition, all opponents using ranged weapons to attack you suffer a –20 penalty to their Ballistic Skill Tests."
   },
   {
     "id": "d-j-vu",
@@ -37,7 +37,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You create a brief memory loop in the mind of the target, causing their thoughts to slip back several seconds in time. You must be able to see the target and they must be within the range of the power to be affected. They are also permitted a Willpower Test to resist its effects. If they fail to resist, however, they must repeat the same Action that they took last Round in their next Turn, be it ﬁring a gun at a target that is no longer there, continuing to run from slain enemy, or diving for cover from a grenade that has already gone off. Any action that would obviously be harmful to the target, such as running off a cliff, automatically allows them to resist the power."
   },
   {
     "id": "distort-vision",
@@ -47,7 +47,7 @@
     "focus_time": "Free Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "S ustained: No With this power, you disappear and your image reappears in another space no more than 10 metres away. Until the start of your next Turn, you are effectively invisible to all other creatures, defeating even sensory equipment. All attacks against you, should your position be discovered by means of a Psyniscience Test, are Very Hard (–30). Creatures and sensors that do not rely on sight are not affected by this power."
   },
   {
     "id": "dull-pain",
@@ -57,7 +57,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You can nullify the pain of any creature, including yourself, within Range. The target of this power reduces their levels of Fatigue by one step. Overbleed: For every 5 points by which you exceed the Threshold, you remove an additional level of Fatigue."
   },
   {
     "id": "fearful-aura",
@@ -67,7 +67,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You twist reality in such a way as to make you appear more sinister and dangerous. You become the source of dread for anyone who looks upon you. Whilst this power is active, you have a Fear Rating of 2. See Chapter VIII: The Game Master, page 232 for details on Fear Ratings. Overbleed: For every 10 points by which you exceed the Threshold, your Fear Rating increases by 1."
   },
   {
     "id": "flash-bang",
@@ -77,7 +77,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You create a bright flash of light and a deafening bang. Anyone within Range must succeed on a Routine (+20) Willpower Test or become Stunned for 1 Round. Overbleed: For every 10 points by which you exceed the Threshold, the Difﬁculty worsens by one step, from Routine (+20) to Ordinary (+10), from Ordinary (+10) to Challenging (+0), and so on."
   },
   {
     "id": "float",
@@ -87,7 +87,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You focus your concentration and slowly begin to lift off the ground. You can only move up and down while under the effects of this power, and you cannot rise higher than 5 metres. You can use this power to stop yourself from falling, but you must succeed on a Difﬁcult (–10) Willpower Test in addition to beating the PT."
   },
   {
     "id": "forget-me",
@@ -97,7 +97,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You become instantly forgettable to a single creature within range. They can’t seem to recall having met you before this very instant and you effectively suppress all memories of your previous"
   },
   {
     "id": "healer",
@@ -107,7 +107,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You channel your power into a single target to knit flesh and mend bones. You may only use this power on a willing target, including yourself. The target of this power removes 1d5 points of Damage (removing Critical Damage ﬁrst). Repeated uses of this power can be dangerous, however, not to mention painful, and the person’s flesh rebels against the intrusion of warp energy. If a person (including the Psyker) is the subject of this power more than once in a 6 hour period, they must Test Toughness or take 1d5 points of Damage (with no reduction for Toughness Bonus or Armour), rather than being healed."
   },
   {
     "id": "inflict-pain",
@@ -117,7 +117,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You cause a person to be wracked with agony, ﬁlling their minds with unspeakable pain. The target is entitled to a Willpower Test to resist the effects of this power. On a failed Test, the target suffers a –10 to all their Tests as they struggle to control their pain. Overbleed: For every 10 points by which you exceed the Threshold you can extend the effects of this power to affect another target."
   },
   {
     "id": "inspiring-aura",
@@ -127,7 +127,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You seem to glow with an inner light and all those around you are ﬁlled with conﬁdence. While this power is active, all allies that can see you gain a +20 bonus to Tests made to resist Fear and Pinning. They may also feel compelled to say nice things about you. Which is nice."
   },
   {
     "id": "knack",
@@ -137,7 +137,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You tap into your unconscious to awaken a deeper understanding of your capabilities. Until the end of your next Turn, you may gain a +10 bonus to any one non-combat Test. After this point, your enlightened mood fades."
   },
   {
     "id": "lucky",
@@ -147,7 +147,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "It is said that luck acts strangely around Psykers, no doubt in part to powers like this one. When you manifest this power, any time before the end of your next Turn, you may re-roll any one roll of your dice (including Damage rolls)."
   },
   {
     "id": "precognition",
@@ -157,7 +157,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You get a fuzzy picture of what will occur a few moments into the future. As you draw nearer to the event, the picture becomes clearer. For as long as this power is active, you gain a +10 bonus to Dodge Tests and to Weapon Skill Tests made to Parry incoming blows."
   },
   {
     "id": "psychic-stench",
@@ -167,7 +167,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "By momentarily handling an item you imbue it with an unnatural psychic smell. Anyone coming within ﬁve metres of the tainted item will smell it, regardless of barriers or other smells present. What a person smells when around an item affected by psychic stench depends on what they ﬁnd most distasteful, so the aroma can vary greatly. As the smell only exists in a person’s mind, it will also affect creatures that do not have a sense of smell or have had their sense of smell impaired. Psychic stench remains in effect for 1d10 days, after which time it dissipates."
   },
   {
     "id": "resist-possession",
@@ -177,7 +177,7 @@
     "focus_time": "Reaction",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You create mental wards to shield your mind from the malign denizens of the warp. Any time in the next hour you may re-roll any failed Test to resist being possessed by a Daemon."
   },
   {
     "id": "sense-presence",
@@ -187,7 +187,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Reaching out with your mind, you get a vague inkling of other life forms within range. You automatically detect all living creatures in the area. Walls in excess of 1 metre thick block this power. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range by an additional 10 metres."
   },
   {
     "id": "spasm",
@@ -197,7 +197,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You cause a target’s muscles to spasm. The target is entitled to a Willpower Test to resist this power. On a failure, the target twitches in an uncontrollable and possibly amusing way. If the target is carrying any ballistic weapon, the weapon goes off—make a Ballistic Skill Test as normal to hit the closest creature. In addition, the target immediately falls to the ground and must use a Stand Action to regain their feet. Overbleed: For every 5 points by which you exceed the Threshold, you may either affect an additional target or worsen the Difﬁculty of the Willpower Test by one step."
   },
   {
     "id": "spectral-hands",
@@ -207,7 +207,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You create an invisible force that you can use to manipulate any object within 30 metres. The force has a Strength Characteristic equal to your Willpower. This power lasts until the end of your next Turn. You can use it to knock over objects, push buttons, pull levers or do any number of other things requiring force. You cannot perform any action that requires precision, such as typing on a data- slate, pulling the pin from another creature’s grenade, pull a trigger, and so on. In addition, Spectral Hands has no effect on living targets."
   },
   {
     "id": "staunch-bleeding",
@@ -217,7 +217,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You cause yourself or another creature within Range to halt Blood Loss. See Chapter VII: Playing the Game, page 211 for details on Blood Loss. Overbleed: For every 5 points by which you exceed the Threshold, you may affect another target."
   },
   {
     "id": "torch",
@@ -227,7 +227,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "By burning the very stuff of your thoughts, you create a ball of glowing psy-flame. The light cast by Torch is equivalent to a glow-lamp. The flame may issue from any point on your body. The flame is roughly the size of your palm, and pulses slightly in time with your heartbeat. It may be coloured according to your whim. The light produces no heat. Overbleed: For every 10 points by which you exceed the Threshold you may double or half the size of the light or cause it to float up to one metre from your body in any direction."
   },
   {
     "id": "touch-of-madness",
@@ -237,7 +237,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You reach into the mind of a target within Range and force them to believe something that just isn’t true. The target is entitled to a Willpower Test to resist this power. On a failed Test, the target must roll 1d100 and consult Table 8-6 Mental Traumas on page 235 . Overbleed: For every 10 points by which you exceed the Threshold, you affect an additional target."
   },
   {
     "id": "trick",
@@ -247,7 +247,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Threshold 5 You subtly influence the fields of probability flowing around you, making you especially good at cheating at games of chance. If you do not have the Gamble skill, you gain it at two levels of mastery for as long as the power is sustained. If you have Gamble, you gain an additional +20 bonus to Gamble Tests. If you already have Skill Mastery in Gamble, this power has no effect, as you are already that good."
   },
   {
     "id": "unnatural-aim",
@@ -257,7 +257,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You draw upon the power of the warp to guide your aim. Before the end of your next Turn, any ranged attacks you make count as being made at Point Blank Range (+30 to hit)."
   },
   {
     "id": "wall-walk",
@@ -267,7 +267,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You bend gravity to your will. You negate all penalties incurred by low- or high-gravity worlds. In addition, you can walk on walls or ceilings for as long as this power is active. You move across such surfaces at half your normal rate. You must also Test Agility to go between a wall and ceiling and vice versa, unless you take a Full Action to ease yourself onto the new surface."
   },
   {
     "id": "warp-howl",
@@ -277,7 +277,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You send out a long, keening screech throughout the warp that tears through into reality in a cacophonous burst. This power drowns out all sound within Range for 1 Round. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range by 10 metres."
   },
   {
     "id": "weaken-veil",
@@ -287,7 +287,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You weaken the fabric of space within 30 metres by drawing the immaterium closer. Anyone within Range that uses Psychic Powers gains a +2 bonus on Power Rolls. However, as the veil between worlds is weakened, Psychic Phenomena occur on the roll of an 8, 9 or 10. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range by an additional 10 metres."
   },
   {
     "id": "weapon-jinx",
@@ -297,7 +297,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You reach into nearby machines with your mind to scramble their circuitry. All mechanical devices within range cease to function for 1 Round. In addition, you may Test Willpower to force a single weapon within range to jam. The jammed weapon can be cleared as normal (see page 196 ). Note that the Adeptus Mechanicus are especially loathing of this kind of ability and tend to take a very dim view of Psykers that employ it. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range of this power by 10 metres, or you can affect an additional weapon."
   },
   {
     "id": "white-noise",
@@ -307,7 +307,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You ﬁll the warp with static, fouling psychic detection and making tech sensors less reliable. While active, any Tests made to detect your presence, as well as that of anyone within range of you, using either psychic or technological means, count as Hard (–20). If the means of detection would not normally require a Test, the user must make an Ordinary (+10) Willpower Test if using psychic means, or an Ordinary (+10) Intelligence Test if they are using technological means. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range of this power by 10 metres."
   },
   {
     "id": "wither",
@@ -317,7 +317,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You cause a vile wave of invisible pestilence to emerge from your body, extending out to the Range of the power. The wave withers all normal plant life in the area in a matter of moments, leaving the area barren and utterly dead. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range of this power by 1d10 metres."
   },
   {
     "id": "bio-lightning",
@@ -327,7 +327,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You channel your life force through the meridians of your body, causing your form to crackle with living energy. You may direct this energy against a single target within Range. The target takes 1d10 plus your Willpower Bonus in Energy Damage. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range of this power by 10 metres. For every 10 points that you exceed the Threshold, you can launch another bolt of energy against the same or a different target."
   },
   {
     "id": "blood-boil",
@@ -337,7 +337,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "With a rhythmic crushing gesture, you tune into an enemy’s body, flexing their heart muscles to accelerate their pulse. This continues until their blood pressure reaches lethal levels. As you continue to exert your will, blood vessels begin to rupture, causing haemorrhaging across the Round in which the power manifests), you may spend a Half Action to make an Opposed Test, pitting your Willpower against your target’s Toughness. If you win the Test, your opponent takes one level of Fatigue plus one level of Fatigue per degree of success, until he collapses"
   },
   {
     "id": "cellular-control",
@@ -347,7 +347,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You learn various ways of transcending your body’s natural limitations by balancing your humors, modifying cellular structure and meditating upon the meridians of your body. This power enables you to achieve any one of the following effects: temperature. • Increase any Characteristic— except Weapon Skill and Ballistic Skill—by +10. suit in a vacuum (though you still need to breathe). Each Round you sustain this power, On a failed Test, you take 1d5 points of Damage, ignoring your Toughness Bonus and Armour as your body begins to break from the strain. Unlike most powers, you can manifest this power multiple times. Each time, choose a different effect."
   },
   {
     "id": "constrict",
@@ -357,7 +357,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "With a word, thought or gesture, you can command the flesh of your target to sharply contract. The target’s windpipe closes, choking them and cutting off their breath. They begin to Suffocate. (See Suffocation on page 210 ) Each Round, the target must spend a Full Action to Test Toughness. On a success, they regain control over their body and clear their windpipe. On a failure they continue to suffocate. The target is considered to be engaged in strenuous activity. Overbleed: For every 10 points by which you exceed the Threshold, the Difﬁculty of the Toughness Test worsens by one step. With a moment’s thought, you force your senses into impossible feats of perception that can only be equalled among humans by the biomechanically augmented. When you manifest this power, choose one of your ﬁve senses. You gain a +30 bonus to all Tests made with this sense. The sense organ involved becomes strained as you push it past all normal human limits; the eyes weep and grow hugely dilated, skin flushes red, the nose drips mucus and so on. Overbleed: For every 5 points by which you exceed the Threshold, you may enhance an additional sense."
   },
   {
     "id": "enhance-senses",
@@ -377,7 +377,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Biomancers who have learned to channel the fierce power of the warp into their limbs can eventually master the art of letting the energy of the immaterium flow unhindered"
   },
   {
     "id": "regenerate",
@@ -387,7 +387,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "One of the pinnacles of a biomancer’s abilities, this power allows you to knit your flesh back together at a phenomenal rate, letting you swiftly overcome any non-fatal injury. This is a hard ability to master, but the rewards are great—Regenerate can eventually regrow lost limbs and organs. Each Round this power is active, you remove 1d5 points of Damage (removing Critical Damage ﬁrst) and have all levels of Fatigue removed. Once all Damage is removed, you begin to regrow lost organs, limbs, and so on. Limbs and organs replaced by cybernetics do not regrow unless the bionic is ﬁrst removed."
   },
   {
     "id": "seal-wounds",
@@ -397,7 +397,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You focus your power to repair your damaged flesh or that of any character within Range. Ragged wounds fuse and cuts vanish. Broken bone knits together, and burnt skin sloughs away as fresh tissue grows beneath. The target of this power removes 1d10 points of Damage plus an amount of Damage equal to your Willpower Bonus. This power can remove Critical Damage as well as normal Damage. Overbleed: For every 5 points by which you exceed the Threshold, you"
   },
   {
     "id": "shape-flesh",
@@ -407,7 +407,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Shape Flesh is the point where your flesh and will become indistinguishable—the goal of many a biomancer. Shape Flesh allows you to twist your physical frame in nearly any way you can imagine. Each manifestation of this power produces one of the following effects: • Gain any one of the following traits—Burrower (1), Crawler, Dark Sight, Flier, Hoverer, Natural Armour (2), Natural Weapons or Quadruped. These traits are described in Chapter XII: Aliens, Heretics & Antagonists, page 329 . • Assume the appearance of any one creature. You may make Disguise Tests as if you had the Disguise skill and at a +10 bonus. If you already have the Skill, you gain an additional +20 bonus. Claws, and so on) to deal 1d10+SB Damage. Unlike most powers, you can manifest this power multiple times. Each time, choose a different effect."
   },
   {
     "id": "toxic-siphon",
@@ -417,7 +417,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You draw poisons from the flesh. This has the same effect as taking a dose of de-tox (see Chapter V: Armoury, page 148 ) with the exception that the target must lose a Full Action as the toxin expels itself from the body naturally. Overbleed: For every 5 points by which you exceed the Threshold, you may draw poison from an additional target, who must be touching you or another person being purged by you."
   },
   {
     "id": "divine-shot",
@@ -427,7 +427,7 @@
     "focus_time": "Free Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Using this power enables you to make near impossible ranged shots, allowing you to strike virtually any target you can perceive. You must concentrate on a single ﬁrearm or other missile weapon in your possession and the ammunition it carries before casting your psychic gaze into the warp to search down the near-inﬁnite paths of potential future trajectories. When you ﬁnd the one you seek, you shoot, and while the damage to the target may vary, the attack cannot be avoided in any way. In effect, you automatically hit any one target you can see regardless of Range. Only one shot automatically hits, even if you are using a semi-automatic or automatic weapon. All other shots require Tests as normal."
   },
   {
     "id": "dowsing",
@@ -437,7 +437,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "By focusing his mind the diviner can single out an object or person vicinity, pushing aside all other distractions until he can unerringly find it. First the Psyker must choose an item or person to be the subject of the power. This can be anything, but it must be a specific item. So for instance, the Psyker could say, “I want to know where the key to this lock is” but not “I want to know where a key is”. Likewise with a person, them before (possibly remotely or in a pict) or know their name. Simply trying to find the person"
   },
   {
     "id": "far-sight",
@@ -447,7 +447,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Some diviners are capable of opening their inner eye to perceive events that occur at places far away from them. Far Sight may be used to make you aware of a single space anywhere within Range of this power. You need not be aware of the destination; you merely need to identify how far away you need to cast your senses (for example: “I look two kilometres to the west”). Should the point you select be inside a solid object, such as a wall, tree, cliff face or the like, the power simply fails. You may use Far Sight to cast your view inside buildings, bodies of water, pockets of gas and so on without impediment. Once you have cast your sight to a particular place, you can see up to the normal range of your vision from a speciﬁc point of view. You may change your facing by 90-degrees by spending a Half Action. Once you choose your point, you may not select another. You must use the power again to select a new point. Far Sight does not grant any special forms of vision; if your clairvoyant point is within a darkened room and you cannot normally see in darkness, you perceive nothing but darkness. In addition, Far Sight does not pick up sound (though if you have the Lip Reading skill, you can use it to work out what speakers are saying). While under the effects of this power, you are disoriented and cannot spend more than a Half Action each Round. In addition, you take a –30 penalty to all Tests. Overbleed: For every 10 points by which you exceed the power’s Threshold, you can double the Range of this power."
   },
   {
     "id": "glimpse",
@@ -457,7 +457,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You peer into the future, sensing the manifold web of different possible pathways and potential outcomes. Until the end of your next Turn, you gain a +30 bonus to any single Skill Test."
   },
   {
     "id": "precognitive-dodge",
@@ -467,7 +467,7 @@
     "focus_time": "Free Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You may manipulate probability to your own advantage. The threads of your immediate future appear clearly in your mind. You have the power to Dodge projectiles before they’ve been ﬁred. When you manifest this power, you can walk into combat with what appears to be astounding grace (or incredible luck), weaving your way through ﬁelds of gunﬁre without a scratch. Until the end of your next Turn, all Ballistic Skill Tests made to hit you with ranged weapons suffer a –30 penalty. P r e t e r N a t u r a l Casting your perception from the limited vessel of your bodily senses, you gain an unnatural awareness of the world around you. Your eyes roll white within their sockets and your senses roam about you, at once glancing above, behind, before and sideways. You also gain impressions of future events, granting you uncanny accuracy in anticipating them. You gain a +20 bonus on all Awareness Tests. In addition, you add your Willpower Bonus to your Initiative count. Overbleed: For every 10 points by which you exceed the power’s Threshold, you may add your Willpower bonus to your Initiative again."
   },
   {
     "id": "precognitive-strike",
@@ -477,7 +477,7 @@
     "focus_time": "Free Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Like a spider on a web, you are able to sense disturbances to your immediate future. This ability to read possible outcomes lets you anticipate the movement of your opponents. Until the end of your next Turn, you gain a +20 bonus to all Weapon Skill and Ballistic Skill Tests."
   },
   {
     "id": "preternatural-awareness",
@@ -497,7 +497,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Intense displays of emotion leave a psychic “residue” on objects and places exposed to them. Similarly, anything that has been actively carried or used by an individual for a long time will eventually pick up similar psychic impressions. With this power, you can read the psychic traces that others leave behind, giving you images directly connected to the place or object in question. These traces often take the form of sensory data. For example, a diviner may taste the hot blood-tang of murder, or smell the rank sweat-stench of desperation. You may use this power in one of two ways. First, you may use it to divine the impressions of an object, or, second, you may use it to divine psychic impressions in an area. In the case of the former, you must be handling the object. In the case of the latter, you may divine any pertinent details that occurred within a number of metres equal to your Willpower Bonus. The quality and nature of the information depends on how long you sustain the power. You derive a new piece of information for every ten Rounds you spend handling an object or concentrating on an area. 10 You sense the most recent strong emotion associated with the area—love, hated, amusement, fear and so on. 20 You perceive the general features of the person who experienced the emotion. 30 You get a clear image of the features of the person who experienced the emotion. 40 You are able to identify the person’s occupation (e.g. Career and Rank). 50 You are able to discern the name of the person. +10 You discover an additional fact about the person as determined by the GM. Overbleed: For every 10 points by which you exceed the power’s Threshold,"
   },
   {
     "id": "personal-augury",
@@ -507,7 +507,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Personal Augury allows you to peer into the fate of a single, willing target. You may warn the querant of impending dangers, opportunities and even divine speciﬁc advice for your client. To begin the augury, you clasp the hands of your client, and ask them to specify a circumstance that they wish divined. This may be as detailed as, “What terrors does the headquarters of the Barbed Chalice hold?” or as vague as, “How can I please my Inquisitor?” The more precise the question, the more speciﬁc the reading may be. Once the question is established, the diviner and client spend the next thirty minutes using his Psychic-foci. This may be reading the Imperial Tarot, casting runes, examining entrails, or any other such act. At the end of this time, you may make a Psyniscience Test to accurately sense the weave of the client’s future. Each degree of success reveals more information. Degrees of 0 Doom: The diviner receives a symbolic warning of the greatest peril or obstacle faced by the client with regards to the question. This is a vague hint at what is to come. 1 Malign Inﬂuences: The di - viner gains intuition of the client’s doom, and a further two negative influences that the client will face. 2 Benign Factors: The diviner gains an additional impression of the greatest advantage or weapon the client has in their possession. 3+ Fate: The diviner is aware of all of the previous effects, and may also offer a single sentence of mystical advice to the client."
   },
   {
     "id": "soul-sight",
@@ -517,7 +517,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Diviners are said to be able to read a person’s shifting aura, the ghost self they unconsciously project into the warp. From observing the nature of this aura, they can learn many things about a person’s emotions and feelings: from their current emotions, to habitual moods, to their levels of injury, and even any addictions or madness they may suffer from. When this power is manifested, the diviner may try to read the aura of any person they can see as a Full Action. This requires a successful Psyniscience Test with each degree of success granting him more information. The diviner must manifest this power each time he wishes to view an additional person’s aura. Degrees of 0 Hue. You focus on the dominant colours in the target’s aura. This allows you to detect the strongest three emotions they are currently experiencing. You are also able to detect their race, and if they have any Psychic Discipline Powers (though not what they are). From the brightness and consistency of the aura, you are also able to gain a rough idea of the target’s physical and mental health. This does not tell you their exact Wounds or Insanity Points, but rather grants a loose impression (good, poor, slightly weak, and so on). Finally, you may tell whether the target is an Untouchable. 1 Flow. You gain all the impressions of the previous result, and also gain a greater understanding of their emotional state. You can read all of the target’s current feelings. You also gain an insight into the target’s nature and their habitual"
   },
   {
     "id": "blinding-flash",
@@ -527,7 +527,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You focus blazing mental energy into a single point within your mind before releasing it all in a burst of searing bright light, blinding anyone who sees you and is within Range. Those with appropriate glare shielding and beings that don’t have visual sensory organs are immune. All those affected must make an Agility Test or be blinded for a number of Rounds equal to 1d10 times the Psyker’s Psy Rating. Blinded targets automatically fail vision-based Tests, move at half normal speed and take a –20 penalty on any Test that involves fighting, movement or reactions. Note that a Psyker may accidentally blind himself with this power (if he’s very stupid). Overbleed: For every 10 points by which you exceed the power’s Threshold, you extend the Range by 4 metres."
   },
   {
     "id": "burning-fist",
@@ -537,7 +537,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Focus Time Half Action With intense concentration, you wreathe your hands in waves of shimmering flame. Your unarmed attacks deal 1d10+SB Energy Damage. In addition, your unarmed strikes do not count as having the Primitive special quality."
   },
   {
     "id": "call-flame",
@@ -547,7 +547,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "One of the ﬁrst powers commonly learned in this discipline is to summon ﬁre with thought. This allows you to conjure a small flame (about the size and intensity of a burning torch) into your palm. The primary purpose of this power is not to attack—though it adds 2 points of Damage to your unarmed attacks and makes them Energy attacks—but rather it is used to set things alight or as fuel for other Pyrokinetic powers, such as Sculpt Flame. While this power is in effect, you cannot use your hand for anything else besides holding the flame."
   },
   {
     "id": "douse-flames",
@@ -557,7 +557,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Focus Time Half Action It takes a potent mind to deny the natural tendency of flames to run out of control. Douse Flames allows you to instantly extinguish all ﬁres within range as well as interfere with ﬁre-based weapons such as flamers, causing them not to function for as long as they are within Range of the power although their fuel may still spray forth, depending on the design of the weapon. Note that chemically flammable substances, such as promethium, that burn continuously once exposed to the air, burst back into flame the moment the power’s effect ends or as soon as the chemical is brought outside of Range. Overbleed: For every 5 points by which you exceed the Threshold, you extend the Range by 5 metres."
   },
   {
     "id": "fire-bolt",
@@ -567,7 +567,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Fire Bolt allows you to create bolts of flame with your mind and hurl them at your foes. The appearance of these flames is up to you—for example, searing white light or green-black spheres of obscenity- mouthing faces. You can direct the bolt at any target you can see within range. Make a Challenging (+0) Willpower Test to strike the target. On a hit, the bolt deals 1d10+5 Energy Damage. Overbleed: For every 5 points by which the Power Roll exceeds the Threshold, you generate an additional Fire Bolt, which can be directed at any targets within Range. Test Willpower for each separate target."
   },
   {
     "id": "fire-storm",
@@ -577,7 +577,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Fire Storm instantly creates an intense conflagration about your target as the air itself ignites, burning all within to cinders. You can call a Fire Storm anywhere within range to a point you have line of sight to. The Fire Storm has a 6 metre radius from the point (or individual) targeted. The Fire Storm deals 1d10+5 Energy Damage to all creatures and objects in the area. Overbleed: For every 5 points by which you exceed the Threshold, you deal an additional 1d10 points of Damage."
   },
   {
     "id": "holocaust",
@@ -587,7 +587,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "A legendary ability that few pyrokinetics are strong enough to even wield, much less have the courage to use. Holocaust calls forth a raging white-hot firestorm ignited by the Psyker’s own soul. The"
   },
   {
     "id": "incinerate",
@@ -597,7 +597,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Incinerate allows you to generate intense heat as well as flame. By psychically agitating the molecules in a tightly focused area, you create an effect even more devastating than a meltagun. However, Incinerate requires you to concentrate on a single point, making it difﬁcult to use against non-stationary targets. Incinerate has a range of 10 metres and deals 1d10+1 Energy Damage. Each Round, beyond the ﬁrst, that you use a Full Action concentrating on the target (it must remain in Range and in line of sight) this power deals the Damage of the previous Round plus 1. Damage caused by Incinerate ignores both Armour and Toughness."
   },
   {
     "id": "sculpt-flame",
@@ -607,7 +607,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You control the shape of the fires burning around you. With this power, you can intensify any flames or shape them to assume any appearance you desire. A successful use of this power allows you to do"
   },
   {
     "id": "wall-of-fire",
@@ -617,7 +617,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "A relatively blunt, but effective, ability in the pyrokinetic’s arsenal, this power allows you to place an immobile barrier of flame that lingers for as long as you will it. The wall is three metres high and a metre thick and can be up to ten metres long for every point of your Willpower Bonus. You can place it anywhere within Range and even on top of foes, though they are allowed an Easy (+20) Agility Test to get out of the way. Foes crossing the wall or failing the Test take 1d10+5 Energy Damage (ignoring Armour) and must Test Agility again or catch on fire."
   },
   {
     "id": "catch-projectiles",
@@ -627,7 +627,7 @@
     "focus_time": "Reaction",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You can use your telekinetic abilities to catch incoming projectiles. This power only works against solid projectiles and so energy attacks get through normally. Until the end of your next Turn, you automatically discount a number of hits from incoming missiles equal to your Willpower Bonus, causing them to immediately stop and hang in the air. When this power ends, they fall harmlessly to the ground."
   },
   {
     "id": "fling",
@@ -647,7 +647,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "This power functions as Force Bolt except you create one bolt per point"
   },
   {
     "id": "force-bolt",
@@ -657,7 +657,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Use this power to hurl a burst of tangible mental force at your opponent. Test Willpower to hit the target. If you succeed, your attack deals 1d10 Impact Damage +1 Damage per point of your Willpower Bonus. Overbleed: For every 5 points by which you exceed the power’s Threshold, you deal 1 additional point of Impact Damage. If Telekinesis is a sledgehammer, a scalpel. This ability allows effects with telekinetic force. At its most basic, this power can pull the pins on grenades, press buttons, jog triggers, undo latches and direct small projectiles to deadly effect. Essentially, with this power, you can manipulate objects as if you were physically handling them. In any situation where the task would call for a Characteristic Test you substitute your Willpower instead."
   },
   {
     "id": "precision-telekinesis",
@@ -677,7 +677,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "A phenomenally complicated ability to master, this power allows you to project your will as a blade of psychic force. Because the blade is formed of psychic energy, it can be formed almost impossibly thin, as little as a molecule thick. A Psychic Blade can thus shear through almost any physical object with ease, and is capable of cutting through most forms of armour as if they were made of cloth. The Psychic Blade is a terribly dangerous weapon to use, though, for any stray thoughts can misdirect it with devastating effect. Once manifested, treat the Psychic Blade as a sword wielded by the Psyker (though it does not require a free hand) that requires no Melee Training to use, but cannot Parry. To strike with the Psychic Blade, the telekine uses their Willpower Characteristic rather than Weapon Skill. On a successful hit, the weapon deals 1d10 Rending Damage, plus 2 additional points of Damage per point of your Willpower Bonus. In addition, the weapon has Penetration equal to twice your Willpower Bonus."
   },
   {
     "id": "psychic-crush",
@@ -687,7 +687,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You can direct your Telekinetic power directly against your opponents, wrapping them in bands of force that constrict and crush the life out of them. Once manifested, you may use this power against any target within Range. Make an Opposed Test, pitting your Willpower against your opponent’s Toughness. If you beat your opponent, you deal 1d10 Impact Damage plus 1 per point of your Willpower Bonus. For each degree of success, you deal an additional 2 points of Damage. Overbleed: For every 5 points by which you exceed the power’s Threshold, you may extend the Range by 10 metres."
   },
   {
     "id": "push",
@@ -697,7 +697,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You gather a ball of telekinetic energy and direct it against any single target within range. Make an Opposed Test, pitting your Willpower against your target’s Strength. If you beat your opponent, you knock them to the ground. For each degree of success, you also deal one level of Fatigue. Overbleed: For every 5 points by which you exceed the power’s Threshold, you may extend the Range by 10 metres or gain a +10 bonus to your Willpower Test. Telekinesis is the ability to use the strength of one’s will to move physical inanimate objects around. You may lift or move any object within Range, whose weight does not exceed 5 kilograms × your Willpower Bonus. You may move the object slowly anywhere within Range of the power. This power cannot affect living creatures. You cannot make attacks with objects you manipulate. Once you cease concentrating on the object, it falls slowly to the ground."
   },
   {
     "id": "telekinesis",
@@ -707,7 +707,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Telekinetic Shield"
   },
   {
     "id": "telekinetic-shield",
@@ -717,7 +717,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You erect a ﬁeld of telekinetic energy about you. This ﬁeld functions as a force shield, granting 1 Armour Point on every location in addition to any other armour you are wearing. By spending a Full Action to activate this Psychic Power, you may opt to cause the Telekinetic Shield to vibrate at a colour frequency of your choosing (golden yellow, skull white, ice blue, and so on). Note that whatever its hue, the shield"
   },
   {
     "id": "beastmaster",
@@ -727,7 +727,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You may stretch out your thoughts to animals, becoming able to perceive their emotions and establish a rudimentary form of communication. The relative simplicity of an animal’s mind allows you to dominate them. Affected animals must follow your every command. When you manifest this power, select one animal within Range. Each Round you sustain the power, you may spend a Reaction to give the animal a command. The command must be simple, such as “come”, “guard”, “flee”, “heel”, “attack” and so on. The animal follows the command to the best of its ability. If the animal feels threatened or is ordered to act in a way that is not suited to its nature, it may make a Willpower Test to break your control. How it acts if it succeeds depends on your treatment of it."
   },
   {
     "id": "compel",
@@ -737,7 +737,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "One of the most direct of all “psyker mind tricks”, Compel allows you to force others into briefly acting against their own will. Compel is a highly versatile power, useful for both subtle and blatant effects. When you manifest this power, make an Opposed Test, pitting your Willpower against the"
   },
   {
     "id": "dominate",
@@ -747,7 +747,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "One of the most infamous of all telepathic abilities, you reach out with your mind to seize control of another’s body. Make an Opposed Test, pitting your Willpower against the target’s. If you succeed, you control your target’s body as if it were a puppet. For as long as the power remains active, you may divide up your Actions between yourself and your target. For example, on your Turn, you might spend a Half Action to ﬁre your laspistol at an Ork and then for your other Half Action, order your puppet to ﬁre his bolter at the Ork. The dominated target uses its own Characteristics, but takes a –10 penalty to all Tests because it is controlled. Any action that could be deemed as suicidal grants the target a new Willpower Test to try and break your hold. Overbleed: For every 10 points by which you exceed the power’s Threshold, you gain a +10 bonus on your Opposed Willpower Test."
   },
   {
     "id": "inspire",
@@ -757,7 +757,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Sustain: You bolster your comrades by subtly implanting images of great courage, and masking various negative emotional stimuli, allowing them to swiftly shake off fears and doubts. A number of targets equal to your Willpower Bonus immediately overcome the effects of Pinning and Fear, and remain impervious to these effects for as long as they stay within Range and for as long as you sustain the power. Such psychic propaganda is frequently used amongst the Imperial Guard."
   },
   {
     "id": "mind-scan",
@@ -767,7 +767,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Sustain: With this power, you can read a target’s mind, probing whatever secrets are hidden therein. You must touch the target for this power to work, which, unless clever methods are employed, means you must successfully Test Weapon Skill. If you manage to touch the target, you may enter a contest of wills in order to pierce your target’s mental barriers and discover all sorts of information. Mind Scan is a lengthy process, extending over ﬁve Rounds. During each of these Rounds the Psyker"
   },
   {
     "id": "projection",
@@ -777,7 +777,7 @@
     "focus_time": "Full Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "Sustain: You can send out your disembodied mind and spirit, allowing you to touch other minds from a great distance away. You project a “mental self ”, which you can shape to look like whatever you choose. The projection can travel at great speed, literally the speed of thought, but it can also be vary dangerous as creatures native to the immaterium and other Psykers may be able to directly attack your mind. Whilst using Projection, you are completely unaware of what is happening with your physical body. This power lets you communicate with any creature you know well (such as a companion or your Inquisitor), and is somewhere within the same solar system. Unwilling targets, or possibly those that do not look kindly at having people invade their thoughts, may make an Opposed Willpower Test with the Psyker to force them back into their bodies. Whilst using this power, your body functions as if it were unconscious."
   },
   {
     "id": "psychic-shriek",
@@ -787,7 +787,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "Sustain: A voice’s volume is limited to the realities of vocal capacity and a"
   },
   {
     "id": "see-me-not",
@@ -797,7 +797,7 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You erase your presence from the minds of others. This power is more than just “invisibility”; targets that this power has been used successfully on literally cannot perceive you at all. While they may suspect that someone else is present, they can only react to the effects of what you do. For example, you could punch a guard while using See Me Not. The guard would know that he had been hit by “something” and would certainly do his best to ﬁnd the source of the attack, in hopes of stopping a second blow, but he would look “right through you” while he was searching. Upon manifesting this power, select a number of targets within Range equal to your Willpower Bonus. Each target No must succeed on a Willpower Test or they can no longer perceive you for as long as you sustain the power. Lack of perception means they cannot directly"
   },
   {
     "id": "telepathy",
@@ -807,7 +807,7 @@
     "focus_time": "Free Action",
     "range": "—",
     "sustained": true,
-    "description": ""
+    "description": "You can send your thoughts into the minds of those around you. You can choose to send your message to one or more persons in a select group of individuals, which is known as a “placed sending”, or can transmit your thoughts to anyone within Range, an art known as “broadcasting”."
   },
   {
     "id": "terrify",
@@ -817,6 +817,6 @@
     "focus_time": "Half Action",
     "range": "—",
     "sustained": false,
-    "description": ""
+    "description": "You dredge up a person’s worst nightmare and project it directly into their mind, causing them to flee screaming. You may affect a number of targets within Range up to your Willpower Bonus. Each target must pass a Willpower Test or roll on the Shock Table (see page 233 ). Overbleed: For every 5 points by which you exceed the power’s Threshold, the target adds +10 to their roll on the Shock Table."
   }
 ]
