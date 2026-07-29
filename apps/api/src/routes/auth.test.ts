@@ -24,7 +24,7 @@ describe("POST /auth/login", () => {
     // module-level constants (evaluated at import time) pick them up.
     const res = await login({ password: process.env.ADMIN_PASSWORD })
     expect(res.status).toBe(200)
-    const { token } = await res.json()
+    const { token } = (await res.json()) as { token: string }
     expect(typeof token).toBe("string")
     expect(token.split(".")).toHaveLength(3)
   })

@@ -14,7 +14,7 @@ briefingRouter.get("/:sessionId", async (c) => {
     args: [sessionId],
   })
   if (!sessionRows.length) return c.json({ error: "Session not found" }, 404)
-  const session = sessionRows[0]
+  const session = sessionRows[0]!
 
   let dates: string[] = []
   try { dates = JSON.parse(session.dates as string) } catch {}
@@ -122,7 +122,7 @@ briefingRouter.get("/", async (c) => {
   const recentNotes = notes.map((n) => (n.transcript as string) ?? "").filter(Boolean)
 
   const briefing = await generateBriefing({
-    sessionName: (sessions[0].name as string | null) ?? null,
+    sessionName: (sessions[0]!.name as string | null) ?? null,
     sessionSummaries,
     activeEntities,
     recentNotes,

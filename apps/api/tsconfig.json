@@ -14,6 +14,10 @@
     "verbatimModuleSyntax": true,
     "noEmit": true,
 
+    // Bun auto-inclusion of @types/bun (and transitively @types/node) isn't
+    // happening implicitly under this TS version — list them explicitly.
+    "types": ["bun", "node"],
+
     // Best practices
     "strict": true,
     "skipLibCheck": true,

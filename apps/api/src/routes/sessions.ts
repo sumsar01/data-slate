@@ -84,7 +84,7 @@ sessionsRouter.patch("/:id", async (c) => {
   const existing = await db.execute({ sql: "SELECT * FROM session_overrides WHERE id = ?", args: [id] })
   if (existing.rows.length === 0) return c.json({ error: "Not found" }, 404)
 
-  const current = existing.rows[0]
+  const current = existing.rows[0]!
   const name = body.name ?? (current.name as string)
   const dates = body.dates ? JSON.stringify(body.dates) : (current.dates as string)
 
@@ -193,7 +193,7 @@ sessionsRouter.patch("/arcs/:arcId", async (c) => {
   const body = await c.req.json<{ name?: string; color?: string; session_ids?: string[] }>()
   const existing = await db.execute({ sql: "SELECT * FROM arcs WHERE id = ?", args: [arcId] })
   if (existing.rows.length === 0) return c.json({ error: "Arc not found" }, 404)
-  const cur = existing.rows[0]
+  const cur = existing.rows[0]!
   const name = body.name ?? (cur.name as string)
   const color = body.color ?? (cur.color as string)
   const oldIds: string[] = JSON.parse(cur.session_ids as string)

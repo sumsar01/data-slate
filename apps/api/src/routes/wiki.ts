@@ -11,10 +11,10 @@ function levenshtein(a: string, b: string): number {
   )
   for (let i = 1; i <= m; i++)
     for (let j = 1; j <= n; j++)
-      dp[i][j] = a[i-1] === b[j-1]
-        ? dp[i-1][j-1]
-        : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
-  return dp[m][n]
+      dp[i]![j] = a[i-1] === b[j-1]
+        ? dp[i-1]![j-1]!
+        : 1 + Math.min(dp[i-1]![j]!, dp[i]![j-1]!, dp[i-1]![j-1]!)
+  return dp[m]![n]!
 }
 
 // Find potential duplicates among entity names
@@ -26,21 +26,23 @@ function findDuplicates(entities: { id: string; name: string }[]): Array<{
   const results: Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: "HIGH" | "MEDIUM" }> = []
   for (let i = 0; i < entities.length; i++) {
     for (let j = i + 1; j < entities.length; j++) {
-      const a = entities[i].name.toLowerCase()
-      const b = entities[j].name.toLowerCase()
+      const entityI = entities[i]!
+      const entityJ = entities[j]!
+      const a = entityI.name.toLowerCase()
+      const b = entityJ.name.toLowerCase()
       // Skip if one contains the other (likely a short alias vs full name)
       if (a.includes(b) || b.includes(a)) {
         // Only flag if the shorter one is ≥ 4 chars to avoid noise
         if (Math.min(a.length, b.length) >= 4) {
-          results.push({ a: entities[i], b: entities[j], similarity: "HIGH" })
+          results.push({ a: entityI, b: entityJ, similarity: "HIGH" })
         }
         continue
       }
       const dist = levenshtein(a, b)
       const maxLen = Math.max(a.length, b.length)
       const ratio = 1 - dist / maxLen
-      if (ratio >= 0.85) results.push({ a: entities[i], b: entities[j], similarity: "HIGH" })
-      else if (ratio >= 0.70) results.push({ a: entities[i], b: entities[j], similarity: "MEDIUM" })
+      if (ratio >= 0.85) results.push({ a: entityI, b: entityJ, similarity: "HIGH" })
+      else if (ratio >= 0.70) results.push({ a: entityI, b: entityJ, similarity: "MEDIUM" })
     }
   }
   return results
@@ -117,7 +119,7 @@ wikiRouter.get("/by-name/:name", async (c) => {
     args: [name],
   })
   if (!rows.length) return c.json({ error: "not found" }, 404)
-  const entity = rows[0]
+  const entity = rows[0]!
   // If it's an alias, follow to canonical
   if (entity.canonical_id) {
     const { rows: canonical } = await db.execute({
@@ -170,7 +172,7 @@ wikiRouter.get("/:id", async (c) => {
     args: [id],
   })
   if (!rows.length) return c.json({ error: "not found" }, 404)
-  let entity = rows[0]
+  let entity = rows[0]!
 
   // Follow canonical redirect
   if (entity.canonical_id) {
@@ -178,7 +180,7 @@ wikiRouter.get("/:id", async (c) => {
       sql: "SELECT * FROM entities WHERE id = ?1",
       args: [entity.canonical_id as string],
     })
-    if (canonical.length) entity = canonical[0]
+    if (canonical.length) entity = canonical[0]!
   }
 
   // Collect all aliases for this entity
@@ -480,7 +482,7 @@ wikiRouter.post("/:id/summary", async (c) => {
   const id = c.req.param("id")
   const { rows } = await db.execute({ sql: "SELECT * FROM entities WHERE id = ?1", args: [id] })
   if (!rows.length) return c.json({ error: "not found" }, 404)
-  const entity = rows[0]
+  const entity = rows[0]!
 
   // Collect all alias names
   const { rows: aliases } = await db.execute({
@@ -534,8 +536,8 @@ wikiRouter.post("/:id/summary", async (c) => {
       const toRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.to_name.toLowerCase())
         ?? (rel.to_name.toLowerCase() === (entity.name as string).toLowerCase() ? { id } : null)
       if (!fromRow || !toRow || fromRow.id === toRow.id) continue
-      const fromId = typeof fromRow.id === "string" ? fromRow.id : fromRow.id as string
-      const toId = typeof toRow.id === "string" ? toRow.id : toRow.id as string
+      const fromId = typeof fromRow.id === "string" ? fromRow.id : String(fromRow.id)
+      const toId = typeof toRow.id === "string" ? toRow.id : String(toRow.id)
       // Skip if this relation already exists
       const { rows: existing } = await db.execute({
         sql: "SELECT id FROM entity_relations WHERE from_id = ?1 AND to_id = ?2 AND relation_type = ?3",
@@ -581,7 +583,7 @@ wikiRouter.post("/:id/image", async (c) => {
   const id = c.req.param("id")
   const { rows } = await db.execute({ sql: "SELECT * FROM entities WHERE id = ?1", args: [id] })
   if (!rows.length) return c.json({ error: "not found" }, 404)
-  const entity = rows[0]
+  const entity = rows[0]!
 
   const formData = await c.req.formData()
   const file = formData.get("image") as File | null
@@ -615,7 +617,7 @@ wikiRouter.delete("/:id/image", async (c) => {
   const { rows } = await db.execute({ sql: "SELECT image_url FROM entities WHERE id = ?1", args: [id] })
   if (!rows.length) return c.json({ error: "not found" }, 404)
 
-  const image_url = rows[0].image_url as string | null
+  const image_url = rows[0]!.image_url as string | null
   if (image_url) {
     const publicBase = process.env.R2_PUBLIC_URL ?? ""
     const key = image_url.replace(`${publicBase}/`, "")

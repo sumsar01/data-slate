@@ -114,7 +114,7 @@ notesRouter.get("/:id", async (c) => {
   const id = c.req.param("id")
   const result = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
   if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
-  return c.json(rowToNote(result.rows[0]))
+  return c.json(rowToNote(result.rows[0]!))
 })
 
 // POST /notes/:id/entities — retry entity extraction for a note
@@ -201,7 +201,7 @@ notesRouter.patch("/:id", async (c) => {
   const body = await c.req.json()
 
   const updates: string[] = []
-  const args: unknown[] = []
+  const args: (string | number | null)[] = []
 
   const textFields = ["title", "date", "transcript"] as const
   const jsonFields = ["tags", "entities"] as const
@@ -230,7 +230,7 @@ notesRouter.patch("/:id", async (c) => {
 
   const result = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
   if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
-  return c.json(rowToNote(result.rows[0]))
+  return c.json(rowToNote(result.rows[0]!))
 })
 
 // DELETE /notes/:id

@@ -22,6 +22,5 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run --cwd apps/api test
-      - name: Typecheck (non-blocking — tracks pre-existing strict-mode debt)
+      - name: Typecheck
         run: bun run --cwd apps/api typecheck
-        continue-on-error: true

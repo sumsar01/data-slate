@@ -38,7 +38,7 @@ cluesRouter.post("/suggest/:sessionId", async (c) => {
   if (!sessionRows.length) return c.json({ error: "Session not found" }, 404)
 
   let dates: string[] = []
-  try { dates = JSON.parse(sessionRows[0].dates as string) } catch {}
+  try { dates = JSON.parse(sessionRows[0]!.dates as string) } catch {}
   dates = dates.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(String(d)))
   if (!dates.length) return c.json({ suggestions: [] })
 
@@ -54,8 +54,8 @@ cluesRouter.post("/suggest/:sessionId", async (c) => {
   if (!notes.length) return c.json({ suggestions: [] })
 
   // Build rich snippets: "TITLE: ... | INDHOLD: ..." so model has both dimensions
-  const sessionName = sessionRows[0].name as string | null
-  const sessionSummary = sessionRows[0].summary as string | null
+  const sessionName = sessionRows[0]!.name as string | null
+  const sessionSummary = sessionRows[0]!.summary as string | null
   const snippets = notes.map((n) => {
     const title = (n.title as string | null) ?? ""
     const transcript = (n.transcript as string | null) ?? ""

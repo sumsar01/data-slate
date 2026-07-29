@@ -5,7 +5,7 @@ function getGroq() {
 }
 
 export async function transcribeAudio(audioBuffer: Buffer, filename: string): Promise<{ transcript: string; detectedLanguage: string }> {
-  const file = new File([audioBuffer], filename, { type: "audio/webm" })
+  const file = new File([new Uint8Array(audioBuffer)], filename, { type: "audio/webm" })
 
   const result = await getGroq().audio.transcriptions.create({
     file,
@@ -176,8 +176,8 @@ export async function extractClues(snippets: string[], sessionName?: string, ses
 
   let total = 0
   const parts: string[] = []
-  for (let i = 0; i < snippets.length; i++) {
-    const chunk = snippets[i].slice(0, PER_SNIPPET_LIMIT)
+  for (const [i, snippet] of snippets.entries()) {
+    const chunk = snippet.slice(0, PER_SNIPPET_LIMIT)
     if (total + chunk.length > TOTAL_LIMIT) break
     parts.push(`[NOTE ${i + 1}] ${chunk}`)
     total += chunk.length
