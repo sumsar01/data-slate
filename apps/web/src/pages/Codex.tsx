@@ -165,21 +165,36 @@ function WeaponsTable({ items }: { items: Weapon[] }) {
 }
 
 function QualitiesTable({ items }: { items: WeaponQuality[] }) {
+  const [expandedId, toggleExpand] = useExpand()
+
   return (
     <table className="codex-table">
       <thead>
         <tr>
           <th>NAME</th>
-          <th>DESCRIPTION</th>
         </tr>
       </thead>
       <tbody>
-        {items.map((q) => (
-          <tr key={q.id}>
-            <td className="codex-name">{q.name}</td>
-            <td className="codex-desc">{q.description}</td>
-          </tr>
-        ))}
+        {items.map((q) => {
+          const hasLong = Boolean(q.description)
+          const expanded = expandedId === q.id
+          return (
+            <Fragment key={q.id}>
+              <tr
+                className={hasLong ? "codex-row-clickable" : ""}
+                onClick={hasLong ? () => toggleExpand(q.id) : undefined}
+              >
+                <td className="codex-name">
+                  {hasLong && (
+                    <span className="codex-expand-icon">{expanded ? "▾" : "▸"}</span>
+                  )}
+                  {q.name}
+                </td>
+              </tr>
+              {expanded && hasLong && <ExpandedDescRow colSpan={1} text={q.description} />}
+            </Fragment>
+          )
+        })}
       </tbody>
     </table>
   )
