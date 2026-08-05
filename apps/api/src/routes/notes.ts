@@ -130,6 +130,35 @@ notesRouter.post("/:id/entities", async (c) => {
   return c.json({ id, entities })
 })
 
+// POST /notes/:id/retranscribe — re-run transcription from the original audio (fixes
+// notes whose transcript/title were generated in the wrong language due to Whisper
+// language auto-detection misfiring on the original recording)
+notesRouter.post("/:id/retranscribe", async (c) => {
+  const id = c.req.param("id")
+  const result = await db.execute({ sql: "SELECT audio_url FROM notes WHERE id = ?", args: [id] })
+  if (result.rows.length === 0) return c.json({ error: "Not found" }, 404)
+  const audio_url = (result.rows[0]!.audio_url ?? "") as string
+  if (!audio_url) return c.json({ error: "Note has no audio" }, 422)
+
+  const audioRes = await fetch(audio_url)
+  if (!audioRes.ok) return c.json({ error: "Failed to fetch audio" }, 502)
+  const buffer = Buffer.from(await audioRes.arrayBuffer())
+  const filename = audio_url.split("/").pop() || "recording.webm"
+
+  const { transcript: rawTranscript, detectedLanguage } = await transcribeAudio(buffer, filename)
+  const transcript = await flavourTranscript(rawTranscript, detectedLanguage)
+  const title = await generateTitle(transcript)
+  const entities = await extractEntities(transcript)
+
+  await db.execute({
+    sql: "UPDATE notes SET transcript = ?, title = ?, entities = ? WHERE id = ?",
+    args: [transcript, title, JSON.stringify(entities), id],
+  })
+
+  const updated = await db.execute({ sql: "SELECT * FROM notes WHERE id = ?", args: [id] })
+  return c.json(rowToNote(updated.rows[0]!))
+})
+
 // POST /notes/flavour-all — retroactively flavour all notes and re-extract entities
 notesRouter.post("/flavour-all", async (c) => {
   const result = await db.execute("SELECT id, transcript FROM notes ORDER BY created_at ASC")
@@ -145,7 +174,7 @@ notesRouter.post("/flavour-all", async (c) => {
 
     try {
       // Flavour (tell Groq to detect language from text)
-      const flavoured = await flavourTranscript(rawTranscript, "the original language of the text")
+      const flavoured = await flavourTranscript(rawTranscript, "Danish")
       // Generate English title
       const title = await generateTitle(flavoured)
       // Re-extract entities on flavoured text
