@@ -147,7 +147,7 @@ export async function nameSession(transcripts: string[]): Promise<string> {
           "You are a scribe for a Warhammer 40K tabletop RPG campaign. " +
           "Given session recordings, generate a short evocative session name (4–7 words max) in the style of a 40K mission title. " +
           "Examples: 'The Siege of Hive Tertius', 'Descent into the Underhive', 'Blood on the Manufactorum Floor'. " +
-          "IMPORTANT: Write the session name in the SAME language as the majority of the transcripts. " +
+          "IMPORTANT: Write the session name in Danish, regardless of what language the transcripts are in. " +
           "Return ONLY the session name, no quotes, no explanation.",
       },
       {
@@ -229,7 +229,7 @@ export async function summariseSession(transcripts: string[]): Promise<string> {
         content:
           "You are a scribe for a Warhammer 40K tabletop RPG campaign. " +
           "Summarise the session notes provided into a concise but evocative battle report. " +
-          "IMPORTANT: Write the summary in the SAME language as the majority of the transcripts. " +
+          "IMPORTANT: Write the summary in Danish, regardless of what language the notes are in. " +
           "Use gothic, Mechanicus-flavoured language. Focus on events, decisions, NPCs encountered, and locations visited. " +
           "Keep it under 300 words.",
       },
