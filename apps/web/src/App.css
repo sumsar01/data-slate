@@ -17,7 +17,7 @@ html, body, #root {
   padding-right: env(safe-area-inset-right);
 }
 
-/* Pages that need vertical scroll (briefing, search, dead-drop, etc.)
+/* Pages that need vertical scroll (briefing, search, etc.)
    set document.body.classList.add("page--scrollable") on mount */
 body.page--scrollable,
 body.page--scrollable #root,

@@ -13,7 +13,6 @@ import Login from "./pages/Login.tsx"
 import VoxSearch from "./pages/VoxSearch.tsx"
 import ThreatMatrixPage from "./pages/ThreatMatrixPage.tsx"
 import BriefingPage from "./pages/BriefingPage.tsx"
-import DeadDropPage from "./pages/DeadDropPage.tsx"
 import Codex from "./pages/Codex.tsx"
 import RequireAuth from "./components/RequireAuth.tsx"
 import "./index.css"
@@ -33,7 +32,6 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/threat-matrix" element={<ThreatMatrixPage />} />
         <Route path="/briefing" element={<BriefingPage />} />
         <Route path="/briefing/:sessionId" element={<BriefingPage />} />
-        <Route path="/dead-drop" element={<DeadDropPage />} />
         <Route path="/codex" element={<Codex />} />
         <Route path="/record" element={<RequireAuth><Record /></RequireAuth>} />
         <Route path="/admin-mechanicus" element={<RequireAuth><Admin /></RequireAuth>} />

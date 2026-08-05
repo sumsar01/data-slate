@@ -11,6 +11,7 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
     file,
     model: "whisper-large-v3",
     response_format: "verbose_json",
+    language: "da",
   })
 
   const transcript = (result as any).text ?? ""
@@ -157,78 +158,6 @@ export async function nameSession(transcripts: string[]): Promise<string> {
     max_tokens: 30,
   })
   return chat.choices[0]?.message?.content?.trim() ?? "Unnamed Session"
-}
-
-export type ClueSuggestion = {
-  title: string
-  description: string
-  priority: number // 0=critical, 1=high, 2=normal, 3=low, 4=background
-}
-
-// Scans session snippets (title + transcript) and returns suggested Dead Drop leads.
-// Truncates each snippet to 1500 chars and caps total input at 18000 chars
-// to avoid silent context-overflow failures with many recordings.
-export async function extractClues(snippets: string[], sessionName?: string, sessionSummary?: string): Promise<ClueSuggestion[]> {
-  if (!snippets.length) return []
-
-  const PER_SNIPPET_LIMIT = 1500
-  const TOTAL_LIMIT = 18000
-
-  let total = 0
-  const parts: string[] = []
-  for (const [i, snippet] of snippets.entries()) {
-    const chunk = snippet.slice(0, PER_SNIPPET_LIMIT)
-    if (total + chunk.length > TOTAL_LIMIT) break
-    parts.push(`[NOTE ${i + 1}] ${chunk}`)
-    total += chunk.length
-  }
-  const combined = parts.join("\n")
-
-  const contextHeader = [
-    sessionName ? `SESSION: ${sessionName}` : null,
-    sessionSummary ? `SAMMENDRAG: ${sessionSummary.slice(0, 800)}` : null,
-  ].filter(Boolean).join("\n")
-
-  const userContent = contextHeader ? `${contextHeader}\n\n---\n\n${combined}` : combined
-
-  const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
-    response_format: { type: "json_object" },
-    messages: [
-      {
-        role: "system",
-        content:
-          "Du er en inquisitoriel analytiker for Ordo Hereticus i Warhammer 40K-universet. " +
-          "Læs sessionens noter og udpeg 3-8 konkrete efterretningsemner der fortjener opfølgning. " +
-          "Vær generøs — hellere for mange end for få. Selv delvist uklare emner er relevante. " +
-          "\n\nKig efter: navngivne personer hvis loyalitet er ukendt, organisationer der omtales mystisk, " +
-          "steder der ikke er undersøgt, genstande med ukendt formål, hændelser der ikke er forklaret, " +
-          "planlagte møder der ikke er bekræftet afholdt, mistænkelige sammenhænge mellem entiteter, " +
-          "handlinger som gruppen endnu ikke har foretaget sig. " +
-          "\n\nReturner KUN dette JSON-format:\n" +
-          '{"clues":[{"title":"Kort betegnelse max 8 ord","description":"Hvad der er observeret og hvorfor det er relevant (2-3 sætninger)","priority":0}]}' +
-          "\n\nPrioritet: 0=KRITISK, 1=HØJ, 2=NORMAL, 3=LAV, 4=BAGGRUND. " +
-          "Skriv på dansk. Brug kun oplysninger fra noterne.",
-      },
-      {
-        role: "user",
-        content: userContent,
-      },
-    ],
-    max_tokens: 1500,
-  })
-  try {
-    const raw = chat.choices[0]?.message?.content ?? "{}"
-    const parsed = JSON.parse(raw)
-    const clues: ClueSuggestion[] = (parsed.clues ?? []).map((c: any) => ({
-      title: String(c.title ?? "").slice(0, 120),
-      description: String(c.description ?? "").slice(0, 500),
-      priority: Math.min(4, Math.max(0, parseInt(c.priority ?? "2", 10) || 2)),
-    }))
-    return clues
-  } catch {
-    return []
-  }
 }
 
 export type Relation = {

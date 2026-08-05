@@ -10,7 +10,6 @@ import { wikiRouter } from "./routes/wiki"
 import { authRouter } from "./routes/auth"
 import { searchRouter } from "./routes/search"
 import { briefingRouter } from "./routes/briefing"
-import { cluesRouter } from "./routes/clues"
 import { codexRouter } from "./routes/codex"
 
 const app = new Hono()
@@ -78,10 +77,6 @@ app.use("/search", requireAuthForWrites)
 app.use("/briefing/*", requireAuthForWrites)
 app.use("/briefing", requireAuthForWrites)
 
-// /clues — GET public, mutations protected
-app.use("/clues/*", requireAuthForWrites)
-app.use("/clues", requireAuthForWrites)
-
 // /codex — fully public, read-only static data
 
 // ── Routers ────────────────────────────────────────────────────────────────
@@ -92,7 +87,6 @@ app.route("/shares", sharesRouter)
 app.route("/wiki", wikiRouter)
 app.route("/search", searchRouter)
 app.route("/briefing", briefingRouter)
-app.route("/clues", cluesRouter)
 app.route("/codex", codexRouter)
 
 export default {

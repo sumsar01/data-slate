@@ -107,7 +107,6 @@ export default function App() {
               <Link to="/timeline" className="app-export-btn" title="Campaign timeline">◈ TIMELINE</Link>
               <Link to="/wiki" className="app-export-btn" title="Entity wiki">◈ WIKI</Link>
               <Link to="/threat-matrix" className="app-export-btn" title="Threat assessment">◈ THREATS</Link>
-              <Link to="/dead-drop" className="app-export-btn" title="Dead Drop — lead tracker">◈ DEAD DROP</Link>
               <Link to="/briefing" className="app-export-btn" title="Mission briefing">◈ BRIEFING</Link>
               <Link to="/vox-search" className="app-export-btn" title="Search vox-log">⌕ SEARCH</Link>
             </div>
@@ -128,7 +127,6 @@ export default function App() {
                   <Link to="/timeline" role="menuitem" onClick={() => setNavOpen(false)}>◈ TIMELINE</Link>
                   <Link to="/wiki" role="menuitem" onClick={() => setNavOpen(false)}>◈ WIKI</Link>
                   <Link to="/threat-matrix" role="menuitem" onClick={() => setNavOpen(false)}>◈ THREATS</Link>
-                  <Link to="/dead-drop" role="menuitem" onClick={() => setNavOpen(false)}>◈ DEAD DROP</Link>
                   <Link to="/briefing" role="menuitem" onClick={() => setNavOpen(false)}>◈ BRIEFING</Link>
                   <Link to="/vox-search" role="menuitem" onClick={() => setNavOpen(false)}>⌕ SEARCH</Link>
                 </div>

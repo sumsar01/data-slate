@@ -92,25 +92,6 @@ export type SearchResult = {
   session_name: string | null
 }
 
-// ── Clue Tracker ──────────────────────────────────────────────────────────
-
-export type ClueStatus = "ACTIVE" | "COLD" | "RESOLVED"
-
-export type Clue = {
-  id: string
-  title: string
-  description: string | null
-  status: ClueStatus
-  priority: number
-  created_at: string
-  updated_at: string
-  linked_notes: number
-}
-
-export type ClueDetail = Clue & {
-  notes: Array<{ id: string; title: string; date: string }>
-}
-
 // ── Entity Graph (Threat Matrix) ──────────────────────────────────────────
 
 export type GraphNode = {
