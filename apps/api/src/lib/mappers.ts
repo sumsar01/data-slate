@@ -1,8 +1,7 @@
 import type { Note } from "@data-slate/shared"
-import type { Row } from "@libsql/client"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function rowToNote(row: Row | Record<string, any>): Note {
+export function rowToNote(row: Record<string, any>): Note {
   return {
     id: row.id as string,
     date: row.date as string,
