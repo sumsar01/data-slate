@@ -1,5 +1,7 @@
 import Groq from "groq-sdk"
 
+const CHAT_MODEL = process.env.GROQ_CHAT_MODEL ?? "openai/gpt-oss-120b"
+
 function getGroq() {
   return new Groq({ apiKey: process.env.GROQ_API_KEY ?? "" })
 }
@@ -24,7 +26,8 @@ export async function transcribeAudio(audioBuffer: Buffer, filename: string): Pr
 export async function flavourTranscript(transcript: string, language: string): Promise<string> {
   if (!transcript.trim()) return transcript
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -59,7 +62,8 @@ export async function flavourTranscript(transcript: string, language: string): P
 export async function generateTitle(transcript: string): Promise<string> {
   if (!transcript.trim()) return "Untitled"
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -74,7 +78,7 @@ export async function generateTitle(transcript: string): Promise<string> {
         content: transcript,
       },
     ],
-    max_tokens: 30,
+    max_tokens: 200,
   })
   const title = chat.choices[0]?.message?.content?.trim() ?? ""
   return title.slice(0, 60) || "Untitled"
@@ -84,7 +88,8 @@ export type Entity = { name: string; type: "NPC" | "Location" | "Faction" | "Ite
 
 export async function extractEntities(transcript: string): Promise<Entity[]> {
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -115,7 +120,8 @@ export async function extractEntities(transcript: string): Promise<Entity[]> {
 export async function summariseEntity(name: string, type: string, transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Transcript ${i + 1}]: ${t}`).join("\n\n")
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -139,7 +145,8 @@ export async function summariseEntity(name: string, type: string, transcripts: s
 export async function nameSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -155,7 +162,7 @@ export async function nameSession(transcripts: string[]): Promise<string> {
         content: `Name this session based on these recordings:\n\n${combined}`,
       },
     ],
-    max_tokens: 30,
+    max_tokens: 100,
   })
   return chat.choices[0]?.message?.content?.trim() ?? "Unnamed Session"
 }
@@ -184,7 +191,8 @@ export async function extractRelations(
   const knownList = knownEntityNames.join(", ")
   const validList = VALID_RELATIONS.join(", ")
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -222,7 +230,8 @@ export async function extractRelations(
 export async function summariseSession(transcripts: string[]): Promise<string> {
   const combined = transcripts.map((t, i) => `[Note ${i + 1}]: ${t}`).join("\n\n")
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
@@ -266,7 +275,8 @@ export async function generateBriefing(params: {
     : recentNotes.slice(0, 3).join("\n\n---\n\n")
 
   const chat = await getGroq().chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: CHAT_MODEL,
+    reasoning_effort: "low",
     messages: [
       {
         role: "system",
