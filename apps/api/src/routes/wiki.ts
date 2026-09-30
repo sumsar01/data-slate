@@ -87,6 +87,11 @@ async function ensureTable() {
   } catch {
     // Column already exists — ignore
   }
+  try {
+    await db.execute("ALTER TABLE notes ADD COLUMN wiki_link_cursor TEXT")
+  } catch {
+    // Column already exists — ignore
+  }
   // Ensure entity_relations table exists
   await db.execute(`
     CREATE TABLE IF NOT EXISTS entity_relations (
@@ -308,21 +313,25 @@ wikiRouter.patch("/:id", async (c) => {
   return c.json(rows[0] ?? null)
 })
 
-// POST /wiki/sync — upsert entities from notes not yet scanned (idempotent)
+// POST /wiki/sync — process a bounded batch; force resets progress once
 wikiRouter.post("/sync", async (c) => {
   await ensureTable()
 
   const body = await c.req.json<{ force?: boolean }>().catch(() => ({ force: false }))
   const force = body.force === true
+  if (force) await db.execute("UPDATE notes SET wiki_synced_at = NULL")
 
   const { rows: notes } = await db.execute(
-    force ? "SELECT id, entities FROM notes" : "SELECT id, entities FROM notes WHERE wiki_synced_at IS NULL"
+    "SELECT id, entities FROM notes WHERE wiki_synced_at IS NULL AND entities IS NOT NULL ORDER BY created_at, id LIMIT 20"
   )
   let inserted = 0
 
   for (const note of notes) {
     let entities: Array<{ name: string; type: string }> = []
-    try { entities = JSON.parse((note.entities as string) ?? "[]") } catch { entities = [] }
+    try {
+      const parsed = JSON.parse((note.entities as string) ?? "[]")
+      entities = Array.isArray(parsed) ? parsed : []
+    } catch { entities = [] }
 
     for (const e of entities) {
       if (!e.name || !e.type) continue
@@ -339,95 +348,77 @@ wikiRouter.post("/sync", async (c) => {
       })
       inserted++
     }
-  }
-
-  const now = new Date().toISOString()
-  for (const note of notes) {
     await db.execute({
       sql: "UPDATE notes SET wiki_synced_at = ?1 WHERE id = ?2",
-      args: [now, note.id as string],
+      args: [new Date().toISOString(), note.id as string],
     })
   }
 
-  // Find potential duplicates across all canonical entities
-  const { rows: allEntities } = await db.execute(
-    "SELECT id, name FROM entities WHERE canonical_id IS NULL"
+  const { rows: remaining } = await db.execute(
+    "SELECT id FROM notes WHERE wiki_synced_at IS NULL AND entities IS NOT NULL LIMIT 1"
   )
-  const potential_duplicates = findDuplicates(
-    allEntities.map((e) => ({ id: e.id as string, name: e.name as string }))
-  )
-
-  return c.json({ inserted, notes_scanned: notes.length, potential_duplicates })
+  // Duplicate comparison is quadratic; perform it only after the last batch.
+  let potential_duplicates: ReturnType<typeof findDuplicates> = []
+  if (!remaining.length) {
+    const { rows: allEntities } = await db.execute(
+      "SELECT id, name FROM entities WHERE canonical_id IS NULL"
+    )
+    potential_duplicates = findDuplicates(
+      allEntities.map((e) => ({ id: e.id as string, name: e.name as string }))
+    )
+  }
+  return c.json({ inserted, notes_scanned: notes.length, has_more: remaining.length > 0, potential_duplicates })
 })
 
-// POST /wiki/link-all — extract relations for all canonical entities (no dossier generation)
+// POST /wiki/link-all — resume a single note, at most two AI calls per request
 wikiRouter.post("/link-all", async (c) => {
   await ensureTable()
 
   const body = await c.req.json<{ force?: boolean }>().catch(() => ({ force: false }))
   const force = body.force === true
+  if (force) await db.execute("UPDATE notes SET wiki_linked_at = NULL, wiki_link_cursor = NULL")
 
   const { rows: allEntityRows } = await db.execute(
-    "SELECT id, name, type FROM entities WHERE canonical_id IS NULL"
+    "SELECT id, name, type, canonical_id FROM entities ORDER BY id"
   )
   const { rows: notes } = await db.execute(
-    force
-      ? "SELECT id, transcript, entities FROM notes ORDER BY date ASC"
-      : "SELECT id, transcript, entities FROM notes WHERE wiki_linked_at IS NULL ORDER BY date ASC"
+    "SELECT id, transcript, entities, wiki_link_cursor FROM notes WHERE wiki_linked_at IS NULL AND entities IS NOT NULL ORDER BY created_at, id LIMIT 1"
   )
 
   if (!notes.length) {
-    return c.json({ processed: 0, skipped: 0, relations_added: 0, notes_scanned: 0 })
+    return c.json({ processed: 0, skipped: 0, relations_added: 0, notes_scanned: 0, has_more: false })
   }
 
+  const note = notes[0]!
+  const canonical = allEntityRows.filter((e) => !e.canonical_id)
+  const byName = new Map(allEntityRows.map((e) => [((e.name as string) ?? "").toLowerCase(), (e.canonical_id ?? e.id) as string]))
+  let noteEntities: Array<{ name: string }> = []
+  try {
+    const parsed = JSON.parse((note.entities as string) ?? "[]")
+    noteEntities = Array.isArray(parsed) ? parsed : []
+  } catch { /* malformed extraction */ }
+  const mentionedIds = new Set(noteEntities.map((e) => byName.get(e.name?.toLowerCase())).filter((id): id is string => !!id))
+  const pending = canonical.filter((e) => mentionedIds.has(e.id as string) && (e.id as string) > ((note.wiki_link_cursor as string) ?? ""))
   let processed = 0
   let skipped = 0
   let relationsAdded = 0
 
-  for (const entity of allEntityRows) {
+  for (const entity of pending.slice(0, 2)) {
     const entityId = entity.id as string
     const entityName = entity.name as string
     const entityType = entity.type as string
-
-    // Collect alias names
-    const { rows: aliases } = await db.execute({
-      sql: "SELECT name FROM entities WHERE canonical_id = ?1",
-      args: [entityId],
-    })
-    const allNames = [entityName, ...aliases.map((a) => a.name as string)]
-
-    // Gather transcript excerpts where this entity appears
-    const excerpts: string[] = []
-    for (const note of notes) {
-      let noteEntities: Array<{ name: string }> = []
-      try { noteEntities = JSON.parse((note.entities as string) ?? "[]") } catch {}
-      const matched = noteEntities.some((e) =>
-        allNames.some((n) => n.toLowerCase() === e.name.toLowerCase())
-      )
-      if (matched && note.transcript) {
-        excerpts.push(note.transcript as string)
-      }
-    }
-
-    if (!excerpts.length) {
-      skipped++
-      continue
-    }
-
-    const otherEntityNames = allEntityRows
+    const otherEntityNames = canonical
       .filter((e) => e.id !== entityId)
       .map((e) => e.name as string)
 
     try {
-      const relations = await extractRelations(entityName, entityType, otherEntityNames, excerpts)
+      const relations = note.transcript
+        ? await extractRelations(entityName, entityType, otherEntityNames, [note.transcript as string])
+        : []
       for (const rel of relations) {
-        const fromRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.from_name.toLowerCase())
-          ?? (rel.from_name.toLowerCase() === entityName.toLowerCase() ? { id: entityId } : null)
-        const toRow = allEntityRows.find((e) => (e.name as string).toLowerCase() === rel.to_name.toLowerCase())
-          ?? (rel.to_name.toLowerCase() === entityName.toLowerCase() ? { id: entityId } : null)
-        if (!fromRow || !toRow || fromRow.id === toRow.id) continue
-        const fromId = fromRow.id as string
-        const toId = toRow.id as string
+        const fromId = byName.get(rel.from_name.toLowerCase())
+        const toId = byName.get(rel.to_name.toLowerCase())
+        if (!fromId || !toId || fromId === toId) continue
         const { rows: existing } = await db.execute({
           sql: "SELECT id FROM entity_relations WHERE from_id = ?1 AND to_id = ?2 AND relation_type = ?3",
           args: [fromId, toId, rel.relation_type],
@@ -440,20 +431,29 @@ wikiRouter.post("/link-all", async (c) => {
         relationsAdded++
       }
       processed++
-    } catch {
-      skipped++
+      await db.execute({
+        sql: "UPDATE notes SET wiki_link_cursor = ?1 WHERE id = ?2",
+        args: [entityId, note.id as string],
+      })
+    } catch (error) {
+      console.error("Wiki relation extraction failed:", error)
+      return c.json({ error: "Relation extraction failed; progress saved. Retry to resume." }, 502)
     }
   }
 
-  const now = new Date().toISOString()
-  for (const note of notes) {
+  const complete = pending.length <= 2
+  if (complete) {
+    if (!pending.length) skipped++
     await db.execute({
-      sql: "UPDATE notes SET wiki_linked_at = ?1 WHERE id = ?2",
-      args: [now, note.id as string],
+      sql: "UPDATE notes SET wiki_linked_at = ?1, wiki_link_cursor = NULL WHERE id = ?2",
+      args: [new Date().toISOString(), note.id as string],
     })
   }
 
-  return c.json({ processed, skipped, relations_added: relationsAdded, notes_scanned: notes.length })
+  const { rows: remaining } = await db.execute(
+    "SELECT id FROM notes WHERE wiki_linked_at IS NULL AND entities IS NOT NULL LIMIT 1"
+  )
+  return c.json({ processed, skipped, relations_added: relationsAdded, notes_scanned: complete ? 1 : 0, has_more: remaining.length > 0 })
 })
 
 // POST /wiki/merge — merge drop_id into keep_id

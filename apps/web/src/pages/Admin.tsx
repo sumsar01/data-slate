@@ -46,9 +46,10 @@ export default function Admin() {
   const [wikiFilter, setWikiFilter] = useState("")
   const [wikiTypeFilter, setWikiTypeFilter] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
-  const [syncResult, setSyncResult] = useState<{ inserted: number; notes_scanned: number } | null>(null)
+  const [syncResult, setSyncResult] = useState<{ inserted: number; notes_scanned: number; has_more: boolean } | null>(null)
   const [linkingAll, setLinkingAll] = useState(false)
-  const [linkAllResult, setLinkAllResult] = useState<{ processed: number; skipped: number; relations_added: number; notes_scanned: number } | null>(null)
+  const [linkAllResult, setLinkAllResult] = useState<{ processed: number; skipped: number; relations_added: number; notes_scanned: number; has_more: boolean } | null>(null)
+  const [wikiError, setWikiError] = useState(false)
   const [forceResync, setForceResync] = useState(false)
   const [duplicates, setDuplicates] = useState<Array<{ a: { id: string; name: string }; b: { id: string; name: string }; similarity: string }>>([])
   const [dismissedDupes, setDismissedDupes] = useState<Set<string>>(new Set())
@@ -136,16 +137,29 @@ export default function Admin() {
   async function linkAllEntities() {
     setLinkingAll(true)
     setLinkAllResult(null)
+    setWikiError(false)
     try {
-      const res = await authFetch(`${API_URL}/wiki/link-all`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ force: forceResync }),
-      })
-      const data = await res.json()
-      setLinkAllResult(data)
+      let first = true
+      const total = { processed: 0, skipped: 0, relations_added: 0, notes_scanned: 0, has_more: true }
+      while (total.has_more) {
+        const res = await authFetch(`${API_URL}/wiki/link-all`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ force: first && forceResync }),
+        })
+        if (!res.ok) throw new Error(`Link failed: ${res.status}`)
+        const data = await res.json() as typeof total
+        first = false
+        total.processed += data.processed
+        total.skipped += data.skipped
+        total.relations_added += data.relations_added
+        total.notes_scanned += data.notes_scanned
+        total.has_more = data.has_more
+        setLinkAllResult({ ...total })
+      }
     } catch (e) {
       console.error(e)
+      setWikiError(true)
     } finally {
       setLinkingAll(false)
     }
@@ -156,19 +170,30 @@ export default function Admin() {
     setSyncResult(null)
     setDuplicates([])
     setDismissedDupes(new Set())
+    setWikiError(false)
     try {
-      const res = await authFetch(`${API_URL}/wiki/sync`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ force: forceResync }),
-      })
-      const data = await res.json()
-      setSyncResult(data)
-      if (data.potential_duplicates) setDuplicates(data.potential_duplicates)
+      let first = true
+      const total = { inserted: 0, notes_scanned: 0, has_more: true }
+      while (total.has_more) {
+        const res = await authFetch(`${API_URL}/wiki/sync`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ force: first && forceResync }),
+        })
+        if (!res.ok) throw new Error(`Sync failed: ${res.status}`)
+        const data = await res.json() as typeof total & { potential_duplicates: typeof duplicates }
+        first = false
+        total.inserted += data.inserted
+        total.notes_scanned += data.notes_scanned
+        total.has_more = data.has_more
+        setSyncResult({ ...total })
+        if (data.potential_duplicates) setDuplicates(data.potential_duplicates)
+      }
       const w = await authFetch(`${API_URL}/wiki`).then((r) => r.json())
       setWikiEntities(w)
     } catch (e) {
       console.error(e)
+      setWikiError(true)
     } finally {
       setSyncing(false)
     }
@@ -441,23 +466,24 @@ export default function Admin() {
           <div className="admin-section-title">[ ENTITY WIKI ]</div>
           <div className="admin-row">
             <span className="admin-label admin-label--dim">
-              Scan all transcripts and populate entity index. Safe to run repeatedly.
+              Index extracted entities from new records. Full resync revisits the archive in batches.
             </span>
           </div>
           {syncResult && (
             <div className="admin-row">
               <span className="admin-value">
-                {syncResult.notes_scanned} NOTES SCANNED // {syncResult.inserted} NEW ENTITIES INDEXED
+                 {syncResult.notes_scanned} NOTES SCANNED // {syncResult.inserted} NEW ENTITIES INDEXED{syncResult.has_more ? " // PROCESSING..." : ""}
               </span>
             </div>
           )}
           {linkAllResult && (
             <div className="admin-row">
               <span className="admin-value">
-                {linkAllResult.notes_scanned} NOTES SCANNED // {linkAllResult.relations_added} CONNECTIONS FORGED // {linkAllResult.processed} PROCESSED // {linkAllResult.skipped} SKIPPED
+                 {linkAllResult.notes_scanned} NOTES SCANNED // {linkAllResult.relations_added} CONNECTIONS FORGED // {linkAllResult.processed} PROCESSED // {linkAllResult.skipped} SKIPPED{linkAllResult.has_more ? " // PROCESSING..." : ""}
               </span>
             </div>
           )}
+          {wikiError && <div className="admin-row"><span className="admin-value admin-value--warn">PROCESS INTERRUPTED // RETRY TO RESUME (DISABLE FULL RESYNC)</span></div>}
           {duplicates.filter((d) => !dismissedDupes.has(`${d.a.id}:${d.b.id}`)).length > 0 && (
             <div className="admin-dupe-box">
               <div className="admin-dupe-title">⚠ POTENTIELLE DUBLETTER DETEKTERET</div>
@@ -498,10 +524,10 @@ export default function Admin() {
             </label>
           </div>
           <div className="admin-row">
-            <button className="admin-btn" onClick={syncWiki} disabled={syncing}>
+            <button className="admin-btn" onClick={syncWiki} disabled={syncing || linkingAll}>
               {syncing ? "SCANNING..." : "⚙ SYNC ENTITIES"}
             </button>
-            <button className="admin-btn" onClick={linkAllEntities} disabled={linkingAll}>
+            <button className="admin-btn" onClick={linkAllEntities} disabled={linkingAll || syncing}>
               {linkingAll ? "CORRELATING DATA-STREAMS..." : "⇌ LINK ALL ENTITIES"}
             </button>
             <Link to="/wiki" className="admin-btn" style={{ textDecoration: "none", textAlign: "center" }}>
